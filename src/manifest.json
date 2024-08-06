@@ -4,11 +4,17 @@
   "manifest_version": 3,
   "description": "Download original figures from science journal websites.",
   "action": {
-    "default_popup": "index.html"
+    "default_popup": "index.html",
+    "default_icon": {
+      "128": "icons/logo128.png"
+    }
   },
   "permissions": ["webNavigation", "activeTab", "downloads"],
   "background": {
     "service_worker": "background.js"
+  },
+  "icons": {
+    "128": "icons/logo128.png"
   },
   "content_scripts": [
     {
