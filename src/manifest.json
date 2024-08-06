@@ -1,0 +1,24 @@
+{
+  "name": "Sci Fig Downloader",
+  "version": "0.0.1",
+  "manifest_version": 3,
+  "description": "Download original figures from science journal websites.",
+  "action": {
+    "default_popup": "index.html"
+  },
+  "permissions": ["webNavigation", "activeTab", "downloads"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.nature.com/*",
+        "https://nature.com/*",
+        "https://pubs.acs.org/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
