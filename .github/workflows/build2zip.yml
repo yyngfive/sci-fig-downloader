@@ -23,11 +23,8 @@ jobs:
         run: |
           pnpm install
           pnpm build
-          cd ./dist
-          zip -r sci-fig-downloader.zip .
       - name: upload
         uses: actions/upload-artifact@v4
         with:
-          name: zipped
-          path: dist/sci-fig-downloader.zip
-        
+          name: extension
+          path: dist/

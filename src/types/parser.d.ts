@@ -10,7 +10,7 @@ interface FiguresData {
   title: string;
   hasToc: boolean;
   hasSi: boolean;
-  from: "nature" | "acs";
+  from: "nature" | "acs" | "wiley";
   tocFig?: FigInfo;
   mainFigs: FigInfo[];
   siFigs?: FigInfo[];

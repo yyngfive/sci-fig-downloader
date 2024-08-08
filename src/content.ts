@@ -1,9 +1,12 @@
-import { getFiguresFromNature } from "./Parsers/nature";
-import { getFiguresFromACS } from "./Parsers/acs";
+import {
+  getFiguresFromACS,
+  getFiguresFromNature,
+  getFiguresFromWiley,
+} from "@/Parsers/parsers";
 import type { FiguresData } from "./types/parser";
 
 function handleGetData(
-  request: { current: "nature" | "acs" },
+  request: { current: "nature" | "acs" | "wiley" },
   sender: any,
   sendResponse: (arg0: FiguresData) => void
 ) {
@@ -16,6 +19,10 @@ function handleGetData(
     case "acs":
       const figsDataACS = getFiguresFromACS();
       sendResponse(figsDataACS);
+      break;
+    case "wiley":
+      const figsDataWiley = getFiguresFromWiley();
+      sendResponse(figsDataWiley);
       break;
   }
 }

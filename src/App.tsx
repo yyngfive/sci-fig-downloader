@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useImmer, type Updater } from "use-immer";
 import "./App.css";
 
-import type { FiguresData, FigInfo } from "./types/parser";
+import type { FiguresData, FigInfo } from "@/types/parser";
 
 function App() {
   const [figsData, setFigsData] = useImmer<FiguresData>({
@@ -40,6 +40,9 @@ function App() {
       siTitle = "Extended Data Figures";
       break;
     case "acs":
+      siTitle = "Schemes";
+      break;
+    case "wiley":
       siTitle = "Schemes";
       break;
     default:
@@ -221,8 +224,7 @@ function FigCard({
                 }}
               />
               <li key={index} className="truncate">
-                Fig {figInfo.id}.{" "}
-                {figInfo.name}
+                Fig {figInfo.id}. {figInfo.name}
               </li>
             </div>
           ))}
@@ -233,14 +235,14 @@ function FigCard({
 }
 
 function findJournalForUrl(url: string): string | null {
-  const supportedWebsites: { [key: string]: RegExp } = {
-    nature: /^https:\/\/(www\.)?nature\.com\//,
-    acs: /^https:\/\/pubs\.acs\.org\//,
-  };
-  for (const key in supportedWebsites) {
-    const pattern = supportedWebsites[key];
-    if (pattern.test(url)) {
-      return key;
+  const supportWebsites = ["nature", "acs", "wiley"];
+  const domain = url.split("/")[2].split(".");
+  if (domain.length >= 2) {
+    const top = domain[domain.length - 2];
+    console.log(top, "top");
+
+    if (supportWebsites.includes(top)) {
+      return top;
     }
   }
   return null;
