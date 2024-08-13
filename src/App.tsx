@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useImmer } from "use-immer";
 import "./App.css";
 import { FigCard, FigCardTOC } from "./components/FigCards";
-import { findJournalForUrl } from "./Parsers/parsers";
 import type { FiguresData, FigInfo } from "@/types/parser";
 
 function App() {
@@ -71,39 +70,70 @@ function App() {
 
   return (
     <>
-      <div className="mx-3 mt-3">
-        <h1 className="font-bold text-xl my-1">{figsData.title}</h1>
-        <div className="w-full max-h-[400px] overflow-auto mr-1">
-          {figsData.hasToc && (
-            <>
-              <FigCardTOC
-                title="Graphical Abstract"
-                figsData={figsData}
-                setFigsData={setFigsData}
-              />
-            </>
-          )}
-          <FigCard
-            title="Figures"
-            figsData={figsData}
-            setFigsData={setFigsData}
-            type="mainFigs"
+      <div className="m-3">
+        <h1 className="font-bold text-xl my-2">{figsData.title}</h1>
+        <div role="tablist" className="tabs tabs-lifted w-[476px]">
+          <input
+            type="radio"
+            name="tabs"
+            role="tab"
+            className="tab whitespace-nowrap"
+            aria-label="图片"
+            defaultChecked
           />
-          {figsData.hasSi && (
-            <>
-              <FigCard
-                title={figsData.siTitle as string}
-                figsData={figsData}
-                type="siFigs"
-                setFigsData={setFigsData}
-              />
-            </>
-          )}
+          <div
+            role="tabpanel"
+            className="tab-content bg-base-100 border-base-300 rounded-box px-3 pb-3 max-w-[476px]"
+          >
+            <div className="max-h-[400px] overflow-auto ">
+              {figsData.hasToc && (
+                <>
+                  <FigCardTOC
+                    title="Graphical Abstract"
+                    figsData={figsData}
+                    setFigsData={setFigsData}
+                  />
+                </>
+              )}
+              {figsData.mainFigs.length !== 0 && (
+                <FigCard
+                  title="Figures"
+                  figsData={figsData}
+                  setFigsData={setFigsData}
+                  type="mainFigs"
+                />
+              )}
+              {figsData.hasSi && (
+                <>
+                  <FigCard
+                    title={figsData.siTitle as string}
+                    figsData={figsData}
+                    type="siFigs"
+                    setFigsData={setFigsData}
+                  />
+                </>
+              )}
+            </div>
+          </div>
+
+          <input
+            type="radio"
+            name="tabs"
+            role="tab"
+            className="tab whitespace-nowrap"
+            aria-label="文件"
+          />
+          <div
+            role="tabpanel"
+            className="tab-content bg-base-100 border-base-300 rounded-box px-3 pb-3 max-w-full"
+          >
+            补充材料
+          </div>
         </div>
       </div>
-      <div className="m-3 flex shadow-lg justify-end items-center w-full h-12 relative">
+      <div className="m-3 flex justify-end items-center h-12 z-50">
         <button
-          className="btn btn-primary btn-sm mr-6"
+          className="btn btn-primary btn-sm mx-1"
           onClick={() => {
             handleDownload();
           }}
@@ -113,6 +143,20 @@ function App() {
       </div>
     </>
   );
+}
+
+function findJournalForUrl(url: string): string | null {
+  const supportWebsites = ["nature", "acs", "wiley"];
+  const domain = url.split("/")[2].split(".");
+  if (domain.length >= 2) {
+    const top = domain[domain.length - 2];
+    console.log(top, "top");
+
+    if (supportWebsites.includes(top)) {
+      return top;
+    }
+  }
+  return null;
 }
 
 export default App;

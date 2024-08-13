@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react-swc";
 import { resolve } from "path";
 import copy from "rollup-plugin-copy";
 
@@ -11,7 +11,6 @@ export default defineConfig({
     },
   },
   plugins: [
-    
     react(),
     copy({
       targets: [
@@ -29,7 +28,7 @@ export default defineConfig({
         assetFileNames: "[name].[hash].[ext]",
         entryFileNames: "[name].js",
         dir: "dist",
-      }
+      },
     },
   },
 });

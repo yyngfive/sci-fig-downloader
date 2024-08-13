@@ -19,9 +19,9 @@
   "content_scripts": [
     {
       "matches": [
-        "https://www.nature.com/articles/*",
-        "https://nature.com/articles/*",
-        "https://pubs.acs.org/doi/full/*",
+        "https://www.nature.com/*",
+        "https://nature.com/*",
+        "https://pubs.acs.org/*",
         "https://onlinelibrary.wiley.com/*",
         "https://*.onlinelibrary.wiley.com/*"
       ],

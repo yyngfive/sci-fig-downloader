@@ -11,29 +11,38 @@ function FigCardTOC({
   figsData: FiguresData;
   setFigsData: Updater<FiguresData>;
 }) {
+  function handleSelect(figsData: FiguresData) {
+    setFigsData((draft) => {
+      let figInfo = draft.tocFig as FigInfo;
+      figInfo.selected = !figsData.tocFig?.selected;
+    });
+  }
+
   return (
     <>
       <div className="flex justify-between items-center">
         <h2 className="text-lg my-2">{title}</h2>
       </div>
-      <div className="w-full">
+      <div className="">
         <ul>
-          <div className="flex gap-1 my-1">
+          <li className="flex gap-1 my-1" key={0}>
             <input
               type="checkbox"
               className="checkbox checkbox-sm"
               checked={figsData.tocFig?.selected}
               onChange={() => {
-                setFigsData((draft) => {
-                  let figInfo = draft.tocFig as FigInfo;
-                  figInfo.selected = !figsData.tocFig?.selected;
-                });
+                handleSelect(figsData);
               }}
             />
-            <li key={0} className="">
+            <button
+              className="truncate"
+              onClick={() => {
+                handleSelect(figsData);
+              }}
+            >
               Fig {figsData.tocFig?.id}. {figsData.tocFig?.name}
-            </li>
-          </div>
+            </button>
+          </li>
         </ul>
       </div>
     </>
@@ -102,9 +111,12 @@ function FigCard({
                   handleSelect(figInfo);
                 }}
               />
-              <button className="truncate" onClick={() => {
+              <button
+                className="truncate"
+                onClick={() => {
                   handleSelect(figInfo);
-                }}>
+                }}
+              >
                 Fig {figInfo.id}. {figInfo.name}
               </button>
             </li>
