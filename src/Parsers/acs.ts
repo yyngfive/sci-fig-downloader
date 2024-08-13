@@ -1,6 +1,6 @@
 import type { FiguresData, FigInfo } from "@/types/parser";
 
-function getFiguresFromACS(): FiguresData {
+export function getFiguresFromACS(): FiguresData {
   const figureList = document.getElementsByClassName("article_content")[0];
   const title = document.querySelector(".hlFld-Title")?.textContent as string;
   console.log("title", title);
@@ -17,7 +17,7 @@ function getFiguresFromACS(): FiguresData {
   const figures = figureList.querySelectorAll("figure");
   figures.forEach((element) => {
     const caption = element.querySelector("figcaption")?.textContent as string;
-    const {type, id, name } = extractFigureInfo(caption);
+    const { type, id, name } = extractFigureInfo(caption);
     const baseUrl = element.querySelector("img")?.src
       ? (element.querySelector("img")?.src as string)
       : (element.querySelector("img")?.getAttribute("data-src") as string);
@@ -39,6 +39,7 @@ function getFiguresFromACS(): FiguresData {
   });
   if (figuresData.siFigs?.length !== 0) {
     figuresData.hasSi = true;
+    figuresData.siTitle = "Scheme";
   }
 
   const abstract = document.querySelector(".article_abstract");
@@ -87,5 +88,3 @@ function extractFigureInfo(input: string): {
     name: "",
   };
 }
-
-export { getFiguresFromACS };

@@ -11,6 +11,7 @@ interface FiguresData {
   hasToc: boolean;
   hasSi: boolean;
   from: "nature" | "acs" | "wiley";
+  siTitle?: "Scheme" | "Extended Data Figures";
   tocFig?: FigInfo;
   mainFigs: FigInfo[];
   siFigs?: FigInfo[];

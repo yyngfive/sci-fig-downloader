@@ -1,7 +1,9 @@
 import type { FiguresData, FigInfo } from "@/types/parser";
 
-function getFiguresFromWiley(): FiguresData {
-  const figureList = document.getElementsByClassName("article-section__full")[0];
+export function getFiguresFromWiley(): FiguresData {
+  const figureList = document.getElementsByClassName(
+    "article-section__full"
+  )[0];
   const title = document.querySelector(".citation__title")
     ?.textContent as string;
   console.log("title", title);
@@ -17,22 +19,27 @@ function getFiguresFromWiley(): FiguresData {
 
   const figures = figureList.querySelectorAll("figure");
   console.log(figureList);
-  
+
   figures.forEach((element) => {
-    const captionText = element.querySelector(".figure__caption-text") as HTMLElement
-    const name = getTextWithoutClass(captionText,'bibLink')
-    const captionTitle = element.querySelector(".figure__title")?.textContent as string
-    const type = captionTitle.split(' ')[0]
-    const id = Number(captionTitle.split(' ')[1])
-    const htmlUrl = element.querySelector("img")?.src as string
-    const baseUrl = element.querySelector("img")?.getAttribute("data-lg-src") as string
-    let domain
-    if(htmlUrl.startsWith('http://online')){
-        domain = 'https://onlinelibrary.wiley.com'
-    }else{
-        domain = 'https://chemistry-europe.onlinelibrary.wiley.com'
+    const captionText = element.querySelector(
+      ".figure__caption-text"
+    ) as HTMLElement;
+    const name = getTextWithoutClass(captionText, "bibLink");
+    const captionTitle = element.querySelector(".figure__title")
+      ?.textContent as string;
+    const type = captionTitle.split(" ")[0];
+    const id = Number(captionTitle.split(" ")[1]);
+    const htmlUrl = element.querySelector("img")?.src as string;
+    const baseUrl = element
+      .querySelector("img")
+      ?.getAttribute("data-lg-src") as string;
+    let domain;
+    if (htmlUrl.startsWith("http://online")) {
+      domain = "https://onlinelibrary.wiley.com";
+    } else {
+      domain = "https://chemistry-europe.onlinelibrary.wiley.com";
     }
-    const originUrl = domain + baseUrl
+    const originUrl = domain + baseUrl;
     const figInfo: FigInfo = {
       id,
       name,
@@ -49,6 +56,7 @@ function getFiguresFromWiley(): FiguresData {
   });
   if (figuresData.siFigs?.length !== 0) {
     figuresData.hasSi = true;
+    figuresData.siTitle = "Scheme";
   }
 
   const abstract = document.querySelector(".abstract-group");
@@ -58,9 +66,9 @@ function getFiguresFromWiley(): FiguresData {
   if (abstractFigElement) {
     const id = 1;
     const name = "Graphical Abstract";
-    const baseUrl = abstractFigElement.src
+    const baseUrl = abstractFigElement.src;
     const htmlUrl = `${baseUrl}`;
-    const originUrl = abstractFigElement.getAttribute('data-lg-src') as string
+    const originUrl = abstractFigElement.getAttribute("data-lg-src") as string;
     const figInfo: FigInfo = {
       id,
       name,
@@ -89,5 +97,3 @@ function getTextWithoutClass(element: HTMLElement, className: string) {
   // 将过滤后的节点的textContent合并
   return filteredChildren.map((node) => node.textContent).join("");
 }
-
-export { getFiguresFromWiley };

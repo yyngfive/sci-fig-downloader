@@ -1,13 +1,14 @@
 import type { FiguresData, FigInfo } from "@/types/parser";
 
 //BUG 窄屏下侧栏未加载会导致爬取错误（改成根据正文爬取:需要区分正文和extended data）
-function getFiguresFromNature(): FiguresData {
+//TODO：识别toc
+export function getFiguresFromNature(): FiguresData {
   const figureList = document.getElementsByClassName(
     "c-reading-companion__figures-list"
   )[0];
   const title = document.querySelector("h1")?.textContent as string;
-  console.log('title',title);
-  
+  console.log("title", title);
+
   let figuresData: FiguresData = {
     title: title,
     hasSi: false,
@@ -39,8 +40,9 @@ function getFiguresFromNature(): FiguresData {
       figuresData.mainFigs.push(fig_info);
     }
   });
-  if(figuresData.siFigs?.length !== 0){
-    figuresData.hasSi = true
+  if (figuresData.siFigs?.length !== 0) {
+    figuresData.hasSi = true;
+    figuresData.siTitle = "Extended Data Figures";
   }
   return figuresData;
 }
@@ -59,5 +61,3 @@ function extractFigureInfo(input: string): { id: number; name: string } {
     name: "",
   };
 }
-
-export { getFiguresFromNature };

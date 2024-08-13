@@ -1,29 +1,13 @@
-import {
-  getFiguresFromACS,
-  getFiguresFromNature,
-  getFiguresFromWiley,
-} from "@/Parsers/parsers";
+import { figParsers } from "@/Parsers/parsers";
 import type { FiguresData } from "./types/parser";
 
 function handleGetData(
-  request: { current: "nature" | "acs" | "wiley" },
+  request: { current: FiguresData["from"] },
   sender: any,
   sendResponse: (arg0: FiguresData) => void
 ) {
   console.log("Journal", request.current);
-  switch (request.current) {
-    case "nature":
-      const figsDataNature = getFiguresFromNature();
-      sendResponse(figsDataNature);
-      break;
-    case "acs":
-      const figsDataACS = getFiguresFromACS();
-      sendResponse(figsDataACS);
-      break;
-    case "wiley":
-      const figsDataWiley = getFiguresFromWiley();
-      sendResponse(figsDataWiley);
-      break;
-  }
+  const figsData = figParsers[request.current]();
+  sendResponse(figsData);
 }
 chrome.runtime.onMessage.addListener(handleGetData);
