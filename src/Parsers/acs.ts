@@ -1,8 +1,60 @@
-import type { FiguresData, FigInfo } from "@/types/parser";
+import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
+
+export function getFilesFromACS(): FilesData {
+  let filesData: FilesData = {
+    from: "acs",
+    files: [],
+  };
+  const supportedList = document.querySelector("#silist");
+  if (supportedList === undefined) {
+    return filesData;
+  }
+
+  const fileLinks = supportedList?.querySelectorAll("p");
+  fileLinks?.forEach((si, index) => {
+    const id = index + 1;
+    const text = si.firstChild as Text;
+    const name = text.wholeText.split("(")[0];
+    const link = si.querySelector("a.ext-link") as HTMLAnchorElement;
+    const url = link.href;
+    const type = getFileType(url.split("/").pop() as string);
+    const fileInfo: FileInfo = {
+      id,
+      name,
+      type,
+      url,
+      selected: false,
+    };
+    filesData.files.push(fileInfo);
+  });
+
+  return filesData;
+}
+
+function getFileType(filename: string): FileInfo["type"] {
+  const ext = filename
+    .toLowerCase()
+    .split(".")
+    .pop() as keyof typeof fileExtensions;
+  return fileExtensions[ext] || "other";
+}
+
+const fileExtensions: Record<string, FileInfo["type"]> = {
+  pdf: "pdf",
+  mp4: "video",
+  mov: "video",
+  avi: "video",
+  mp3: "audio",
+  wav: "audio",
+  doc: "word",
+  docx: "word",
+  xls: "excel",
+  xlsx: "excel",
+};
 
 export function getFiguresFromACS(): FiguresData {
   let figuresData: FiguresData = {
-    title: "",
+    title: "请等待页面加载完成后重新加载",
     hasSi: false,
     hasToc: false,
     mainFigs: [],
@@ -18,7 +70,9 @@ export function getFiguresFromACS(): FiguresData {
   figuresData.title = title;
 
   const abstract = document.querySelector(".article_abstract");
-  if(!abstract){return figuresData}
+  if (!abstract) {
+    return figuresData;
+  }
   const abstractFigElement = abstract?.querySelector("img");
   if (abstractFigElement) {
     const id = 1;
@@ -52,6 +106,7 @@ export function getFiguresFromACS(): FiguresData {
       : (element.querySelector("img")?.getAttribute("data-src") as string);
     const htmlUrl = `${baseUrl}`;
     const originUrl = htmlUrl.replace("medium", "large").replace("gif", "jpeg");
+
     const figInfo: FigInfo = {
       id,
       name,

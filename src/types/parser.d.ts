@@ -17,4 +17,17 @@ interface FiguresData {
   siFigs?: FigInfo[]; //补充图片或反应体系
 }
 
-export { FiguresData, FigInfo };
+interface FileInfo {
+  id: number;
+  name: string;
+  type: "pdf" | "video" | "audio" | "word" | "excel" | "other";
+  url: string;
+  selected: boolean;
+}
+
+interface FilesData {
+  from: "acs";
+  files: FileInfo[];
+}
+
+export { FiguresData, FigInfo,FileInfo,FilesData };
