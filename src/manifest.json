@@ -1,6 +1,6 @@
 {
   "name": "Sci Fig Downloader",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "manifest_version": 3,
   "description": "Download original figures from science journal websites.",
   "action": {
