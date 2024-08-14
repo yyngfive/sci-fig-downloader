@@ -1,9 +1,16 @@
-interface FigInfo {
+interface Info {
   id: number; //正文中图片的编号
   name: string; //图片名称，没有明确名称的直接使用图片注解
-  htmlUrl: string; //用于网页上预览的低分辨率版本图片
   originUrl: string; //可以下载的高清版本图片
   selected: boolean; //默认为False
+}
+
+interface FigInfo extends Info {
+  htmlUrl: string; //用于网页上预览的低分辨率版本图片
+}
+
+interface FileInfo extends Info {
+  fileType: "pdf" | "video" | "audio" | "word" | "excel" | "other";
 }
 
 interface FiguresData {
@@ -17,17 +24,10 @@ interface FiguresData {
   siFigs?: FigInfo[]; //补充图片或反应体系
 }
 
-interface FileInfo {
-  id: number;
-  name: string;
-  type: "pdf" | "video" | "audio" | "word" | "excel" | "other";
-  url: string;
-  selected: boolean;
-}
-
 interface FilesData {
+  title:string;
   from: "acs";
   files: FileInfo[];
 }
 
-export { FiguresData, FigInfo,FileInfo,FilesData };
+export { FiguresData, FigInfo, FileInfo, FilesData };

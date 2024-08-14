@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { useImmer } from "use-immer";
-import "./App.css";
-import { FigCard, FigCardTOC } from "./components/FigCards";
-import type { FiguresData, FigInfo } from "@/types/parser";
-import { Tab } from "./components/Tab";
+import "@/App.css";
+import { FigCard, FigCardTOC } from "@/components/FigCard";
+import { FileCard } from "./components/FileCard";
+import type { FiguresData, FigInfo, FilesData, FileInfo } from "@/types/parser";
+import { Tab } from "@/components/Tab";
 
 function App() {
   const [figsData, setFigsData] = useImmer<FiguresData>({
@@ -11,10 +12,16 @@ function App() {
     hasSi: false,
     hasToc: false,
     mainFigs: [],
-    from: "nature",
+    from: "acs",
   });
-  const [files, setFiles] = useImmer<FigInfo[]>([]);
+  const [filesData, setFilesData] = useImmer<FilesData>({
+    files: [],
+    from: "acs",
+    title: "",
+  });
+  const [downloads, setDownloads] = useImmer<FigInfo[] | FileInfo[]>([]);
 
+  //将选中的文件加入State
   useEffect(() => {
     let selectedFiles = [];
     if (figsData.tocFig && figsData.tocFig.selected) {
@@ -32,8 +39,13 @@ function App() {
         }
       });
     }
-    setFiles(selectedFiles);
-  }, [figsData]);
+    filesData.files.forEach((fileInfo) => {
+      if (fileInfo.selected) {
+        selectedFiles.push(fileInfo);
+      }
+    });
+    setDownloads(selectedFiles);
+  }, [figsData, filesData]);
 
   async function getFigsData() {
     const [tab] = await chrome.tabs.query({
@@ -45,10 +57,12 @@ function App() {
       if (findJournalForUrl(currentUrl)) {
         chrome.tabs.sendMessage(
           tab.id,
-          { current: findJournalForUrl(currentUrl) },
+          { from: findJournalForUrl(currentUrl), type: "fig" },
           (res) => {
             console.log(res);
-            setFigsData(res);
+            if (res !== undefined) {
+              setFigsData(res);
+            }
           }
         );
       }
@@ -65,10 +79,12 @@ function App() {
       if (findJournalForUrl(currentUrl)) {
         chrome.tabs.sendMessage(
           tab.id,
-          { current: findJournalForUrl(currentUrl) },
+          { from: findJournalForUrl(currentUrl), type: "file" },
           (res) => {
             console.log(res);
-            setFigsData(res);
+            if (res !== undefined) {
+              setFilesData(res);
+            }
           }
         );
       }
@@ -76,7 +92,7 @@ function App() {
   }
 
   function handleDownload() {
-    files.forEach((item) => {
+    downloads.forEach((item) => {
       if (item.selected) {
         chrome.downloads.download({
           url: item.originUrl,
@@ -87,6 +103,7 @@ function App() {
 
   useEffect(() => {
     getFigsData();
+    getFilesData();
   }, []);
 
   return (
@@ -94,7 +111,7 @@ function App() {
       <div className="m-3">
         <h1 className="font-bold text-xl my-2">{figsData.title}</h1>
         <div role="tablist" className="tabs tabs-lifted w-[476px]">
-          <Tab name="图片" defaultChecked >
+          <Tab name="图片" defaultChecked>
             <div className="max-h-[400px] overflow-auto ">
               {figsData.hasToc && (
                 <>
@@ -127,7 +144,15 @@ function App() {
           </Tab>
 
           <Tab name="文件">
-            
+            <div className="max-h-[400px] overflow-auto ">
+              {filesData.files.length !== 0 && (
+                <FileCard
+                  title={filesData.title}
+                  filesData={filesData}
+                  setFilesData={setFilesData}
+                />
+              )}
+            </div>
           </Tab>
         </div>
       </div>
@@ -138,7 +163,7 @@ function App() {
             handleDownload();
           }}
         >
-          下载已选项({files.length})
+          下载已选项({downloads.length})
         </button>
       </div>
     </>

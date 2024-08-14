@@ -4,8 +4,9 @@ export function getFilesFromACS(): FilesData {
   let filesData: FilesData = {
     from: "acs",
     files: [],
+    title: "Supporting Information",
   };
-  const supportedList = document.querySelector("#silist");
+  const supportedList = document.querySelector(".NLM_list-list_type-label");
   if (supportedList === undefined) {
     return filesData;
   }
@@ -13,16 +14,20 @@ export function getFilesFromACS(): FilesData {
   const fileLinks = supportedList?.querySelectorAll("p");
   fileLinks?.forEach((si, index) => {
     const id = index + 1;
-    const text = si.firstChild as Text;
-    const name = text.wholeText.split("(")[0];
+    const names = si.cloneNode(true) as HTMLParagraphElement;
+    const aTags = names.querySelectorAll("a");
+    aTags.forEach((node) => {
+      names.removeChild(node);
+    });
+    const name = names.textContent?.slice(0, -3) as string;
     const link = si.querySelector("a.ext-link") as HTMLAnchorElement;
-    const url = link.href;
-    const type = getFileType(url.split("/").pop() as string);
+    const originUrl = link.href;
+    const fileType = getFileType(originUrl.split("/").pop() as string);
     const fileInfo: FileInfo = {
       id,
       name,
-      type,
-      url,
+      fileType,
+      originUrl,
       selected: false,
     };
     filesData.files.push(fileInfo);
@@ -31,7 +36,7 @@ export function getFilesFromACS(): FilesData {
   return filesData;
 }
 
-function getFileType(filename: string): FileInfo["type"] {
+function getFileType(filename: string): FileInfo["fileType"] {
   const ext = filename
     .toLowerCase()
     .split(".")
@@ -39,7 +44,7 @@ function getFileType(filename: string): FileInfo["type"] {
   return fileExtensions[ext] || "other";
 }
 
-const fileExtensions: Record<string, FileInfo["type"]> = {
+const fileExtensions: Record<string, FileInfo["fileType"]> = {
   pdf: "pdf",
   mp4: "video",
   mov: "video",

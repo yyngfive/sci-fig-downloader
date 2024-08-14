@@ -3,15 +3,16 @@ import { getFiguresFromACS,getFilesFromACS } from "@/Parsers/acs";
 import { getFiguresFromWiley } from "@/Parsers/wiley";
 import { FiguresData,FilesData } from "@/types/parser";
 
-const figParsers = {
+export const figParsers:Record<FiguresData['from'],()=>FiguresData> = {
     nature:getFiguresFromNature,
     acs:getFiguresFromACS,
     wiley:getFiguresFromWiley
 }
 
-const fileParsers = {
+export const fileParsers:Record<FilesData['from'],()=>FilesData> = {
     acs:getFilesFromACS
 }
+
 export function getFiguresFrom(Journal:FiguresData['from']){
     return figParsers[Journal]()
 }
