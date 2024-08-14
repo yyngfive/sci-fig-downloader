@@ -89,15 +89,17 @@ function FigCard({
     <>
       <div className="flex justify-between items-center">
         <h2 className="text-lg my-2">{title}</h2>
-        <span className="flex gap-1">
-          <input
-            type="checkbox"
-            className="checkbox checkbox-sm"
-            checked={selectAll}
-            onChange={handleSelectAll}
-          />
-          <button onClick={handleSelectAll}>选择全部</button>
-        </span>
+        {(figsData[type]?.length as number) > 1 && (
+          <span className="flex gap-1">
+            <input
+              type="checkbox"
+              className="checkbox checkbox-sm"
+              checked={selectAll}
+              onChange={handleSelectAll}
+            />
+            <button onClick={handleSelectAll}>选择全部</button>
+          </span>
+        )}
       </div>
       <div className="w-full">
         <ul>

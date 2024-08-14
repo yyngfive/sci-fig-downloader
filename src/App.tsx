@@ -156,7 +156,8 @@ function App() {
           </Tab>
         </div>
       </div>
-      <div className="m-3 flex justify-end items-center h-12 z-50">
+      <div className="m-3 flex justify-between items-center h-12 z-50">
+        <span><a href="https://github.com/yyngfive/sci-fig-downloader/issues" className="link link-hover" target="_blank">问题反馈</a></span>
         <button
           className="btn btn-primary btn-sm mx-1"
           onClick={() => {
@@ -165,6 +166,7 @@ function App() {
         >
           下载已选项({downloads.length})
         </button>
+        
       </div>
     </>
   );
