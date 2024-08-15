@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useImmer } from "use-immer";
-import "@/App.css";
+import "./App.css";
 import { FigCard, FigCardTOC } from "@/components/FigCard";
-import { FileCard } from "./components/FileCard";
+import { FileCard } from "@/components/FileCard";
 import type { FiguresData, FigInfo, FilesData, FileInfo } from "@/types/parser";
 import { Tab } from "@/components/Tab";
 
@@ -48,45 +48,47 @@ function App() {
   }, [figsData, filesData]);
 
   async function getFigsData() {
-    const [tab] = await chrome.tabs.query({
+    const [tab] = await browser.tabs.query({
       active: true,
       lastFocusedWindow: true,
     });
     if (tab.id) {
       const currentUrl = tab.url as string;
       if (findJournalForUrl(currentUrl)) {
-        chrome.tabs.sendMessage(
-          tab.id,
-          { from: findJournalForUrl(currentUrl), type: "fig" },
-          (res) => {
+        browser.tabs
+          .sendMessage(tab.id, {
+            from: findJournalForUrl(currentUrl),
+            type: "fig",
+          })
+          .then((res) => {
             console.log(res);
             if (res !== undefined) {
               setFigsData(res);
             }
-          }
-        );
+          });
       }
     }
   }
 
   async function getFilesData() {
-    const [tab] = await chrome.tabs.query({
+    const [tab] = await browser.tabs.query({
       active: true,
       lastFocusedWindow: true,
     });
     if (tab.id) {
       const currentUrl = tab.url as string;
       if (findJournalForUrl(currentUrl)) {
-        chrome.tabs.sendMessage(
-          tab.id,
-          { from: findJournalForUrl(currentUrl), type: "file" },
-          (res) => {
+        browser.tabs
+          .sendMessage(tab.id, {
+            from: findJournalForUrl(currentUrl),
+            type: "file",
+          })
+          .then((res) => {
             console.log(res);
             if (res !== undefined) {
               setFilesData(res);
             }
-          }
-        );
+          });
       }
     }
   }
@@ -94,7 +96,7 @@ function App() {
   function handleDownload() {
     downloads.forEach((item) => {
       if (item.selected) {
-        chrome.downloads.download({
+        browser.downloads.download({
           url: item.originUrl,
         });
       }
@@ -157,7 +159,15 @@ function App() {
         </div>
       </div>
       <div className="m-3 flex justify-between items-center h-12 z-50">
-        <span><a href="https://github.com/yyngfive/sci-fig-downloader/issues" className="link link-hover" target="_blank">问题反馈</a></span>
+        <span>
+          <a
+            href="https://github.com/yyngfive/sci-fig-downloader/issues"
+            className="link link-hover"
+            target="_blank"
+          >
+            问题反馈
+          </a>
+        </span>
         <button
           className="btn btn-primary btn-sm mx-1"
           onClick={() => {
@@ -166,7 +176,6 @@ function App() {
         >
           下载已选项({downloads.length})
         </button>
-        
       </div>
     </>
   );
@@ -174,6 +183,8 @@ function App() {
 
 function findJournalForUrl(url: string): string | null {
   const supportWebsites = ["nature", "acs", "wiley"];
+  console.log(url);
+  if(!url.startsWith('http')){return null}
   const domain = url.split("/")[2].split(".");
   if (domain.length >= 2) {
     const top = domain[domain.length - 2];

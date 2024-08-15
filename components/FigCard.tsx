@@ -113,14 +113,16 @@ function FigCard({
                   handleSelect(figInfo);
                 }}
               />
-              <button
-                className="truncate"
-                onClick={() => {
-                  handleSelect(figInfo);
-                }}
-              >
-                Fig {figInfo.id}. {figInfo.name}
-              </button>
+              <div className="truncate">
+                <span
+                  className="truncate"
+                  onClick={() => {
+                    handleSelect(figInfo);
+                  }}
+                >
+                  Fig {figInfo.id}. {figInfo.name}
+                </span>
+              </div>
             </li>
           ))}
         </ul>

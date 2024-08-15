@@ -4,23 +4,34 @@ Chrome/Edge拓展，用于从期刊网站上下载文章附图的原始版本
 
 ## 支持的期刊
 
-- nature系列
-- acs系列
-- wiley系列
+- nature系列：图片
+- acs系列：图片+文件
+- wiley系列：图片
 
 ## 计划
+
+- 解析器支持：
+  - 图片：Science网站 ScienceDirect网站
+  - 文件：nature系列网站
+
+## 目标
 
 - [x] 简单的下载管理界面
 - [ ] 支持更多的期刊
 - [ ] 可将图片分类下载到可自定义名称的文件夹
-- [ ] 支持下载SI文件以及视频等
+- [x] 支持下载SI文件以及视频等
 - [ ] 优化插件界面
-- [ ] 更方便的Parser添加方式
+- [x] 更方便的Parser添加方式
 
 ## 已知BUG
+
 - 某些情况下无法成功爬取网站内容导致插件界面空白
 
 ## 使用
+
+### 通过Release
+
+可直接从[Release](https://github.com/yyngfive/sci-fig-downloader/releases)页面下载构建好的拓展
 
 ### 通过源码
 克隆源码到本地
