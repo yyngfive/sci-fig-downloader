@@ -22,12 +22,15 @@ jobs:
       - name: build and zip
         run: |
           pnpm install
-          pnpm build
-      - name: Read version of package.json
-        uses: xile611/read-package-version-action@v2.1
-        id: package-version
-      - name: upload
+          pnpm build -b edge
+          pnpm build -b chrome
+      - name: upload chrome
         uses: actions/upload-artifact@v4
         with:
-          name: sci-fig-downloader-${{ steps.package-version.outcome.current_version }}
-          path: dist/
+          name: sci-fig-downloader-chrome
+          path: .output/chrome-mv3
+      - name: upload edge
+        uses: actions/upload-artifact@v4
+        with:
+          name: sci-fig-downloader-chrome
+          path: .output/edge-mv3

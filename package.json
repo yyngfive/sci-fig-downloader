@@ -2,7 +2,7 @@
   "name": "sci-fig-downloader",
   "description": "Download original figures from science journal websites.",
   "private": true,
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "module",
   "scripts": {
     "dev": "wxt",
