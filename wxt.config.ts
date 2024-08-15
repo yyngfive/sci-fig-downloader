@@ -6,6 +6,7 @@ export default defineConfig({
   //modules: ["@wxt-dev/module-react"],
   manifest: {
     permissions: ["webNavigation", "activeTab", "downloads"],
+    name:'Sci Fig Downloader',
   },
   vite: () => ({
     plugins: [react()],
