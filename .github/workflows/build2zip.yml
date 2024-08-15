@@ -32,5 +32,5 @@ jobs:
       - name: upload edge
         uses: actions/upload-artifact@v4
         with:
-          name: sci-fig-downloader-chrome
+          name: sci-fig-downloader-edge
           path: .output/edge-mv3
