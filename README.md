@@ -1,11 +1,11 @@
 # Sci Fig Downloader
 
-Chrome/Edge拓展，用于从期刊网站上下载文章附图的原始版本
+Chrome/Edge拓展，用于从期刊网站上下载文章附图的原始版本以及文章的补充材料
 
 ## 支持的期刊
 
-- nature系列：图片+文件
-- acs系列：图片+文件
+- nature系列：图片+补充材料
+- acs系列：图片+补充材料
 - wiley系列：图片
 
 ## 计划
@@ -46,4 +46,8 @@ pnpm install
 ```bash
 pnpm build
 ```
-构建的浏览器拓展位于`dist`文件夹中，可在Chrome或Edge浏览器中开启开发者模式，通过“加载解压缩的拓展”文件夹方式安装
+默认将构建edge版本，如果需要其他浏览器的版本，可以使用`-b`参数，例如：
+```bash
+pnpm build -b chrome
+```
+构建的浏览器拓展位于`output`文件夹中，可在Chrome或Edge浏览器中开启开发者模式，通过“加载解压缩的拓展”文件夹方式安装

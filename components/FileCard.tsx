@@ -32,8 +32,9 @@ function FileCard({
         }
         selected.push(fileInfoDraft.selected);
       });
+      setSelectAll(selected.every((item) => item === true));
     });
-    setSelectAll(selected.every((item) => item === true));
+    
   }
 
   return (
