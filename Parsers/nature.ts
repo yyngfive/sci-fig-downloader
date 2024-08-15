@@ -1,4 +1,46 @@
 import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
+import { getFileType } from "@/assets/utils/fileType";
+export function getFilesFromNature(): FilesData {
+  let filesData: FilesData = {
+    from: "nature",
+    files: [],
+    hasSrc: false,
+    srcFiles: [],
+    title: "Supplementary Information",
+  };
+  const supportedList = document.querySelector(
+    'section[data-title="Supplementary information"]'
+  );
+  if (!supportedList) {
+    return filesData;
+  }
+
+  const fileLinks = supportedList.querySelectorAll(
+    "div.c-article-supplementary__item"
+  );
+  fileLinks.forEach((si, index) => {
+    const id = index + 1;
+    const link = si.querySelector('a.print-link') as HTMLAnchorElement
+    let name = link.textContent as string
+    const subName = si.querySelector('.c-article-supplementary__description')
+    
+    if(subName !== null){
+      name = `${name}: ${subName.textContent}`
+    }
+    const originUrl = link.href;
+    const fileType = getFileType(originUrl.split("/").pop() as string);
+    const fileInfo: FileInfo = {
+      id,
+      name,
+      fileType,
+      originUrl,
+      selected: false,
+    };
+    filesData.files.push(fileInfo);
+  });
+
+  return filesData;
+}
 
 export function getFiguresFromNature(): FiguresData {
   let figuresData: FiguresData = {
@@ -66,15 +108,22 @@ export function getFiguresFromNature(): FiguresData {
     figuresData.mainFigs.push(fig_info);
   });
 
-  const siFigList = document.querySelector('section[data-title="Extended data figures and tables"],section[data-title="Extended data"]')
+  const siFigList = document.querySelector(
+    'section[data-title="Extended data figures and tables"],section[data-title="Extended data"]'
+  );
 
-  console.log(siFigList?.querySelectorAll('a'),'AAA');
-  if(!siFigList){return figuresData}
-  siFigList.querySelectorAll('a.print-link').forEach((link)=>{
-    const caption = link.textContent as string
+  console.log(siFigList?.querySelectorAll("a"), "AAA");
+  if (!siFigList) {
+    return figuresData;
+  }
+  siFigList.querySelectorAll("a.print-link").forEach((link) => {
+    const caption = link.textContent as string;
     const { id, name } = extractFigureInfo(caption);
-    if(id === 0){return}
-    const htmlUrl = 'https:' + link.getAttribute('data-supp-info-image') as string
+    if (id === 0) {
+      return;
+    }
+    const htmlUrl = ("https:" +
+      link.getAttribute("data-supp-info-image")) as string;
     const originUrl = htmlUrl.replace("lw685", "full");
     const figInfo: FigInfo = {
       id,
@@ -83,10 +132,10 @@ export function getFiguresFromNature(): FiguresData {
       originUrl,
       selected: false,
     };
-    figuresData.siFigs?.push(figInfo)
-  })
+    figuresData.siFigs?.push(figInfo);
+  });
   console.log(figuresData.siFigs);
-  
+
   if (figuresData.siFigs?.length !== 0) {
     figuresData.hasSi = true;
     figuresData.siTitle = "Extended Data Figures";

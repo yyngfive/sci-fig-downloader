@@ -18,6 +18,7 @@ function App() {
     files: [],
     from: "acs",
     title: "",
+    hasSrc:false,
   });
   const [downloads, setDownloads] = useImmer<FigInfo[] | FileInfo[]>([]);
 

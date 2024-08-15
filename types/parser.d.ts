@@ -26,7 +26,9 @@ interface FiguresData {
 
 interface FilesData {
   title:string;
-  from: "acs";
+  from: "acs" | "nature";
+  hasSrc:boolean,
+  srcFiles?: FileInfo[];
   files: FileInfo[];
 }
 

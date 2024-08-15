@@ -1,13 +1,14 @@
 import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
-
+import { getFileType } from "@/assets/utils/fileType";
 export function getFilesFromACS(): FilesData {
   let filesData: FilesData = {
     from: "acs",
     files: [],
+    hasSrc:false,
     title: "Supporting Information",
   };
   const supportedList = document.querySelector(".NLM_list-list_type-label");
-  if (supportedList === undefined) {
+  if (!supportedList) {
     return filesData;
   }
 
@@ -36,26 +37,7 @@ export function getFilesFromACS(): FilesData {
   return filesData;
 }
 
-function getFileType(filename: string): FileInfo["fileType"] {
-  const ext = filename
-    .toLowerCase()
-    .split(".")
-    .pop() as keyof typeof fileExtensions;
-  return fileExtensions[ext] || "other";
-}
 
-const fileExtensions: Record<string, FileInfo["fileType"]> = {
-  pdf: "pdf",
-  mp4: "video",
-  mov: "video",
-  avi: "video",
-  mp3: "audio",
-  wav: "audio",
-  doc: "word",
-  docx: "word",
-  xls: "excel",
-  xlsx: "excel",
-};
 
 export function getFiguresFromACS(): FiguresData {
   let figuresData: FiguresData = {
