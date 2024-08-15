@@ -1,6 +1,6 @@
 {
   "name": "sci-fig-downloader",
-  "description": "Download original figures from science journal websites.",
+  "description": "View and download original figures and supplementary files from science journal websites.",
   "private": true,
   "version": "0.1.2",
   "type": "module",
