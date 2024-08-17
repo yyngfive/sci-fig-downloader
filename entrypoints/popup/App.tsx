@@ -19,7 +19,7 @@ function App() {
     files: [],
     from: "acs",
     title: "",
-    hasSrc:false,
+    hasSrc: false,
   });
   const [downloads, setDownloads] = useImmer<FigInfo[] | FileInfo[]>([]);
 
@@ -116,51 +116,45 @@ function App() {
         <h1 className="font-bold text-xl my-2">{figsData.title}</h1>
         <div role="tablist" className="tabs tabs-lifted w-[476px]">
           <Tab name="图片" defaultChecked>
-            
-              {figsData.hasToc && (
-                <>
-                  <FigCardTOC
-                    title="Graphical Abstract"
-                    figsData={figsData}
-                    setFigsData={setFigsData}
-                  />
-                </>
-              )}
-              {figsData.mainFigs.length !== 0 && (
-                <FigCard
-                  title="Figures"
+            {figsData.hasToc && (
+              <>
+                <FigCardTOC
+                  title="Graphical Abstract"
                   figsData={figsData}
                   setFigsData={setFigsData}
-                  type="mainFigs"
                 />
-              )}
-              {figsData.hasSi && (
-                <>
-                  <FigCard
-                    title={figsData.siTitle as string}
-                    figsData={figsData}
-                    type="siFigs"
-                    setFigsData={setFigsData}
-                  />
-                </>
-              )}
-            
+              </>
+            )}
+            {figsData.mainFigs.length !== 0 && (
+              <FigCard
+                title="Figures"
+                figsData={figsData}
+                setFigsData={setFigsData}
+                type="mainFigs"
+              />
+            )}
+            {figsData.hasSi && (
+              <>
+                <FigCard
+                  title={figsData.siTitle as string}
+                  figsData={figsData}
+                  type="siFigs"
+                  setFigsData={setFigsData}
+                />
+              </>
+            )}
           </Tab>
 
           <Tab name="文件">
-            
-              {filesData.files.length !== 0 && (
-                <FileCard
-                  title={filesData.title}
-                  filesData={filesData}
-                  setFilesData={setFilesData}
-                />
-              )}
-            
+            {filesData.files.length !== 0 && (
+              <FileCard
+                title={filesData.title}
+                filesData={filesData}
+                setFilesData={setFilesData}
+              />
+            )}
           </Tab>
-          <Tab name="设置">
-            无
-          </Tab>
+          <Tab name="设置">无</Tab>
         </div>
       </div>
       <div className="m-3 flex justify-between items-center h-12 z-50">
@@ -185,7 +179,5 @@ function App() {
     </>
   );
 }
-
-
 
 export default App;

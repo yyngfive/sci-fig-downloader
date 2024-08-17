@@ -7,12 +7,15 @@ Chrome/Edge拓展，用于从期刊网站上下载文章附图的原始版本以
 - nature系列：图片+补充材料
 - acs系列：图片+补充材料
 - wiley系列：图片
+- science系列：图片+补充材料
 
-## 计划
+## 下一版本
 
 - 解析器支持：
-  - 图片：Science网站 ScienceDirect网站
-  - 文件：nature系列网站
+  - [x] Science网站 
+  - [ ] ScienceDirect网站
+  - [x] nature系列网站（文件）
+  - [ ] wiley网站（文件）
 
 ## 目标
 
