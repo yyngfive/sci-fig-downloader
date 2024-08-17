@@ -116,7 +116,7 @@ function App() {
         <h1 className="font-bold text-xl my-2">{figsData.title}</h1>
         <div role="tablist" className="tabs tabs-lifted w-[476px]">
           <Tab name="图片" defaultChecked>
-            <div className="max-h-[400px] overflow-auto ">
+            
               {figsData.hasToc && (
                 <>
                   <FigCardTOC
@@ -144,11 +144,11 @@ function App() {
                   />
                 </>
               )}
-            </div>
+            
           </Tab>
 
           <Tab name="文件">
-            <div className="max-h-[400px] overflow-auto ">
+            
               {filesData.files.length !== 0 && (
                 <FileCard
                   title={filesData.title}
@@ -156,7 +156,10 @@ function App() {
                   setFilesData={setFilesData}
                 />
               )}
-            </div>
+            
+          </Tab>
+          <Tab name="设置">
+            无
           </Tab>
         </div>
       </div>

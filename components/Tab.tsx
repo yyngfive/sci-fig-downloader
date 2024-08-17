@@ -5,7 +5,11 @@ interface TabProps {
   defaultChecked?: boolean;
 }
 
-function Tab({ children, name, defaultChecked }: React.PropsWithChildren<TabProps>) {
+function Tab({
+  children,
+  name,
+  defaultChecked,
+}: React.PropsWithChildren<TabProps>) {
   return (
     <>
       <input
@@ -20,7 +24,7 @@ function Tab({ children, name, defaultChecked }: React.PropsWithChildren<TabProp
         role="tabpanel"
         className="tab-content bg-base-100 border-base-300 rounded-box px-3 pb-3 max-w-[476px]"
       >
-        {children}
+        <div className="max-h-[400px] overflow-auto ">{children}</div>
       </div>
     </>
   );
