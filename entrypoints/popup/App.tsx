@@ -5,6 +5,7 @@ import { FigCard, FigCardTOC } from "@/components/FigCard";
 import { FileCard } from "@/components/FileCard";
 import type { FiguresData, FigInfo, FilesData, FileInfo } from "@/types/parser";
 import { Tab } from "@/components/Tab";
+import { findJournalForUrl } from "@/Parsers/parsers";
 
 function App() {
   const [figsData, setFigsData] = useImmer<FiguresData>({
@@ -182,20 +183,6 @@ function App() {
   );
 }
 
-function findJournalForUrl(url: string): string | null {
-  const supportWebsites = ["nature", "acs", "wiley"];
-  console.log(url);
-  if(!url.startsWith('http')){return null}
-  const domain = url.split("/")[2].split(".");
-  if (domain.length >= 2) {
-    const top = domain[domain.length - 2];
-    console.log(top, "top");
 
-    if (supportWebsites.includes(top)) {
-      return top;
-    }
-  }
-  return null;
-}
 
 export default App;

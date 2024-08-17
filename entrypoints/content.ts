@@ -13,6 +13,7 @@ export default defineContentScript({
     "*://pubs.acs.org/*",
     "*://onlinelibrary.wiley.com/*",
     "*://*.onlinelibrary.wiley.com/*",
+    "*://*.science.org/*",
   ],
   main() {
     function handleGetFigsData(
