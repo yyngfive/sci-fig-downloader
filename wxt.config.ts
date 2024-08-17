@@ -17,4 +17,5 @@ export default defineConfig({
     },
   }),
   browser: "edge",
+  //extensionApi: "chrome",
 });

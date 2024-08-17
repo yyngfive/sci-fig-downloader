@@ -1,6 +1,6 @@
 import { getFiguresFromNature, getFilesFromNature } from "@/Parsers/nature";
 import { getFiguresFromACS, getFilesFromACS } from "@/Parsers/acs";
-import { getFiguresFromWiley } from "@/Parsers/wiley";
+import { getFiguresFromWiley, getFilesFromWiley } from "@/Parsers/wiley";
 import { getFiguresFromScience, getFilesFromScience } from "./science";
 import { FiguresData, FilesData } from "@/types/parser";
 
@@ -33,6 +33,7 @@ export const fileParsers: Record<FilesData["from"], () => FilesData> = {
   acs: getFilesFromACS,
   nature: getFilesFromNature,
   science: getFilesFromScience,
+  wiley: getFilesFromWiley,
 };
 
 export function getFiguresFrom(Journal: FiguresData["from"]) {

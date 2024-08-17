@@ -18,6 +18,9 @@ importers:
         specifier: ^0.10.0
         version: 0.10.0(immer@10.1.1)(react@18.3.1)
     devDependencies:
+      '@types/chrome':
+        specifier: ^0.0.270
+        version: 0.0.270
       '@types/react':
         specifier: ^18.3.3
         version: 18.3.3
@@ -29,7 +32,7 @@ importers:
         version: 3.7.0(vite@5.4.0(@types/node@22.3.0))
       '@wxt-dev/module-react':
         specifier: ^1.1.0
-        version: 1.1.1(vite@5.4.0(@types/node@22.3.0))(wxt@0.19.5(@types/node@22.3.0)(rollup@4.20.0))
+        version: 1.1.1(vite@5.4.0(@types/node@22.3.0))(wxt@0.19.5(@types/chrome@0.0.270)(@types/node@22.3.0)(rollup@4.20.0))
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.41)
@@ -47,7 +50,7 @@ importers:
         version: 5.5.4
       wxt:
         specifier: ^0.19.1
-        version: 0.19.5(@types/node@22.3.0)(rollup@4.20.0)
+        version: 0.19.5(@types/chrome@0.0.270)(@types/node@22.3.0)(rollup@4.20.0)
 
 packages:
 
@@ -709,8 +712,20 @@ packages:
   '@types/babel__traverse@7.20.6':
     resolution: {integrity: sha512-r1bzfrm0tomOI8g1SzvCaQHo6Lcv6zu0EA+W2kHrt8dyrHQxGzBBL4kdkzIS+jBMV+EYcMAEAqXqYaLJq5rOZg==}
 
+  '@types/chrome@0.0.270':
+    resolution: {integrity: sha512-ADvkowV7YnJfycZZxL2brluZ6STGW+9oKG37B422UePf2PCXuFA/XdERI0T18wtuWPx0tmFeZqq6MOXVk1IC+Q==}
+
   '@types/estree@1.0.5':
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
+
+  '@types/filesystem@0.0.36':
+    resolution: {integrity: sha512-vPDXOZuannb9FZdxgHnqSwAG/jvdGM8Wq+6N4D/d80z+D4HWH+bItqsZaVRQykAn6WEVeEkLm2oQigyHtgb0RA==}
+
+  '@types/filewriter@0.0.33':
+    resolution: {integrity: sha512-xFU8ZXTw4gd358lb2jw25nxY9QAgqn2+bKKjKOYfNCzN4DKCFetK7sPtrlpg66Ywe3vWY9FNxprZawAh9wfJ3g==}
+
+  '@types/har-format@1.2.15':
+    resolution: {integrity: sha512-RpQH4rXLuvTXKR0zqHq3go0RVXYv/YVqv4TnPH95VbwUxZdQlK1EtcMvQvMpDngHbt13Csh9Z4qT9AbkiQH5BA==}
 
   '@types/http-cache-semantics@4.0.4':
     resolution: {integrity: sha512-1m0bIFVc7eJWyve9S0RnuRgcQqF/Xd5QsUZAZeQFr1Q3/p9JWoQQEqmVy+DPTNpGXwhgIetAoYF8JSc33q29QA==}
@@ -3206,7 +3221,20 @@ snapshots:
     dependencies:
       '@babel/types': 7.25.2
 
+  '@types/chrome@0.0.270':
+    dependencies:
+      '@types/filesystem': 0.0.36
+      '@types/har-format': 1.2.15
+
   '@types/estree@1.0.5': {}
+
+  '@types/filesystem@0.0.36':
+    dependencies:
+      '@types/filewriter': 0.0.33
+
+  '@types/filewriter@0.0.33': {}
+
+  '@types/har-format@1.2.15': {}
 
   '@types/http-cache-semantics@4.0.4': {}
 
@@ -3262,10 +3290,10 @@ snapshots:
 
   '@webext-core/match-patterns@1.0.3': {}
 
-  '@wxt-dev/module-react@1.1.1(vite@5.4.0(@types/node@22.3.0))(wxt@0.19.5(@types/node@22.3.0)(rollup@4.20.0))':
+  '@wxt-dev/module-react@1.1.1(vite@5.4.0(@types/node@22.3.0))(wxt@0.19.5(@types/chrome@0.0.270)(@types/node@22.3.0)(rollup@4.20.0))':
     dependencies:
       '@vitejs/plugin-react': 4.3.1(vite@5.4.0(@types/node@22.3.0))
-      wxt: 0.19.5(@types/node@22.3.0)(rollup@4.20.0)
+      wxt: 0.19.5(@types/chrome@0.0.270)(@types/node@22.3.0)(rollup@4.20.0)
     transitivePeerDependencies:
       - supports-color
       - vite
@@ -5228,7 +5256,7 @@ snapshots:
 
   ws@8.18.0: {}
 
-  wxt@0.19.5(@types/node@22.3.0)(rollup@4.20.0):
+  wxt@0.19.5(@types/chrome@0.0.270)(@types/node@22.3.0)(rollup@4.20.0):
     dependencies:
       '@aklinker1/rollup-plugin-visualizer': 5.12.0(rollup@4.20.0)
       '@types/webextension-polyfill': 0.10.7
@@ -5272,6 +5300,8 @@ snapshots:
       vite-node: 2.0.5(@types/node@22.3.0)
       web-ext-run: 0.2.1
       webextension-polyfill: 0.12.0
+    optionalDependencies:
+      '@types/chrome': 0.0.270
     transitivePeerDependencies:
       - '@types/node'
       - bufferutil

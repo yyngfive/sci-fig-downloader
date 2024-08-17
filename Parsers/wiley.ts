@@ -1,9 +1,44 @@
-import type { FiguresData, FigInfo } from "@/types/parser";
+import type { FiguresData, FigInfo,FileInfo,FilesData } from "@/types/parser";
+import { getFileType } from "@/assets/utils/fileType";
+import { parseQueryParameters } from "@/assets/utils/parseUrl";
+export function getFilesFromWiley(): FilesData {
+  let filesData: FilesData = {
+    from: "wiley",
+    files: [],
+    hasSrc:false,
+    title: "Supporting Information",
+  };
+  const supportedTable = document.querySelector(".support-info__table");
+  if (!supportedTable) {
+    return filesData;
+  }
+  console.log(window.location.href);
+  
+  const fileLinks = supportedTable?.querySelectorAll("tr");
+  fileLinks?.forEach((si, index) => {
+    if(index === 0){return}
+    const id = index;
+    const cells = si.querySelectorAll('td')
+    const name = cells[1].textContent as string
+    const originUrl = cells[0].querySelector('a')?.href as string
+
+    const fileName = parseQueryParameters(originUrl)
+    const fileType = getFileType(originUrl.split("/").pop() as string);
+    const fileInfo: FileInfo = {
+      id,
+      name,
+      fileType,
+      originUrl,
+      selected: false,
+    };
+    filesData.files.push(fileInfo);
+  });
+
+  return filesData;
+}
 
 export function getFiguresFromWiley(): FiguresData {
-  const figureList = document.getElementsByClassName(
-    "article-section__full"
-  )[0];
+  
   const title = document.querySelector(".citation__title")
     ?.textContent as string;
   console.log("title", title);
@@ -17,14 +52,19 @@ export function getFiguresFromWiley(): FiguresData {
     from: "wiley",
   };
 
+  const figureList = document.querySelector(
+    ".article-section__full"
+  );
+  if(!figureList){return figuresData}
   const figures = figureList.querySelectorAll("figure");
   console.log(figureList);
 
   figures.forEach((element) => {
     const captionText = element.querySelector(
       ".figure__caption-text"
-    ) as HTMLElement;
-    const name = getTextWithoutClass(captionText, "bibLink");
+    )
+    if(!captionText){return}
+    const name = getTextWithoutClass(captionText as HTMLElement, "bibLink");
     const captionTitle = element.querySelector(".figure__title")
       ?.textContent as string;
     const type = captionTitle.split(" ")[0];
@@ -34,7 +74,7 @@ export function getFiguresFromWiley(): FiguresData {
       .querySelector("img")
       ?.getAttribute("data-lg-src") as string;
     let domain;
-    if (htmlUrl.startsWith("http://online")) {
+    if (htmlUrl.startsWith("https://online")) {
       domain = "https://onlinelibrary.wiley.com";
     } else {
       domain = "https://chemistry-europe.onlinelibrary.wiley.com";
@@ -47,6 +87,8 @@ export function getFiguresFromWiley(): FiguresData {
       originUrl,
       selected: false,
     };
+    console.log(figInfo);
+    
 
     if (type.startsWith("Scheme")) {
       figuresData.siFigs?.push(figInfo);

@@ -24,7 +24,7 @@ function Tab({
         role="tabpanel"
         className="tab-content bg-base-100 border-base-300 rounded-box px-3 pb-3 max-w-[476px]"
       >
-        <div className="max-h-[400px] overflow-auto ">{children}</div>
+        <div className="max-h-[350px] overflow-auto ">{children}</div>
       </div>
     </>
   );

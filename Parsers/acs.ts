@@ -15,12 +15,6 @@ export function getFilesFromACS(): FilesData {
   const fileLinks = supportedList?.querySelectorAll("p");
   fileLinks?.forEach((si, index) => {
     const id = index + 1;
-    // const names = si.cloneNode(true) as HTMLParagraphElement;
-    // const aTags = names.querySelectorAll("a");
-    // aTags.forEach((node) => {
-    //   names.removeChild(node);
-    // });
-    // const name = names.textContent?.slice(0, -3) as string;
     const name = si.textContent?.replace(/\(.*?\)$/, '') as string
     const link = si.querySelector("a.ext-link") as HTMLAnchorElement;
     const originUrl = link.href;
@@ -82,7 +76,6 @@ export function getFiguresFromACS(): FiguresData {
   if (figureList === undefined) {
     return figuresData;
   }
-  console.log('figure list');
   
   const figures = figureList.querySelectorAll("figure");
   figures.forEach((element) => {
@@ -100,9 +93,7 @@ export function getFiguresFromACS(): FiguresData {
       htmlUrl,
       originUrl,
       selected: false,
-    };
-    console.log(figInfo,'info');
-    
+    };    
 
     if (type.startsWith("Scheme")) {
       figuresData.siFigs?.push(figInfo);

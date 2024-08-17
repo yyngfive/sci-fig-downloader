@@ -57,17 +57,14 @@ function App() {
     if (tab.id) {
       const currentUrl = tab.url as string;
       if (findJournalForUrl(currentUrl)) {
-        browser.tabs
-          .sendMessage(tab.id, {
-            from: findJournalForUrl(currentUrl),
-            type: "fig",
-          })
-          .then((res) => {
-            console.log(res);
-            if (res !== undefined) {
-              setFigsData(res);
-            }
-          });
+        const res = await browser.tabs.sendMessage(tab.id, {
+          from: findJournalForUrl(currentUrl),
+          type: "fig",
+        });
+        console.log(res);
+        if (res !== undefined) {
+          setFigsData(res);
+        }
       }
     }
   }
