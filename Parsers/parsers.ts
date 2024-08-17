@@ -1,33 +1,15 @@
 import { getFiguresFromNature, getFilesFromNature } from "@/Parsers/nature";
 import { getFiguresFromACS, getFilesFromACS } from "@/Parsers/acs";
 import { getFiguresFromWiley } from "@/Parsers/wiley";
-import { getFiguresFromScience} from "./science";
+import { getFiguresFromScience, getFilesFromScience } from "./science";
 import { FiguresData, FilesData } from "@/types/parser";
 
-export const figParsers: Record<FiguresData["from"], () => FiguresData> = {
-  nature: getFiguresFromNature,
-  acs: getFiguresFromACS,
-  wiley: getFiguresFromWiley,
-  science:getFiguresFromScience,
-};
-
-export const fileParsers: Record<FilesData["from"], () => FilesData> = {
-  acs: getFilesFromACS,
-  nature: getFilesFromNature,
-};
-
-export function getFiguresFrom(Journal: FiguresData["from"]) {
-  return figParsers[Journal]();
-}
-
-export function getFilesFrom(Journal: FilesData["from"]) {
-  return fileParsers[Journal]();
-}
-
 export function findJournalForUrl(url: string): string | null {
-  const supportWebsites = ["nature", "acs", "wiley","science"];
+  const supportWebsites = ["nature", "acs", "wiley", "science"];
   console.log(url);
-  if(!url.startsWith('http')){return null}
+  if (!url.startsWith("http")) {
+    return null;
+  }
   const domain = url.split("/")[2].split(".");
   if (domain.length >= 2) {
     const top = domain[domain.length - 2];
@@ -38,4 +20,25 @@ export function findJournalForUrl(url: string): string | null {
     }
   }
   return null;
+}
+
+export const figParsers: Record<FiguresData["from"], () => FiguresData> = {
+  nature: getFiguresFromNature,
+  acs: getFiguresFromACS,
+  wiley: getFiguresFromWiley,
+  science: getFiguresFromScience,
+};
+
+export const fileParsers: Record<FilesData["from"], () => FilesData> = {
+  acs: getFilesFromACS,
+  nature: getFilesFromNature,
+  science: getFilesFromScience,
+};
+
+export function getFiguresFrom(Journal: FiguresData["from"]) {
+  return figParsers[Journal]();
+}
+
+export function getFilesFrom(Journal: FilesData["from"]) {
+  return fileParsers[Journal]();
 }
