@@ -1,6 +1,7 @@
 import { type Updater } from "use-immer";
 import type { FiguresData, FigInfo } from "@/types/parser";
 import { useState } from "react";
+import IconLink from "@/assets/svg/IconLink";
 
 function FigCardTOC({
   title,
@@ -25,23 +26,34 @@ function FigCardTOC({
       </div>
       <div className="">
         <ul>
-          <li className="flex gap-1 my-1" key={0}>
-            <input
-              type="checkbox"
-              className="checkbox checkbox-sm"
-              checked={figsData.tocFig?.selected}
-              onChange={() => {
-                handleSelect(figsData);
-              }}
-            />
-            <button
-              className="truncate"
-              onClick={() => {
-                handleSelect(figsData);
-              }}
-            >
-              Fig {figsData.tocFig?.id}. {figsData.tocFig?.name}
-            </button>
+          <li className="flex gap-1 my-1 justify-between items-center" key={0}>
+            <div className="flex gap-1 w-[calc(100%-20px)]">
+              <input
+                type="checkbox"
+                className="checkbox checkbox-sm"
+                checked={figsData.tocFig?.selected}
+                onChange={() => {
+                  handleSelect(figsData);
+                }}
+              />
+              <button
+                className="truncate"
+                onClick={() => {
+                  handleSelect(figsData);
+                }}
+              >
+                Fig {figsData.tocFig?.id}. {figsData.tocFig?.name}
+              </button>
+            </div>
+            <div className="size-4 p-0">
+                <a
+                  className=""
+                  href={figsData.tocFig?.originUrl}
+                  target="_blank"
+                >
+                  <IconLink width={3} />
+                </a>
+              </div>
           </li>
         </ul>
       </div>
@@ -104,24 +116,38 @@ function FigCard({
       <div className="w-full">
         <ul>
           {figsData[type]?.map((figInfo, index) => (
-            <li className="flex gap-1 my-1" key={index}>
-              <input
-                type="checkbox"
-                className="checkbox checkbox-sm"
-                checked={figInfo.selected}
-                onChange={() => {
-                  handleSelect(figInfo);
-                }}
-              />
-              <div className="truncate">
-                <span
-                  className="truncate"
-                  onClick={() => {
+            <li
+              className="flex gap-1 my-1 justify-between items-center w-full"
+              key={index}
+            >
+              <div className="flex gap-1 w-[calc(100%-20px)]">
+                <input
+                  type="checkbox"
+                  className="checkbox checkbox-sm"
+                  checked={figInfo.selected}
+                  onChange={() => {
                     handleSelect(figInfo);
                   }}
+                />
+                <div className="truncate">
+                  <span
+                    className="truncate"
+                    onClick={() => {
+                      handleSelect(figInfo);
+                    }}
+                  >
+                    Fig {figInfo.id}. {figInfo.name}
+                  </span>
+                </div>
+              </div>
+              <div className="size-4 p-0">
+                <a
+                  className=""
+                  href={figInfo.originUrl}
+                  target="_blank"
                 >
-                  Fig {figInfo.id}. {figInfo.name}
-                </span>
+                  <IconLink width={3} />
+                </a>
               </div>
             </li>
           ))}

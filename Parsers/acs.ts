@@ -15,12 +15,13 @@ export function getFilesFromACS(): FilesData {
   const fileLinks = supportedList?.querySelectorAll("p");
   fileLinks?.forEach((si, index) => {
     const id = index + 1;
-    const names = si.cloneNode(true) as HTMLParagraphElement;
-    const aTags = names.querySelectorAll("a");
-    aTags.forEach((node) => {
-      names.removeChild(node);
-    });
-    const name = names.textContent?.slice(0, -3) as string;
+    // const names = si.cloneNode(true) as HTMLParagraphElement;
+    // const aTags = names.querySelectorAll("a");
+    // aTags.forEach((node) => {
+    //   names.removeChild(node);
+    // });
+    // const name = names.textContent?.slice(0, -3) as string;
+    const name = si.textContent?.replace(/\(.*?\)$/, '') as string
     const link = si.querySelector("a.ext-link") as HTMLAnchorElement;
     const originUrl = link.href;
     const fileType = getFileType(originUrl.split("/").pop() as string);
@@ -57,9 +58,6 @@ export function getFiguresFromACS(): FiguresData {
   figuresData.title = title;
 
   const abstract = document.querySelector(".article_abstract");
-  if (!abstract) {
-    return figuresData;
-  }
   const abstractFigElement = abstract?.querySelector("img");
   if (abstractFigElement) {
     const id = 1;
@@ -84,6 +82,8 @@ export function getFiguresFromACS(): FiguresData {
   if (figureList === undefined) {
     return figuresData;
   }
+  console.log('figure list');
+  
   const figures = figureList.querySelectorAll("figure");
   figures.forEach((element) => {
     const caption = element.querySelector("figcaption")?.textContent as string;
@@ -101,6 +101,8 @@ export function getFiguresFromACS(): FiguresData {
       originUrl,
       selected: false,
     };
+    console.log(figInfo,'info');
+    
 
     if (type.startsWith("Scheme")) {
       figuresData.siFigs?.push(figInfo);

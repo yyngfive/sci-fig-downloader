@@ -1,7 +1,7 @@
 import type { FileInfo, FilesData } from "@/types/parser";
 import type { Updater } from "use-immer";
 import { useState } from "react";
-
+import IconLink from "@/assets/svg/IconLink";
 function FileCard({
   title,
   filesData,
@@ -34,7 +34,6 @@ function FileCard({
       });
       setSelectAll(selected.every((item) => item === true));
     });
-    
   }
 
   return (
@@ -56,23 +55,35 @@ function FileCard({
       <div className="w-full">
         <ul>
           {filesData.files.map((fileInfo, index) => (
-            <li className="flex gap-1 my-1" key={index}>
-              <input
-                type="checkbox"
-                className="checkbox checkbox-sm"
-                checked={fileInfo.selected}
-                onChange={() => {
-                  handleSelect(fileInfo);
-                }}
-              />
-              <button
-                className="truncate"
-                onClick={() => {
-                  handleSelect(fileInfo);
-                }}
-              >
-                {fileInfo.id}. {fileInfo.name}
-              </button>
+            <li
+              className="flex gap-1 my-1 justify-between items-center"
+              key={index}
+            >
+              <div className="flex gap-1 w-[calc(100%-20px)]">
+                <input
+                  type="checkbox"
+                  className="checkbox checkbox-sm"
+                  checked={fileInfo.selected}
+                  onChange={() => {
+                    handleSelect(fileInfo);
+                  }}
+                />
+                <button
+                  className="truncate"
+                  onClick={() => {
+                    handleSelect(fileInfo);
+                  }}
+                >
+                  {fileInfo.id}. {fileInfo.name}
+                </button>
+              </div>
+              <div className="size-4 p-0">
+                {fileInfo.fileType == "pdf" && (
+                  <a className="" href={fileInfo.originUrl} target="_blank">
+                    <IconLink width={3} />
+                  </a>
+                )}
+              </div>
             </li>
           ))}
         </ul>

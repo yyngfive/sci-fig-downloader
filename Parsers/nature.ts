@@ -42,6 +42,8 @@ export function getFilesFromNature(): FilesData {
   return filesData;
 }
 
+//TODO：未解锁文章的图片抓取
+
 export function getFiguresFromNature(): FiguresData {
   let figuresData: FiguresData = {
     title: "",
