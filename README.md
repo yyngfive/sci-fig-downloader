@@ -20,17 +20,21 @@ Chrome/Edge 拓展，用于从期刊网站上下载文章附图的原始版本�
 
 ## 版本计划
 
-### 0.1.4
+### 0.1.5
 
 - 解析器支持：
-  - 牛津出版社 主要是 NAR
-  - Cell 出版社(Cell 出版社的文章也可以通过 ScienceDirect 网站查看)
+  - [ ] 牛津出版社 主要是 NAR
+  - [ ] Cell 出版社(Cell 出版社的文章也可以通过 ScienceDirect 网站查看)
+
+### 0.1.4
+
+- 界面优化
 
 ### 0.1.3
 
 - 解析器支持：
   - [x] Science 网站
-  - [ ] ScienceDirect 网站
+  - [x] ScienceDirect 网站
   - [x] nature 系列网站（文件）
   - [x] wiley 网站（文件）
 
