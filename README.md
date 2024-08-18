@@ -4,10 +4,11 @@ Chrome/Edge 拓展，用于从期刊网站上下载文章附图的原始版本�
 
 ## 支持的期刊
 
-- nature 系列：图片+补充材料
-- acs 系列：图片+补充材料
-- wiley 系列：图片
-- science 系列：图片+补充材料
+- nature 系列
+- acs 系列
+- wiley 系列
+- science 系列
+- sciencedirect 系列
 
 ## 目标
 
