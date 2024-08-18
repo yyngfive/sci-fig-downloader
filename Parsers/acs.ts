@@ -73,7 +73,7 @@ export function getFiguresFromACS(): FiguresData {
   }
 
   const figureList = document.querySelectorAll(".article_content")[0];
-  if (figureList === undefined) {
+  if (!figureList) {
     return figuresData;
   }
   

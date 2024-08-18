@@ -2,10 +2,11 @@ import { getFiguresFromNature, getFilesFromNature } from "@/Parsers/nature";
 import { getFiguresFromACS, getFilesFromACS } from "@/Parsers/acs";
 import { getFiguresFromWiley, getFilesFromWiley } from "@/Parsers/wiley";
 import { getFiguresFromScience, getFilesFromScience } from "./science";
+import { getFiguresFromScienceDirect } from "./sciencedirect";
 import { FiguresData, FilesData } from "@/types/parser";
 
 export function findJournalForUrl(url: string): string | null {
-  const supportWebsites = ["nature", "acs", "wiley", "science"];
+  const supportWebsites = ["nature", "acs", "wiley", "science","sciencedirect"];
   console.log(url);
   if (!url.startsWith("http")) {
     return null;
@@ -27,6 +28,7 @@ export const figParsers: Record<FiguresData["from"], () => FiguresData> = {
   acs: getFiguresFromACS,
   wiley: getFiguresFromWiley,
   science: getFiguresFromScience,
+  sciencedirect:getFiguresFromScienceDirect,
 };
 
 export const fileParsers: Record<FilesData["from"], () => FilesData> = {

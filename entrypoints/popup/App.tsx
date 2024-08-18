@@ -54,7 +54,7 @@ function App() {
       active: true,
       lastFocusedWindow: true,
     });
-    if (tab.id) {
+    if (tab.id && figsData.title === '') {
       const currentUrl = tab.url as string;
       if (findJournalForUrl(currentUrl)) {
         const res = await browser.tabs.sendMessage(tab.id, {
@@ -74,7 +74,7 @@ function App() {
       active: true,
       lastFocusedWindow: true,
     });
-    if (tab.id) {
+    if (tab.id && filesData.title === '') {
       const currentUrl = tab.url as string;
       if (findJournalForUrl(currentUrl)) {
         browser.tabs

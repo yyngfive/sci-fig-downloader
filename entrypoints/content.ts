@@ -14,6 +14,7 @@ export default defineContentScript({
     "*://onlinelibrary.wiley.com/*",
     "*://*.onlinelibrary.wiley.com/*",
     "*://*.science.org/*",
+    "*://*.sciencedirect.com/*",
   ],
   main() {
     function handleGetFigsData(

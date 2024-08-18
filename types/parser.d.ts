@@ -17,7 +17,7 @@ interface FiguresData {
   title: string; //文章标题
   hasToc: boolean; //是否有图片摘要
   hasSi: boolean; //是否提供可直接下载的补充材料图片或者反应体系图（有机反应文章常见）
-  from: "nature" | "acs" | "wiley" | "science"; //支持的杂志网站
+  from: "nature" | "acs" | "wiley" | "science" | "sciencedirect"; //支持的杂志网站
   siTitle?: "Scheme" | "Extended Data Figures"; //补充图片的类别
   tocFig?: FigInfo; //图片摘要
   mainFigs: FigInfo[]; //正文图片
