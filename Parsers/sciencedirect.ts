@@ -110,8 +110,11 @@ export function getFiguresFromScienceDirect(): FiguresData {
 
   const figures = figureList.querySelectorAll("figure.figure");
   figures.forEach((element) => {
-    const caption = element.querySelector(".captions")?.textContent as string;
-
+    let caption = element.querySelector(".captions")?.textContent;
+    if(!caption){
+      caption = ''
+    }
+    
     const name = caption
       .replace(/(\s|&nbsp;)+/g, " ")
       .replace(/^(Figure|Fig\.|Scheme)(?:\s\d+\.?)?\s*/, "");
@@ -139,6 +142,9 @@ export function getFiguresFromScienceDirect(): FiguresData {
       figuresData.mainFigs.push(figInfo);
     }
   });
+  figuresData.mainFigs.forEach((e,i)=>{
+    e.id = i +1
+  })
   if (figuresData.siFigs?.length !== 0) {
     figuresData.hasSi = true;
     figuresData.siTitle = "Scheme";
