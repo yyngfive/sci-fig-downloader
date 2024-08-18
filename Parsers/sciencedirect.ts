@@ -2,23 +2,35 @@ import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
 import { getFileType } from "@/assets/utils/fileType";
 export function getFilesFromScienceDirect(): FilesData {
   let filesData: FilesData = {
-    from: "acs",
+    from: "sciencedirect",
     files: [],
     hasSrc: false,
-    title: "Supporting Information",
+    title: "",
   };
-  const supportedList = document.querySelector(".NLM_list-list_type-label");
+  //抓display class
+  const supportedList = document.querySelector(".Appendices");
   if (!supportedList) {
     return filesData;
   }
-
-  const fileLinks = supportedList?.querySelectorAll("p");
+  const title = supportedList.querySelector("h2")?.textContent;
+  if (typeof title !== "string") {
+    return filesData;
+  }
+  filesData.title = title;
+  const fileLinks = supportedList?.querySelectorAll(".display");
   fileLinks?.forEach((si, index) => {
     const id = index + 1;
-    const name = si.textContent?.replace(/\(.*?\)$/, "") as string;
-    const link = si.querySelector("a.ext-link") as HTMLAnchorElement;
-    const originUrl = link.href;
+    const name = si.querySelector(".captions")?.textContent as string;
+    const link = si.querySelector("a.download-link") as HTMLAnchorElement;
+    let originUrl = link.href;
     const fileType = getFileType(originUrl.split("/").pop() as string);
+    if (fileType === "figure") {
+      const figList = si.querySelectorAll("ul li");
+      const hasHiRes = figList.length >= 2 ? true : false;
+      originUrl = hasHiRes
+        ? (figList[0].querySelector("a")?.href as string)
+        : (figList[1].querySelector("a")?.href as string);
+    }
     const fileInfo: FileInfo = {
       id,
       name,
@@ -50,15 +62,18 @@ export function getFiguresFromScienceDirect(): FiguresData {
   figuresData.title = title;
 
   const abstract = document.querySelector('div[class="abstract graphical"]');
-  console.log('abs');
-  
+
   if (abstract) {
     const id = 1;
     const name = "Graphical Abstract";
     const figList = abstract.querySelectorAll("ol li");
-    const hasHiRes = figList.length >= 2 ? true:false 
-    const htmlUrl = hasHiRes? figList[1].querySelector('a')?.href as string : figList[0].querySelector('a')?.href as string
-    const originUrl = hasHiRes?figList[0].querySelector('a')?.href as string:htmlUrl
+    const hasHiRes = figList.length >= 2 ? true : false;
+    const htmlUrl = hasHiRes
+      ? (figList[1].querySelector("a")?.href as string)
+      : (figList[0].querySelector("a")?.href as string);
+    const originUrl = hasHiRes
+      ? (figList[0].querySelector("a")?.href as string)
+      : htmlUrl;
     const figInfo: FigInfo = {
       id,
       name,
@@ -71,26 +86,28 @@ export function getFiguresFromScienceDirect(): FiguresData {
   }
 
   const figureList = document.querySelector("#body");
-  console.log('body');
-  
+
   if (!figureList) {
     return figuresData;
   }
 
   const figures = figureList.querySelectorAll("figure.figure");
   figures.forEach((element) => {
-
     const caption = element.querySelector(".captions")?.textContent as string;
-    console.log(caption);
-    
-    const name = caption.replace(/(\s|&nbsp;)+/g, " ").replace(/^(Figure|Fig\.|Scheme)(?:\s\d+\.?)?\s*/, '');
-    console.log(name);
-    
-    let {type,id} = extractFigureInfo(element.id)
+
+    const name = caption
+      .replace(/(\s|&nbsp;)+/g, " ")
+      .replace(/^(Figure|Fig\.|Scheme)(?:\s\d+\.?)?\s*/, "");
+
+    let { type, id } = extractFigureInfo(element.id);
     const figList = element.querySelectorAll("ol li");
-    const hasHiRes = figList.length >= 2 ? true:false 
-    const htmlUrl = hasHiRes? figList[1].querySelector('a')?.href as string : figList[0].querySelector('a')?.href as string
-    const originUrl = hasHiRes?figList[0].querySelector('a')?.href as string:htmlUrl
+    const hasHiRes = figList.length >= 2 ? true : false;
+    const htmlUrl = hasHiRes
+      ? (figList[1].querySelector("a")?.href as string)
+      : (figList[0].querySelector("a")?.href as string);
+    const originUrl = hasHiRes
+      ? (figList[0].querySelector("a")?.href as string)
+      : htmlUrl;
     const figInfo: FigInfo = {
       id,
       name,
@@ -98,10 +115,8 @@ export function getFiguresFromScienceDirect(): FiguresData {
       originUrl,
       selected: false,
     };
-    console.log(figInfo);
-    
 
-    if (type === 'sch') {
+    if (type === "sch") {
       figuresData.siFigs?.push(figInfo);
     } else {
       figuresData.mainFigs.push(figInfo);
@@ -117,25 +132,23 @@ export function getFiguresFromScienceDirect(): FiguresData {
 
 function extractFigureInfo(input: string): {
   type: string;
-  id: number;} 
-{
-    if(/^\d+$/.test(input)){
-        return{
-            type:'fig',
-            id:Number(input)
-        }
-    }
-    const match = input.match(/\d+/);
-    if(match){
-        return{
-            type: input.startsWith('sch')?'sch':'fig',
-            id:Number(match[0])
-        }
-    }
-    return{
-        type:'',
-        id:0
-    }
-
-  
+  id: number;
+} {
+  if (/^\d+$/.test(input)) {
+    return {
+      type: "fig",
+      id: Number(input),
+    };
+  }
+  const match = input.match(/\d+/);
+  if (match) {
+    return {
+      type: input.startsWith("sch") ? "sch" : "fig",
+      id: Number(match[0]),
+    };
+  }
+  return {
+    type: "",
+    id: 0,
+  };
 }

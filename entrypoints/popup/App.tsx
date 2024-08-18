@@ -6,6 +6,7 @@ import { FileCard } from "@/components/FileCard";
 import type { FiguresData, FigInfo, FilesData, FileInfo } from "@/types/parser";
 import { Tab } from "@/components/Tab";
 import { findJournalForUrl } from "@/Parsers/parsers";
+import { ShowMore } from "@re-dev/react-truncate";
 
 function App() {
   const [figsData, setFigsData] = useImmer<FiguresData>({
@@ -54,7 +55,7 @@ function App() {
       active: true,
       lastFocusedWindow: true,
     });
-    if (tab.id && figsData.title === '') {
+    if (tab.id && figsData.title === "") {
       const currentUrl = tab.url as string;
       if (findJournalForUrl(currentUrl)) {
         const res = await browser.tabs.sendMessage(tab.id, {
@@ -74,7 +75,7 @@ function App() {
       active: true,
       lastFocusedWindow: true,
     });
-    if (tab.id && filesData.title === '') {
+    if (tab.id && filesData.title === "") {
       const currentUrl = tab.url as string;
       if (findJournalForUrl(currentUrl)) {
         browser.tabs
@@ -110,7 +111,12 @@ function App() {
   return (
     <>
       <div className="m-3">
-        <h1 className="font-bold text-xl my-2">{figsData.title}</h1>
+        <h1 className="font-bold text-xl my-2">
+          <ShowMore lines={3} more={null}>
+            {figsData.title}
+          </ShowMore>
+        </h1>
+
         <div role="tablist" className="tabs tabs-lifted w-[476px]">
           <Tab name="图片" defaultChecked>
             {figsData.hasToc && (

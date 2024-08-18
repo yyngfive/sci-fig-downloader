@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@re-dev/react-truncate':
+        specifier: ^0.4.2
+        version: 0.4.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -507,6 +510,12 @@ packages:
   '@pnpm/npm-conf@2.3.1':
     resolution: {integrity: sha512-c83qWb22rNRuB0UaVCI0uRPNRr8Z0FWnEIvT47jiHAmOIUHbBOg5XvV7pM5x+rKn9HRpjxquDbXYSXr3fAKFcw==}
     engines: {node: '>=12'}
+
+  '@re-dev/react-truncate@0.4.2':
+    resolution: {integrity: sha512-IOwjqMLCZd1puNeNVfepc6KNcan7pW40xdAe85TijLXshr2Wgww4MtofdYsA0YYYvXxnz9Q1xYGVP8Iw8N5ybA==}
+    peerDependencies:
+      react: '>=19.0.0 || >=18.0.0 || >=17.0.0 || >=16.0.0'
+      react-dom: '>=19.0.0 || >=18.0.0 || >=17.0.0 || >=16.0.0'
 
   '@rollup/pluginutils@5.1.0':
     resolution: {integrity: sha512-XTIWOPPcpvyKI6L1NHo0lFlCyznUEyPmPY1mc3KpPVDYulHSTvyeLNVW00QTLIAFNhR3kYnJTQHeGqU4M3n09g==}
@@ -3081,6 +3090,11 @@ snapshots:
       '@pnpm/config.env-replace': 1.1.0
       '@pnpm/network.ca-file': 1.0.2
       config-chain: 1.1.13
+
+  '@re-dev/react-truncate@0.4.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
 
   '@rollup/pluginutils@5.1.0(rollup@4.20.0)':
     dependencies:

@@ -19,4 +19,7 @@ const fileExtensions: Record<string, FileInfo["fileType"]> = {
   docx: "word",
   xls: "excel",
   xlsx: "excel",
+  jpg:"figure",
+  png:"figure",
+  jpeg:"figure",
 };

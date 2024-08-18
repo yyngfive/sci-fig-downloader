@@ -15,6 +15,7 @@
     "postinstall": "wxt prepare"
   },
   "dependencies": {
+    "@re-dev/react-truncate": "^0.4.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "use-immer": "^0.10.0"

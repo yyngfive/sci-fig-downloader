@@ -10,7 +10,7 @@ interface FigInfo extends Info {
 }
 
 interface FileInfo extends Info {
-  fileType: "pdf" | "video" | "audio" | "word" | "excel" | "other";
+  fileType: "pdf" | "video" | "audio" | "word" | "excel" |"figure"| "other";
 }
 
 interface FiguresData {
@@ -26,7 +26,7 @@ interface FiguresData {
 
 interface FilesData {
   title: string;
-  from: "acs" | "nature" | "science" | "wiley";
+  from: "acs" | "nature" | "science" | "wiley"|"sciencedirect";
   hasSrc: boolean;
   srcFiles?: FileInfo[];
   files: FileInfo[];
