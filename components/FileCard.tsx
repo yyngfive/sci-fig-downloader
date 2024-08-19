@@ -95,7 +95,7 @@ function FileCard({
                 </button>
               </div>
               <div className="size-4 p-0">
-                {fileInfo.fileType == "pdf" && (
+                {(fileInfo.fileType === "pdf" || fileInfo.fileType === 'figure') && (
                   <a className="" href={fileInfo.originUrl} target="_blank">
                     <IconLink width={3} />
                   </a>

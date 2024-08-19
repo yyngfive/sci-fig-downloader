@@ -5,8 +5,8 @@ import { resolve } from "path";
 export default defineConfig({
   //modules: ["@wxt-dev/module-react"],
   manifest: {
-    permissions: ["webNavigation", "activeTab", "downloads"],
-    name:'Sci Fig Downloader',
+    permissions: ["webNavigation", "activeTab", "downloads", "storage"],
+    name: "Sci Fig Downloader",
   },
   vite: () => ({
     plugins: [react()],
@@ -17,5 +17,5 @@ export default defineConfig({
     },
   }),
   browser: "edge",
-  //extensionApi: "chrome",
+  extensionApi: "chrome",
 });

@@ -1,4 +1,4 @@
-// Copyright (C) 2024  yyngfive 
+// Copyright (C) 2024  yyngfive
 
 // Email: chenhye5@outlook.com
 
@@ -23,6 +23,7 @@ import {
 } from "@/Parsers/parsers";
 import type { FiguresData, FilesData } from "@/types/parser";
 
+
 export default defineContentScript({
   matches: [
     "*://www.nature.com/*",
@@ -37,12 +38,12 @@ export default defineContentScript({
     function handleGetFigsData(
       request: {
         from: FiguresData["from"];
-        type: string;
+        action: string;
       },
       sender: any,
       sendResponse: (arg0: FiguresData) => void
     ) {
-      if (request.type !== "fig") {
+      if (request.action !== "fig") {
         return;
       }
       if (!Object.keys(figParsers).includes(request.from)) {
@@ -52,17 +53,16 @@ export default defineContentScript({
       const figsData = getFiguresFrom(request.from);
       sendResponse(figsData);
     }
-    browser.runtime.onMessage.addListener(handleGetFigsData);
 
     function handleGetFilesData(
       request: {
         from: FilesData["from"];
-        type: string;
+        action: string;
       },
       sender: any,
       sendResponse: (arg0: FilesData) => void
     ) {
-      if (request.type !== "file") {
+      if (request.action !== "file") {
         return;
       }
       if (!Object.keys(fileParsers).includes(request.from)) {
@@ -74,6 +74,11 @@ export default defineContentScript({
 
       sendResponse(filesData);
     }
+
+    
+
+    browser.runtime.onMessage.addListener(handleGetFigsData);
     browser.runtime.onMessage.addListener(handleGetFilesData);
+    
   },
 });

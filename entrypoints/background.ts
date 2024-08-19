@@ -1,4 +1,4 @@
-// Copyright (C) 2024  yyngfive 
+// Copyright (C) 2024  yyngfive
 
 // Email: chenhye5@outlook.com
 
@@ -14,7 +14,38 @@
 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
+import type { FileList } from "@/types/download";
 
 export default defineBackground(() => {
-  console.log('Hello background!', { id: browser.runtime.id });
+  console.log("Hello background!", { id: browser.runtime.id });
+  function handleRename(
+    downloadItem: chrome.downloads.DownloadItem,
+    suggest: (suggestion?: chrome.downloads.DownloadFilenameSuggestion) => void
+  ) {
+    console.log(downloadItem);
+    //suggest({filename:'fdfdfs'})
+  }
+  function handleDownload(
+    request: {
+      fileList: FileList;
+      action: "download";
+    },
+    sender: any,
+    sendResponse: () => void
+  ) {
+    if (request.action === "download") {
+      const fileList = request.fileList;
+      fileList.forEach((item) => {
+        if (item.selected) {
+          browser.downloads.download({
+            url: item.originUrl,
+            
+          });
+        }
+      });
+    }
+  }
+  browser.runtime.onMessage.addListener(handleDownload);
+  browser.downloads.onDeterminingFilename.addListener(handleRename);
+ 
 });

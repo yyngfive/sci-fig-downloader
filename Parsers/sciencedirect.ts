@@ -37,7 +37,8 @@ export function getFilesFromScienceDirect(): FilesData {
   const fileLinks = supportedList?.querySelectorAll(".display");
   fileLinks?.forEach((si, index) => {
     const id = index + 1;
-    const name = si.querySelector(".captions")?.textContent as string;
+    let name = si.querySelector(".captions")?.textContent;
+    if(typeof name !== 'string'){name = ''}
     const link = si.querySelector("a.download-link") as HTMLAnchorElement;
     let originUrl = link.href;
     const fileType = getFileType(originUrl.split("/").pop() as string);

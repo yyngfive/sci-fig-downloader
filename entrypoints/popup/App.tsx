@@ -21,10 +21,11 @@ import "./App.css";
 import { FigCard, FigCardTOC } from "@/components/FigCard";
 import { FileCard } from "@/components/FileCard";
 import type { FiguresData, FigInfo, FilesData, FileInfo } from "@/types/parser";
+import type { FileList } from "@/types/download";
 import { Tab } from "@/components/Tab";
 import { findJournalForUrl } from "@/Parsers/parsers";
 import { ShowMore } from "@re-dev/react-truncate";
-
+import { DownloadOptionCard } from "@/components/OptionCard";
 function App() {
   const [figsData, setFigsData] = useImmer<FiguresData>({
     title: "",
@@ -39,7 +40,7 @@ function App() {
     title: "",
     hasSrc: false,
   });
-  const [downloads, setDownloads] = useImmer<FigInfo[] | FileInfo[]>([]);
+  const [downloads, setDownloads] = useImmer<FileList>([]);
 
   //将选中的文件加入State
   useEffect(() => {
@@ -77,7 +78,7 @@ function App() {
       if (findJournalForUrl(currentUrl)) {
         const res = await browser.tabs.sendMessage(tab.id, {
           from: findJournalForUrl(currentUrl),
-          type: "fig",
+          action: "fig",
         });
         console.log(res);
         if (res !== undefined) {
@@ -98,7 +99,7 @@ function App() {
         browser.tabs
           .sendMessage(tab.id, {
             from: findJournalForUrl(currentUrl),
-            type: "file",
+            action: "file",
           })
           .then((res) => {
             console.log(res);
@@ -111,13 +112,11 @@ function App() {
   }
 
   function handleDownload() {
-    downloads.forEach((item) => {
-      if (item.selected) {
-        browser.downloads.download({
-          url: item.originUrl,
-        });
-      }
-    });
+    
+    browser.runtime.sendMessage({
+      action:'download',
+      fileList:downloads,
+    })
   }
 
   useEffect(() => {
@@ -174,7 +173,9 @@ function App() {
               />
             )}
           </Tab>
-          <Tab name="设置">无</Tab>
+          <Tab name="设置">
+            <DownloadOptionCard/>
+          </Tab>
         </div>
       </div>
       <div className="m-3 flex justify-between items-center h-12 z-50">
