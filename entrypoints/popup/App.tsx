@@ -21,11 +21,12 @@ import "./App.css";
 import { FigCard, FigCardTOC } from "@/components/FigCard";
 import { FileCard } from "@/components/FileCard";
 import type { FiguresData, FigInfo, FilesData, FileInfo } from "@/types/parser";
-import type { FileList } from "@/types/download";
+import type { DownloadItem } from "@/types/download";
 import { Tab } from "@/components/Tab";
 import { findJournalForUrl } from "@/Parsers/parsers";
 import { ShowMore } from "@re-dev/react-truncate";
 import { DownloadOptionCard } from "@/components/OptionCard";
+import { info2Download } from "@/assets/utils/downloads";
 function App() {
   const [figsData, setFigsData] = useImmer<FiguresData>({
     title: "",
@@ -40,29 +41,29 @@ function App() {
     title: "",
     hasSrc: false,
   });
-  const [downloads, setDownloads] = useImmer<FileList>([]);
+  const [downloads, setDownloads] = useImmer<DownloadItem[]>([]);
 
   //将选中的文件加入State
   useEffect(() => {
     let selectedFiles = [];
     if (figsData.tocFig && figsData.tocFig.selected) {
-      selectedFiles.push(figsData.tocFig);
+      selectedFiles.push(info2Download(figsData.tocFig,figsData.title,'Abstract'));
     }
     figsData.mainFigs.forEach((figInfo) => {
       if (figInfo.selected) {
-        selectedFiles.push(figInfo);
+        selectedFiles.push(info2Download(figInfo,figsData.title,'Figure'));
       }
     });
     if (figsData.siFigs) {
       figsData.siFigs.forEach((figInfo) => {
         if (figInfo.selected) {
-          selectedFiles.push(figInfo);
+          selectedFiles.push(info2Download(figInfo,figsData.title,figsData.siTitle!));
         }
       });
     }
     filesData.files.forEach((fileInfo) => {
       if (fileInfo.selected) {
-        selectedFiles.push(fileInfo);
+        selectedFiles.push(info2Download(fileInfo,figsData.title,filesData.title));
       }
     });
     setDownloads(selectedFiles);
@@ -112,6 +113,8 @@ function App() {
   }
 
   function handleDownload() {
+
+
     
     browser.runtime.sendMessage({
       action:'download',

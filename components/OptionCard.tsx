@@ -53,27 +53,21 @@ function OptionItem({
 }
 
 function DownloadOptionCard() {
-  const [options, setOptions] = useImmer(()=>{
-    
-    return {
-      folder:false,
-      conflict:'uniquify'
-    }
+  const [options, setOptions] = useImmer({
+    folder:false,
+    conflict:'uniquify'
   });
 
-  async function init(){
-    
-    const res = await storage.getItem<boolean>('local:download-folder')
-    console.log(res);
-    const res2 = await storage.getItem<string>('local:download-conflict')
-    console.log(res2);
+  async function initOptions(){
+  
+    const folder = await storage.getItem<boolean>('local:download-folder') ?? false
+    const conflict = await storage.getItem<chrome.downloads.FilenameConflictAction>('local:download-conflict') ?? 'uniquify'
+    setOptions({folder,conflict})
   }
-  
-  
 
   useEffect(()=>{
-    init()
-  },[options])
+    initOptions()
+  },[])
 
   return (
     <OptionCard title="下载设置">
@@ -92,26 +86,36 @@ function DownloadOptionCard() {
           checked={options.folder}
         ></input>
         <span className="cursor-pointer">
-          将文件下载到期刊文件夹
+          将文件重命名并下载到文件夹
           <span className="text-error">（开启后可能与其他插件冲突）</span>
         </span>
       </OptionItem>
       <span className="my-1">文件名冲突时</span>
-      <OptionItem key={1}>
+      <OptionItem key={1} onClick={()=>{
+        setOptions((draft)=>{
+          draft.conflict = 'uniquify'
+          storage.setItem('local:download-conflict','uniquify')
+        })
+      }}>
         <input
           type="radio"
           name="radio-conflict"
           className="radio radio-sm"
-          checked={options.conflict === "uniquify" ? true : false}
+          checked={options.conflict === "uniquify"}
         />
         <span>唯一</span>
       </OptionItem>
-      <OptionItem key={2}>
+      <OptionItem key={2} onClick={()=>{
+        setOptions((draft)=>{
+          draft.conflict = 'overwrite'
+          storage.setItem('local:download-conflict','overwrite')
+        })
+      }}>
         <input
           type="radio"
           name="radio-conflict"
           className="radio radio-sm"
-          checked={options.conflict === "overwrite" ? true : false}
+          checked={options.conflict === "overwrite"}
         />
         <span>覆盖</span>
       </OptionItem>

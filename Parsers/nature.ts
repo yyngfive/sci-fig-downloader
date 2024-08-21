@@ -133,9 +133,6 @@ export function getFiguresFromNature(): FiguresData {
     "Extended data",
   ];
 
-  // const siFigList = document.querySelector(
-  //   'section[data-title="Extended data figures and tables"],section[data-title="Extended data"]'
-  // );
   const sections = document.querySelectorAll("section");
   let siFigList;
   for (const e of sections) {

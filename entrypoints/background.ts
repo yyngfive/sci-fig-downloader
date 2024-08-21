@@ -14,7 +14,8 @@
 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-import type { FileList } from "@/types/download";
+import type { DownloadItem } from "@/types/download";
+let current:DownloadItem
 
 export default defineBackground(() => {
   console.log("Hello background!", { id: browser.runtime.id });
@@ -22,30 +23,51 @@ export default defineBackground(() => {
     downloadItem: chrome.downloads.DownloadItem,
     suggest: (suggestion?: chrome.downloads.DownloadFilenameSuggestion) => void
   ) {
-    console.log(downloadItem);
+    const ext = downloadItem.filename.split('.').pop()!
+    storage.getItems(["local:download-folder","local:download-conflict"]).then(res=>{
+      const folder = res[0].value
+      const conflict = res[1].value
+      console.log(current,downloadItem.filename);
+      
+      if(folder){
+        suggest({
+          filename:`${current.article}/${current.name} ${current.id}.${ext}`,
+          conflictAction:conflict
+        })
+      }
+    })
+    return true
     //suggest({filename:'fdfdfs'})
   }
   function handleDownload(
     request: {
-      fileList: FileList;
+      fileList: DownloadItem[];
       action: "download";
     },
     sender: any,
     sendResponse: () => void
   ) {
+    let conflict: chrome.downloads.FilenameConflictAction;
+
+    storage
+      .getItem<chrome.downloads.FilenameConflictAction>(
+        "local:download-conflict"
+      )
+      .then((res) => {
+        conflict = res ?? "uniquify";
+      });
+
     if (request.action === "download") {
       const fileList = request.fileList;
       fileList.forEach((item) => {
-        if (item.selected) {
-          browser.downloads.download({
-            url: item.originUrl,
-            
-          });
-        }
+        current = item
+        browser.downloads.download({
+          url: item.originUrl,
+          conflictAction: conflict,
+        });
       });
     }
   }
   browser.runtime.onMessage.addListener(handleDownload);
   browser.downloads.onDeterminingFilename.addListener(handleRename);
- 
 });
