@@ -1,4 +1,4 @@
-// Copyright (C) 2024  yyngfive 
+// Copyright (C) 2024  yyngfive
 
 // Email: chenhye5@outlook.com
 
@@ -37,12 +37,12 @@ export function getFilesFromNature(): FilesData {
   );
   fileLinks.forEach((si, index) => {
     const id = index + 1;
-    const link = si.querySelector('a.print-link') as HTMLAnchorElement
-    let name = link.textContent as string
-    const subName = si.querySelector('.c-article-supplementary__description')
-    
-    if(subName !== null){
-      name = `${name}: ${subName.textContent}`
+    const link = si.querySelector("a.print-link") as HTMLAnchorElement;
+    let name = link.textContent as string;
+    const subName = si.querySelector(".c-article-supplementary__description");
+
+    if (subName !== null) {
+      name = `${name}: ${subName.textContent}`;
     }
     const originUrl = link.href;
     const fileType = getFileType(originUrl.split("/").pop() as string);
@@ -127,9 +127,23 @@ export function getFiguresFromNature(): FiguresData {
     figuresData.mainFigs.push(fig_info);
   });
 
-  const siFigList = document.querySelector(
-    'section[data-title="Extended data figures and tables"],section[data-title="Extended data"]'
-  );
+  const siFigTitles = [
+    "Integrated supplementary information",
+    "Extended data figures and tables",
+    "Extended data",
+  ];
+
+  // const siFigList = document.querySelector(
+  //   'section[data-title="Extended data figures and tables"],section[data-title="Extended data"]'
+  // );
+  const sections = document.querySelectorAll("section");
+  let siFigList;
+  for (const e of sections) {
+    if (siFigTitles.includes(e.getAttribute("data-title") as string)) {
+      siFigList = e;
+      break;
+    }
+  }
 
   console.log(siFigList?.querySelectorAll("a"), "AAA");
   if (!siFigList) {
@@ -163,7 +177,8 @@ export function getFiguresFromNature(): FiguresData {
 }
 
 function extractFigureInfo(input: string): { id: number; name: string } {
-  const regex = /(Fig\.|Extended Data Fig\.) (\d+):?\s*(.*)/;
+  const regex =
+    /(Figure|Fig\.|Extended Data Fig\.|Supplementary Figure) (\d+):?\s*(.*)/;
   const match = input.match(regex);
   if (match) {
     return {
