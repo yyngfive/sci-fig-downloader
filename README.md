@@ -52,6 +52,7 @@ Chrome/Edge 拓展，用于从期刊网站上下载文章附图的原始版本�
 - 爬虫仅针对部分文章页面进行了测试，一些特殊的期刊排版可能会导致插件无法正常运行
 - European Journal of Cell Biology 等部分 Elsevier 期刊图片序号可能会出错
 - Elsevier 的期刊很杂，插件只针对部分期刊进行了测试
+- Nature Methods无法正确解析
 
 ## 开发
 
