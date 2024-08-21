@@ -2,6 +2,8 @@
 
 Chrome/Edge 拓展，用于从期刊网站上下载文章附图的原始版本以及文章的补充材料
 
+<a href='https://microsoftedge.microsoft.com/addons/detail/sci-fig-downloader/eakkjiohlkpoimlgnljjceajjpgfjdop'><img src='https://get.microsoft.com/images/en-us%20light.svg' alt='Microsoft Store' style='width: 202.5px; height: 72px;'/></a>
+
 ## LICENSE
 
 本拓展遵循GNU GPLv3.0协议
@@ -49,13 +51,7 @@ Chrome/Edge 拓展，用于从期刊网站上下载文章附图的原始版本�
 - European Journal of Cell Biology 等部分 Elsevier 期刊图片序号可能会出错
 - Elsevier 的期刊很杂，插件只针对部分期刊进行了测试
 
-## 使用
-
-### 通过 Release
-
-可直接从[Release](https://github.com/yyngfive/sci-fig-downloader/releases)页面下载构建好的拓展
-
-### 通过源码
+## 开发
 
 克隆源码到本地
 
@@ -63,13 +59,17 @@ Chrome/Edge 拓展，用于从期刊网站上下载文章附图的原始版本�
 git clone https://github.com/yyngfive/sci-fig-downloader.git
 ```
 
-在项目目录中执行
+安装依赖
 
 ```bash
 pnpm install
 ```
+调试
 
-安装依赖后执行
+```bash
+pnpm dev
+```
+构建
 
 ```bash
 pnpm build
