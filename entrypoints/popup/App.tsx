@@ -1,4 +1,4 @@
-// Copyright (C) 2024  yyngfive 
+// Copyright (C) 2024  yyngfive
 
 // Email: chenhye5@outlook.com
 
@@ -47,23 +47,29 @@ function App() {
   useEffect(() => {
     let selectedFiles = [];
     if (figsData.tocFig && figsData.tocFig.selected) {
-      selectedFiles.push(info2Download(figsData.tocFig,figsData.title,'Abstract'));
+      selectedFiles.push(
+        info2Download(figsData.tocFig, figsData.title, "Abstract")
+      );
     }
     figsData.mainFigs.forEach((figInfo) => {
       if (figInfo.selected) {
-        selectedFiles.push(info2Download(figInfo,figsData.title,'Figure'));
+        selectedFiles.push(info2Download(figInfo, figsData.title, "Figure"));
       }
     });
     if (figsData.siFigs) {
       figsData.siFigs.forEach((figInfo) => {
         if (figInfo.selected) {
-          selectedFiles.push(info2Download(figInfo,figsData.title,figsData.siTitle!));
+          selectedFiles.push(
+            info2Download(figInfo, figsData.title, figsData.siTitle!)
+          );
         }
       });
     }
     filesData.files.forEach((fileInfo) => {
       if (fileInfo.selected) {
-        selectedFiles.push(info2Download(fileInfo,figsData.title,filesData.title));
+        selectedFiles.push(
+          info2Download(fileInfo, figsData.title, filesData.title)
+        );
       }
     });
     setDownloads(selectedFiles);
@@ -113,13 +119,10 @@ function App() {
   }
 
   function handleDownload() {
-
-
-    
     browser.runtime.sendMessage({
-      action:'download',
-      fileList:downloads,
-    })
+      action: "download",
+      fileList: downloads,
+    });
   }
 
   useEffect(() => {
@@ -149,7 +152,7 @@ function App() {
             )}
             {figsData.mainFigs.length !== 0 && (
               <FigCard
-                title="Figures"
+                title="Figure"
                 figsData={figsData}
                 setFigsData={setFigsData}
                 type="mainFigs"
@@ -176,11 +179,12 @@ function App() {
               />
             )}
           </Tab>
-          <Tab name="设置">
+          {/* <Tab name="设置">
             <DownloadOptionCard/>
-          </Tab>
+          </Tab> */}
         </div>
       </div>
+
       <div className="m-3 flex justify-between items-center h-12 z-50">
         <span>
           <a

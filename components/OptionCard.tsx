@@ -19,7 +19,7 @@ import type { Updater } from "use-immer";
 import React, { useEffect, useState } from "react";
 import { useImmer } from "use-immer";
 import { storage } from 'wxt/storage';
-import IconLink from "@/assets/svg/IconLink";
+import IconLink from "@/assets/svg/Icons";
 function OptionCard({
   title,
   children,

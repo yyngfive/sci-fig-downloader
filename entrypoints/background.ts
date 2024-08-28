@@ -69,5 +69,5 @@ export default defineBackground(() => {
     }
   }
   browser.runtime.onMessage.addListener(handleDownload);
-  browser.downloads.onDeterminingFilename.addListener(handleRename);
+  //browser.downloads.onDeterminingFilename.addListener(handleRename);
 });

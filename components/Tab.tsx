@@ -16,7 +16,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import React from "react";
-
+import '@/entrypoints/popup/App.css'
 interface TabProps {
   name: string;
   defaultChecked?: boolean;
@@ -41,7 +41,7 @@ function Tab({
         role="tabpanel"
         className="tab-content bg-base-100 border-base-300 rounded-box px-3 pb-3 max-w-[476px]"
       >
-        <div className="max-h-[350px] overflow-auto ">{children}</div>
+        <div className="max-h-[350px] overflow-auto cursor-pointer min-h-10 select-none no-scrollbar">{children}</div>
       </div>
     </>
   );

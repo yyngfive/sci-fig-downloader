@@ -1,0 +1,8 @@
+.no-scrollbar {
+  scrollbar-width: none; /* 针对 WebKit 浏览器 */
+  -ms-overflow-style: none; /* 针对 IE 和 Edge 浏览器 */
+}
+.no-scrollbar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}

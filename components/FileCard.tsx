@@ -1,4 +1,4 @@
-// Copyright (C) 2024  yyngfive 
+// Copyright (C) 2024  yyngfive
 
 // Email: chenhye5@outlook.com
 
@@ -18,7 +18,8 @@
 import type { FileInfo, FilesData } from "@/types/parser";
 import type { Updater } from "use-immer";
 import { useState } from "react";
-import IconLink from "@/assets/svg/IconLink";
+import { IconLink } from "@/assets/svg/Icons";
+import { Truncate } from "@re-dev/react-truncate";
 function FileCard({
   title,
   filesData,
@@ -85,17 +86,20 @@ function FileCard({
                     handleSelect(fileInfo);
                   }}
                 />
-                <button
-                  className="truncate"
+                <span
+                  className="grow truncate"
                   onClick={() => {
                     handleSelect(fileInfo);
                   }}
                 >
-                  {fileInfo.id}. {fileInfo.name}
-                </button>
+                  <Truncate className="text-sm">
+                    {fileInfo.id}. {fileInfo.name}
+                  </Truncate>
+                </span>
               </div>
               <div className="size-4 p-0">
-                {(fileInfo.fileType === "pdf" || fileInfo.fileType === 'figure') && (
+                {(fileInfo.fileType === "pdf" ||
+                  fileInfo.fileType === "figure") && (
                   <a className="" href={fileInfo.originUrl} target="_blank">
                     <IconLink width={3} />
                   </a>
