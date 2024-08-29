@@ -1,4 +1,4 @@
-// Copyright (C) 2024  yyngfive 
+// Copyright (C) 2024  yyngfive
 
 // Email: chenhye5@outlook.com
 
@@ -43,10 +43,12 @@ export function getFilesFromScience(): FilesData {
         return element.textContent || "";
       })
       .join(" ");
-    const link = si.querySelector(".core-link")?.querySelector('a') as HTMLAnchorElement;
+    const link = si
+      .querySelector(".core-link")
+      ?.querySelector("a") as HTMLAnchorElement;
     const originUrl = link.href;
     console.log(link);
-    
+
     const fileType = getFileType(originUrl.split("/").pop() as string);
     const fileInfo: FileInfo = {
       id,
@@ -79,26 +81,33 @@ export function getFiguresFromScience(): FiguresData {
   }
   figuresData.title = title;
 
-  //   const abstract = document.querySelector(".article_abstract");
-  //   const abstractFigElement = abstract?.querySelector("img");
-  //   if (abstractFigElement) {
-  //     const id = 1;
-  //     const name = "Graphical Abstract";
-  //     const baseUrl = abstractFigElement.src
-  //       ? abstractFigElement.src
-  //       : abstractFigElement.querySelector("img")?.getAttribute("data-src");
-  //     const htmlUrl = `${baseUrl}`;
-  //     const originUrl = htmlUrl.replace("medium", "large").replace("gif", "jpeg");
-  //     const figInfo: FigInfo = {
-  //       id,
-  //       name,
-  //       htmlUrl,
-  //       originUrl,
-  //       selected: false,
-  //     };
-  //     figuresData.tocFig = figInfo;
-  //     figuresData.hasToc = true;
-  //   }
+  const abstract = document.querySelectorAll('section[property="abstract"]');
+  let abstractFigElement:undefined | HTMLImageElement | null = undefined;
+  abstract.forEach((e) => {});
+  for (let e of abstract) {
+    if (e.querySelector("figure")?.querySelector("img")) {
+      abstractFigElement = e.querySelector("figure")?.querySelector("img");
+      break;
+    }
+  }
+  if (abstractFigElement) {
+    const id = 1;
+    const name = "Graphical Abstract";
+    const baseUrl = abstractFigElement.src
+      ? abstractFigElement.src
+      : abstractFigElement.querySelector("img")?.getAttribute("data-src");
+    const htmlUrl = `${baseUrl}`;
+    const originUrl = htmlUrl.replace("medium", "large").replace("gif", "jpeg");
+    const figInfo: FigInfo = {
+      id,
+      name,
+      htmlUrl,
+      originUrl,
+      selected: false,
+    };
+    figuresData.tocFig = figInfo;
+    figuresData.hasToc = true;
+  }
 
   const figureList = document.querySelector("#bodymatter");
   if (!figureList) {
@@ -114,7 +123,10 @@ export function getFiguresFromScience(): FiguresData {
     const caption = captionElement?.textContent
       ?.replace(/(\s|&nbsp;)+/g, " ")
       .split(". ") as string[];
-    const [type, id, name] = caption;
+    console.log(caption);
+
+    const [type, id] = caption;
+    const name = caption.slice(2).join(". ");
     const baseUrl = element.querySelector("img")?.src
       ? (element.querySelector("img")?.src as string)
       : (element.querySelector("img")?.getAttribute("data-src") as string);
@@ -129,10 +141,12 @@ export function getFiguresFromScience(): FiguresData {
       selected: false,
     };
 
-    if (type.startsWith("Scheme")) {
+    if (type.startsWith("Sch")) {
       figuresData.siFigs?.push(figInfo);
-    } else {
+    } else if (type.startsWith("Fig")) {
       figuresData.mainFigs.push(figInfo);
+    } else {
+      return;
     }
   });
   if (figuresData.siFigs?.length !== 0) {

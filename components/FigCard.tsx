@@ -146,7 +146,7 @@ function FigCardItem({
   const expand = show === index;
 
   return (
-    <li>
+    <li key={index}>
       <div
         className={`flex gap-1 justify-between items-center w-full  box-content  hover:bg-base-200 ${
           expand ? "bg-base-200 rounded-t-lg" : "rounded-lg"

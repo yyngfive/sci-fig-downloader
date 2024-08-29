@@ -56,18 +56,43 @@ export function getFilesFromWiley(): FilesData {
 
 export function getFiguresFromWiley(): FiguresData {
   
-  const title = document.querySelector(".citation__title")
-    ?.textContent as string;
-  console.log("title", title);
-
   let figuresData: FiguresData = {
-    title: title,
+    title: '请等待页面加载完成后重新加载',
     hasSi: false,
     hasToc: false,
     mainFigs: [],
     siFigs: [],
     from: "wiley",
   };
+
+  const title = document.querySelector(".citation__title")
+    ?.textContent;
+  if(typeof title !== 'string'){
+    return figuresData
+  }
+  console.log("title", title);
+  figuresData.title = title
+  
+  const abstract = document.querySelector(".abstract-group");
+  const abstractFigElement = abstract
+    ?.querySelector("figure")
+    ?.querySelector("img");
+  if (abstractFigElement) {
+    const id = 1;
+    const name = "Graphical Abstract";
+    const baseUrl = abstractFigElement.src;
+    const htmlUrl = `${baseUrl}`;
+    const originUrl = abstractFigElement.getAttribute("data-lg-src") as string;
+    const figInfo: FigInfo = {
+      id,
+      name,
+      htmlUrl,
+      originUrl,
+      selected: false,
+    };
+    figuresData.tocFig = figInfo;
+    figuresData.hasToc = true;
+  }
 
   const figureList = document.querySelector(
     ".article-section__full"
@@ -81,7 +106,7 @@ export function getFiguresFromWiley(): FiguresData {
       ".figure__caption-text"
     )
     if(!captionText){return}
-    const name = getTextWithoutClass(captionText as HTMLElement, "bibLink");
+    const name = getTextWithoutRef(captionText as HTMLElement, "bibLink");
     const captionTitle = element.querySelector(".figure__title")
       ?.textContent as string;
     const type = captionTitle.split(" ")[0];
@@ -118,41 +143,33 @@ export function getFiguresFromWiley(): FiguresData {
     figuresData.siTitle = "Scheme";
   }
 
-  const abstract = document.querySelector(".abstract-group");
-  const abstractFigElement = abstract
-    ?.querySelector("figure")
-    ?.querySelector("img");
-  if (abstractFigElement) {
-    const id = 1;
-    const name = "Graphical Abstract";
-    const baseUrl = abstractFigElement.src;
-    const htmlUrl = `${baseUrl}`;
-    const originUrl = abstractFigElement.getAttribute("data-lg-src") as string;
-    const figInfo: FigInfo = {
-      id,
-      name,
-      htmlUrl,
-      originUrl,
-      selected: false,
-    };
-    figuresData.tocFig = figInfo;
-    figuresData.hasToc = true;
-  }
+  
 
   return figuresData;
 }
 
-function getTextWithoutClass(element: HTMLElement, className: string) {
-  const children: HTMLElement[] = Array.from(element.childNodes).filter(
-    (node): node is HTMLElement => {
-      return node.nodeType === Node.ELEMENT_NODE;
-    }
-  );
+function getTextWithoutRef(element: HTMLElement, className: string) {
+  // const children: HTMLElement[] = Array.from(element.childNodes).filter(
+  //   (node): node is HTMLElement => {
+  //     console.log('node '+node);
+      
+  //     return node.nodeType === Node.ELEMENT_NODE;
+  //   }
+  // );
+  
+
   // 过滤掉具有指定类名的节点
-  const filteredChildren = children.filter(
-    (child) => !child.classList.contains(className)
-  );
+  // const filteredChildren = children.filter(
+  //   (child) => !child.classList.contains(className)
+  // );
 
   // 将过滤后的节点的textContent合并
-  return filteredChildren.map((node) => node.textContent).join("");
+  //return filteredChildren.map((node) => node.textContent).join("");
+  const node = element.cloneNode(true) as HTMLElement;
+  const refLinks = node.querySelectorAll(`a.${className}`)
+  refLinks.forEach((e)=>{
+    e.remove()
+  })
+  const text = node.textContent!
+  return text
 }

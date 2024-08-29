@@ -73,7 +73,7 @@ function FileCard({
       <div className="w-full">
         <ul>
           {filesData.files.map((fileInfo, index) => (
-            <li>
+            <li key={index}>
               <div
                 className={`flex gap-1  justify-between items-center box-content rounded-lg hover:bg-base-200`}
                 key={index}
