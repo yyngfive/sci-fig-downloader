@@ -20,7 +20,7 @@ import type { FiguresData, FigInfo } from "@/types/parser";
 import { useEffect, useState } from "react";
 import { IconEyeOpen, IconEyeClose, IconLink } from "@/assets/svg/Icons";
 import { Truncate } from "@re-dev/react-truncate";
-import { motion,AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 function FigCardTOC({
   title,
   figsData,
@@ -30,7 +30,7 @@ function FigCardTOC({
   figsData: FiguresData;
   setFigsData: Updater<FiguresData>;
 }) {
-  const [show,setShow] = useState<false | number>(false)
+  const [show, setShow] = useState<false | number>(false);
   function handleSelect(figInfo: FigInfo) {
     setFigsData((draft) => {
       let draftInfo = draft.tocFig as FigInfo;
@@ -45,7 +45,13 @@ function FigCardTOC({
       </div>
       <div className="">
         <ul>
-          <FigCardItem figInfo={figsData.tocFig!} index={0} handleSelect={handleSelect} show={show} setShow={setShow} />
+          <FigCardItem
+            figInfo={figsData.tocFig!}
+            index={0}
+            handleSelect={handleSelect}
+            show={show}
+            setShow={setShow}
+          />
         </ul>
       </div>
     </>
@@ -64,7 +70,7 @@ function FigCard({
   type: "mainFigs" | "siFigs";
 }) {
   const [selectAll, setSelectAll] = useState(false);
-  const [show,setShow] = useState<false | number>(false)
+  const [show, setShow] = useState<false | number>(false);
 
   function handleSelectAll() {
     const current = !selectAll;
@@ -126,18 +132,25 @@ interface FigCardItemProps {
   figInfo: FigInfo;
   index: number;
   handleSelect: (figInfo: FigInfo) => void;
-  show:false | number;
-  setShow:(arg0:false | number)=>void;
+  show: false | number;
+  setShow: (arg0: false | number) => void;
 }
 
-function FigCardItem({ figInfo, index, handleSelect,show,setShow }: FigCardItemProps) {
-  
-  const expand = (show === index)
+function FigCardItem({
+  figInfo,
+  index,
+  handleSelect,
+  show,
+  setShow,
+}: FigCardItemProps) {
+  const expand = show === index;
 
   return (
     <li>
       <div
-        className={`flex gap-1 justify-between items-center w-full  box-content  hover:bg-base-200 ${expand?'bg-base-200 rounded-t-lg':'rounded-lg'}`}
+        className={`flex gap-1 justify-between items-center w-full  box-content  hover:bg-base-200 ${
+          expand ? "bg-base-200 rounded-t-lg" : "rounded-lg"
+        }`}
         key={index}
       >
         {/* 名称和选择框 */}
@@ -162,10 +175,13 @@ function FigCardItem({ figInfo, index, handleSelect,show,setShow }: FigCardItemP
           </span>
         </div>
         {/* 显示或隐藏详细 */}
-        <div className="size-5 p-0.5 rounded-md hover:bg-base-300 my-1" onClick={() => {
-                setShow(expand ? false : index);
-              }}>
-           <label className={`swap ${expand ? 'swap-active':''}`}>
+        <div
+          className="size-5 p-0.5 rounded-md hover:bg-base-300 my-1"
+          onClick={() => {
+            setShow(expand ? false : index);
+          }}
+        >
+          <label className={`swap ${expand ? "swap-active" : ""}`}>
             <IconEyeOpen className="swap-on" width={4} />
             <IconEyeClose className="swap-off" width={4} />
           </label>
@@ -187,15 +203,20 @@ function FigCardItem({ figInfo, index, handleSelect,show,setShow }: FigCardItemP
             exit="collapsed"
             variants={{
               open: { opacity: 1, height: "auto" },
-              collapsed: { opacity: 0, height: 0 }
+              collapsed: { opacity: 0, height: 0 },
             }}
             //transition={{ duration: 0.8, ease: [0.04, 0.62, 0.23, 0.98] }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
           >
-           <FigureItemDetail figInfo={figInfo}/>
-           <button className="btn btn-sm hidden" onClick={() => {
+            <FigureItemDetail figInfo={figInfo} />
+            <button
+              className="btn btn-sm hidden"
+              onClick={() => {
                 setShow(expand ? false : index);
-              }}>隐藏</button>
+              }}
+            >
+              隐藏
+            </button>
           </motion.section>
         )}
       </AnimatePresence>
@@ -203,15 +224,22 @@ function FigCardItem({ figInfo, index, handleSelect,show,setShow }: FigCardItemP
   );
 }
 
-function FigureItemDetail({figInfo}:{figInfo:FigInfo}){
-  const [loading,setLoading] = useState(true)
+function FigureItemDetail({ figInfo }: { figInfo: FigInfo }) {
+  const [loading, setLoading] = useState(true);
   return (
-<div className="flex justify-center flex-col px-7 pt-3 mt-0 mb-1 box-content rounded-b-lg bg-base-200">
-            {loading && <div className="skeleton h-40"></div>}
-            <img src={figInfo.htmlUrl} alt='' className={`rounded-lg box-content ${loading ?'hidden':''}`} onLoad={()=>{setLoading(false)}}/>
-            <p className="my-3">{figInfo.name}</p>
-           </div>
-  )
+    <div className="flex justify-center flex-col px-7 pt-3 mt-0 mb-1 box-content rounded-b-lg bg-base-200">
+      {loading && <div className="skeleton h-40"></div>}
+      <img
+        src={figInfo.htmlUrl}
+        alt=""
+        className={`rounded-lg box-content ${loading ? "hidden" : ""}`}
+        onLoad={() => {
+          setLoading(false);
+        }}
+      />
+      <p className="my-3">{figInfo.name}</p>
+    </div>
+  );
 }
 
 export { FigCard, FigCardTOC };

@@ -73,37 +73,39 @@ function FileCard({
       <div className="w-full">
         <ul>
           {filesData.files.map((fileInfo, index) => (
-            <li
-              className="flex gap-1 my-1 justify-between items-center"
-              key={index}
-            >
-              <div className="flex gap-1 w-[calc(100%-20px)]">
-                <input
-                  type="checkbox"
-                  className="checkbox checkbox-sm"
-                  checked={fileInfo.selected}
-                  onChange={() => {
-                    handleSelect(fileInfo);
-                  }}
-                />
-                <span
-                  className="grow truncate"
-                  onClick={() => {
-                    handleSelect(fileInfo);
-                  }}
-                >
-                  <Truncate className="text-sm">
-                    {fileInfo.id}. {fileInfo.name}
-                  </Truncate>
-                </span>
-              </div>
-              <div className="size-4 p-0">
-                {(fileInfo.fileType === "pdf" ||
-                  fileInfo.fileType === "figure") && (
-                  <a className="" href={fileInfo.originUrl} target="_blank">
-                    <IconLink width={3} />
-                  </a>
-                )}
+            <li>
+              <div
+                className={`flex gap-1  justify-between items-center box-content rounded-lg hover:bg-base-200`}
+                key={index}
+              >
+                <div className="flex gap-1 w-[calc(100%-24px)] ml-1 my-1">
+                  <input
+                    type="checkbox"
+                    className="checkbox checkbox-sm"
+                    checked={fileInfo.selected}
+                    onChange={() => {
+                      handleSelect(fileInfo);
+                    }}
+                  />
+                  <span
+                    className="grow truncate"
+                    onClick={() => {
+                      handleSelect(fileInfo);
+                    }}
+                  >
+                    <Truncate className="text-sm">
+                      {fileInfo.id}. {fileInfo.name}
+                    </Truncate>
+                  </span>
+                </div>
+                <div className="size-5 p-0.5 rounded-md hover:bg-base-300 my-1 mr-1">
+                  {(fileInfo.fileType === "pdf" ||
+                    fileInfo.fileType === "figure") && (
+                    <a className="" href={fileInfo.originUrl} target="_blank">
+                      <IconLink width={3} />
+                    </a>
+                  )}
+                </div>
               </div>
             </li>
           ))}

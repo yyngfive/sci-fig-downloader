@@ -16,8 +16,8 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import type { FiguresData, FigInfo,FileInfo,FilesData } from "@/types/parser";
-import { getFileType } from "@/assets/utils/fileType";
-import { parseQueryParameters } from "@/assets/utils/parseUrl";
+import { getFileType } from "@/utils/fileType";
+import { parseQueryParameters } from "@/utils/parseUrl";
 export function getFilesFromWiley(): FilesData {
   let filesData: FilesData = {
     from: "wiley",

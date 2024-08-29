@@ -26,7 +26,7 @@ import { Tab } from "@/components/Tab";
 import { findJournalForUrl } from "@/Parsers/parsers";
 import { ShowMore } from "@re-dev/react-truncate";
 import { DownloadOptionCard } from "@/components/OptionCard";
-import { info2Download } from "@/assets/utils/downloads";
+import { info2Download } from "@/utils/downloads";
 function App() {
   const [figsData, setFigsData] = useImmer<FiguresData>({
     title: "",

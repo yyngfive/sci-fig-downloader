@@ -16,7 +16,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
-import { getFileType } from "@/assets/utils/fileType";
+import { getFileType } from "@/utils/fileType";
 export function getFilesFromACS(): FilesData {
   let filesData: FilesData = {
     from: "acs",
