@@ -48,6 +48,7 @@ function FigCardTOC({
           <FigCardItem
             figInfo={figsData.tocFig!}
             index={0}
+            key={0}
             handleSelect={handleSelect}
             show={show}
             setShow={setShow}
@@ -116,6 +117,7 @@ function FigCard({
           {figsData[type]?.map((figInfo, index) => (
             <FigCardItem
               figInfo={figInfo}
+              key={index}
               index={index}
               handleSelect={handleSelect}
               show={show}
@@ -181,7 +183,8 @@ function FigCardItem({
             setShow(expand ? false : index);
           }}
         >
-          <label className={`swap ${expand ? "swap-active" : ""}`}>
+          <label className={`swap size-4 ${expand ? "swap-active" : ""}`}>
+         
             <IconEyeOpen className="swap-on" width={4} />
             <IconEyeClose className="swap-off" width={4} />
           </label>
@@ -193,7 +196,7 @@ function FigCardItem({
           </a>
         </div>
       </div>
-      {/*动画来自 https://codesandbox.io/p/sandbox/framer-motion-accordion-qx958?file=%2Fsrc%2FExample.tsx%3A21%2C26 */}
+      {/*动画来自 https://codesandbox.io/p/sandbox/framer-motion-accordion-qx958 */}
       <AnimatePresence initial={false}>
         {expand && (
           <motion.section

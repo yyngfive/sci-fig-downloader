@@ -1,4 +1,4 @@
-// Copyright (C) 2024  yyngfive 
+// Copyright (C) 2024  yyngfive
 
 // Email: chenhye5@outlook.com
 
@@ -16,17 +16,25 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import React from "react";
-import '@/entrypoints/popup/App.css'
+import "@/entrypoints/popup/App.css";
 interface TabProps {
   name: string;
   defaultChecked?: boolean;
+  scrollRef?: React.MutableRefObject<any>;
+  loaded?: boolean;
+}
+interface ScrollbarLengths {
+  thumbLength: number;
+  trackLength: number;
 }
 
 function Tab({
   children,
   name,
+  loaded,
   defaultChecked,
 }: React.PropsWithChildren<TabProps>) {
+
   return (
     <>
       <input
@@ -39,9 +47,11 @@ function Tab({
       />
       <div
         role="tabpanel"
-        className="tab-content bg-base-100 border-base-300 rounded-box px-3 pb-3 max-w-[476px]"
+        className="tab-content bg-base-100 border-base-300 rounded-box pl-3 pr-1 pb-3 max-w-[476px]"
       >
-        <div className="max-h-[350px] overflow-auto cursor-pointer min-h-10 select-none no-scrollbar">{children}</div>
+       <div className="max-h-[350px] overflow-y-scroll cursor-pointer min-h-10 select-none pr-1" >
+          {children}
+        </div> 
       </div>
     </>
   );

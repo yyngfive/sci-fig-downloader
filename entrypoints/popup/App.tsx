@@ -15,18 +15,19 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useImmer } from "use-immer";
 import "./App.css";
 import { FigCard, FigCardTOC } from "@/components/FigCard";
 import { FileCard } from "@/components/FileCard";
-import type { FiguresData, FigInfo, FilesData, FileInfo } from "@/types/parser";
+import type { FiguresData, FilesData } from "@/types/parser";
 import type { DownloadItem } from "@/types/download";
 import { Tab } from "@/components/Tab";
 import { findJournalForUrl } from "@/Parsers/parsers";
 import { ShowMore } from "@re-dev/react-truncate";
 import { DownloadOptionCard } from "@/components/OptionCard";
 import { info2Download } from "@/utils/downloads";
+
 function App() {
   const [figsData, setFigsData] = useImmer<FiguresData>({
     title: "",
@@ -42,6 +43,7 @@ function App() {
     hasSrc: false,
   });
   const [downloads, setDownloads] = useImmer<DownloadItem[]>([]);
+  const [loaded,setLoaded] = useState(false)
 
   //将选中的文件加入State
   useEffect(() => {
@@ -128,7 +130,11 @@ function App() {
   useEffect(() => {
     getFigsData();
     getFilesData();
+    console.log('loaded');
+    setLoaded(true)
+    
   }, []);
+
 
   return (
     <>
@@ -140,7 +146,7 @@ function App() {
         </h1>
 
         <div role="tablist" className="tabs tabs-lifted w-[476px]">
-          <Tab name="图片" defaultChecked>
+          <Tab name="图片" defaultChecked  loaded = {loaded}>
             {figsData.hasToc && (
               <>
                 <FigCardTOC
@@ -170,7 +176,7 @@ function App() {
             )}
           </Tab>
 
-          <Tab name="文件">
+          <Tab name="文件" loaded = {loaded}>
             {filesData.files.length !== 0 && (
               <FileCard
                 title={filesData.title}
