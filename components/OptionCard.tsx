@@ -36,14 +36,14 @@ function OptionCard({
 }
 
 function OptionItem({
-  key,
+  index,
   children,
   onClick,
-}: React.PropsWithChildren<{ key: number; onClick?: () => void }>) {
+}: React.PropsWithChildren<{ index: number; onClick?: () => void }>) {
   return (
     <li
-      className="flex gap-1 my-1 justify-start items-center"
-      key={key}
+      className="flex gap-1 my-1 justify-start items-center hover:bg-base-200 p-1 cursor-pointer select-none rounded-lg"
+      key={index}
       onClick={onClick}
     >
       {children}
@@ -71,7 +71,7 @@ function DownloadOptionCard() {
   return (
     <OptionCard title="下载设置">
       <OptionItem
-        key={0}
+        index={0}
         onClick={() => {
           setOptions((draft) => {
             draft.folder = !options.folder;
@@ -79,18 +79,22 @@ function DownloadOptionCard() {
           });
         }}
       >
+        
         <input
           type="checkbox"
-          className="checkbox checkbox-sm"
+          className="checkbox checkbox-sm place-self-start"
           checked={options.folder}
         ></input>
+        <div className="flex flex-col">
         <span className="cursor-pointer">
-          将文件重命名并下载到文件夹
-          <span className="text-error">（开启后可能与其他插件冲突）</span>
+          重命名文件并下载到文件夹
         </span>
+        <span className="text-error">可能因为其他插件或浏览器设置无法正常工作</span>
+        </div>
+        
       </OptionItem>
       <span className="my-1">文件名冲突时</span>
-      <OptionItem key={1} onClick={()=>{
+      <OptionItem index={1} onClick={()=>{
         setOptions((draft)=>{
           draft.conflict = 'uniquify'
           storage.setItem('local:download-conflict','uniquify')
@@ -104,7 +108,7 @@ function DownloadOptionCard() {
         />
         <span>唯一</span>
       </OptionItem>
-      <OptionItem key={2} onClick={()=>{
+      <OptionItem index={2} onClick={()=>{
         setOptions((draft)=>{
           draft.conflict = 'overwrite'
           storage.setItem('local:download-conflict','overwrite')

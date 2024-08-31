@@ -7,3 +7,16 @@ export interface DownloadItem {
   article: string;
   name: string;
 }
+
+interface Task {
+  numberOfProcessedFiles: number;
+  currentFile: DownloadItem;
+  filesToDownload: DownloadItem[];
+  next: () => void;
+}
+
+interface downloadStatus {
+  downloaded:boolean,
+  currentId:number,
+  total:number,
+}

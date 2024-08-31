@@ -168,7 +168,7 @@ export function getFiguresFromNature(): FiguresData {
 
   if (figuresData.siFigs?.length !== 0) {
     figuresData.hasSi = true;
-    figuresData.siTitle = "Extended Data Figures";
+    figuresData.siTitle = "Extended Data Figure";
   }
   return figuresData;
 }

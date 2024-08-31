@@ -21,7 +21,7 @@ import "./App.css";
 import { FigCard, FigCardTOC } from "@/components/FigCard";
 import { FileCard } from "@/components/FileCard";
 import type { FiguresData, FilesData } from "@/types/parser";
-import type { DownloadItem } from "@/types/download";
+import type { DownloadItem, downloadStatus } from "@/types/download";
 import { Tab } from "@/components/Tab";
 import { findJournalForUrl } from "@/Parsers/parsers";
 import { ShowMore } from "@re-dev/react-truncate";
@@ -43,7 +43,12 @@ function App() {
     hasSrc: false,
   });
   const [downloads, setDownloads] = useImmer<DownloadItem[]>([]);
-  const [loaded,setLoaded] = useState(false)
+  const [loaded, setLoaded] = useState(false);
+  const [downloadStatus, setDownloadStatus] = useImmer<downloadStatus>({
+    downloaded: true,
+    currentId: 0,
+    total: 0,
+  });
 
   //将选中的文件加入State
   useEffect(() => {
@@ -77,50 +82,13 @@ function App() {
     setDownloads(selectedFiles);
   }, [figsData, filesData]);
 
-  async function getFigsData() {
-    const [tab] = await browser.tabs.query({
-      active: true,
-      lastFocusedWindow: true,
-    });
-    if (tab.id && figsData.title === "") {
-      const currentUrl = tab.url as string;
-      if (findJournalForUrl(currentUrl)) {
-        const res = await browser.tabs.sendMessage(tab.id, {
-          from: findJournalForUrl(currentUrl),
-          action: "fig",
-        });
-        console.log(res);
-        if (res !== undefined) {
-          setFigsData(res);
-        }
-      }
-    }
-  }
-
-  async function getFilesData() {
-    const [tab] = await browser.tabs.query({
-      active: true,
-      lastFocusedWindow: true,
-    });
-    if (tab.id && filesData.title === "") {
-      const currentUrl = tab.url as string;
-      if (findJournalForUrl(currentUrl)) {
-        browser.tabs
-          .sendMessage(tab.id, {
-            from: findJournalForUrl(currentUrl),
-            action: "file",
-          })
-          .then((res) => {
-            console.log(res);
-            if (res !== undefined) {
-              setFilesData(res);
-            }
-          });
-      }
-    }
-  }
-
   function handleDownload() {
+    setDownloadStatus({
+      downloaded: false,
+      currentId: 0,
+      total: downloads.length,
+    });
+
     browser.runtime.sendMessage({
       action: "download",
       fileList: downloads,
@@ -128,13 +96,73 @@ function App() {
   }
 
   useEffect(() => {
+    async function getFigsData() {
+      const [tab] = await browser.tabs.query({
+        active: true,
+        lastFocusedWindow: true,
+      });
+      if (tab.id && figsData.title === "") {
+        const currentUrl = tab.url as string;
+        if (findJournalForUrl(currentUrl)) {
+          const res = await browser.tabs.sendMessage(tab.id, {
+            from: findJournalForUrl(currentUrl),
+            action: "fig",
+          });
+          console.log(res);
+          if (res !== undefined) {
+            setFigsData(res);
+          }
+        }
+      }
+    }
+
+    async function getFilesData() {
+      const [tab] = await browser.tabs.query({
+        active: true,
+        lastFocusedWindow: true,
+      });
+      if (tab.id && filesData.title === "") {
+        const currentUrl = tab.url as string;
+        if (findJournalForUrl(currentUrl)) {
+          browser.tabs
+            .sendMessage(tab.id, {
+              from: findJournalForUrl(currentUrl),
+              action: "file",
+            })
+            .then((res) => {
+              console.log(res);
+              if (res !== undefined) {
+                setFilesData(res);
+              }
+            });
+        }
+      }
+    }
     getFigsData();
     getFilesData();
-    console.log('loaded');
-    setLoaded(true)
-    
-  }, []);
+    console.log("loaded");
+    setLoaded(true);
 
+    function handleDownloading(
+      request: {
+        action: string;
+        downloadStatus: downloadStatus;
+      },
+      sender: chrome.runtime.MessageSender,
+      sendResponse: () => void
+    ) {
+      if (request.action === "downloading") {
+        console.log(request.downloadStatus);
+        setDownloadStatus(request.downloadStatus);
+      }
+    }
+
+    browser.runtime.onMessage.addListener(handleDownloading);
+
+    return () => {
+      browser.runtime.onMessage.removeListener(handleDownloading);
+    };
+  }, []);
 
   return (
     <>
@@ -146,7 +174,7 @@ function App() {
         </h1>
 
         <div role="tablist" className="tabs tabs-lifted w-[476px]">
-          <Tab name="图片" defaultChecked  loaded = {loaded}>
+          <Tab name="图片" defaultChecked loaded={loaded}>
             {figsData.hasToc && (
               <>
                 <FigCardTOC
@@ -176,7 +204,7 @@ function App() {
             )}
           </Tab>
 
-          <Tab name="文件" loaded = {loaded}>
+          <Tab name="文件" loaded={loaded}>
             {filesData.files.length !== 0 && (
               <FileCard
                 title={filesData.title}
@@ -185,9 +213,9 @@ function App() {
               />
             )}
           </Tab>
-          {/* <Tab name="设置">
-            <DownloadOptionCard/>
-          </Tab> */}
+          <Tab name="设置">
+            <DownloadOptionCard />
+          </Tab>
         </div>
       </div>
 
@@ -207,7 +235,14 @@ function App() {
             handleDownload();
           }}
         >
-          下载已选项({downloads.length})
+          {downloadStatus.downloaded ? (
+            <>下载已选项({downloads.length})</>
+          ) : (
+            <>
+              <span className="loading loading-spinner loading-xs"></span>
+              正在下载({downloadStatus.currentId}/{downloadStatus.total})
+            </>
+          )}
         </button>
       </div>
     </>

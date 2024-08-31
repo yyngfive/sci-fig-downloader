@@ -40,7 +40,7 @@ export default defineContentScript({
         from: FiguresData["from"];
         action: string;
       },
-      sender: any,
+      sender: chrome.runtime.MessageSender,
       sendResponse: (arg0: FiguresData) => void
     ) {
       if (request.action !== "fig") {
@@ -59,7 +59,7 @@ export default defineContentScript({
         from: FilesData["from"];
         action: string;
       },
-      sender: any,
+      sender: chrome.runtime.MessageSender,
       sendResponse: (arg0: FilesData) => void
     ) {
       if (request.action !== "file") {

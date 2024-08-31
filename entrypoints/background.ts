@@ -14,60 +14,134 @@
 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-import type { DownloadItem } from "@/types/download";
-let current:DownloadItem
+
+//https://github.com/PactInteractive/image-downloader
+
+// Copyright (c) 2012-2021 Vladimir Sabev
+
+// Permission is hereby granted, free of charge, to any person
+// obtaining a copy of this software and associated documentation
+// files (the "Software"), to deal in the Software without
+// restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the
+// Software is furnished to do so, subject to the following
+// conditions:
+
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+// WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+// OTHER DEALINGS IN THE SOFTWARE.
+
+import type { DownloadItem,downloadStatus,Task } from "@/types/download";
+
+
+
+const tasks = new Set<Task>();
+
+function handleRename(
+  downloadItem: chrome.downloads.DownloadItem,
+  suggest: (suggestion?: chrome.downloads.DownloadFilenameSuggestion) => void
+) {
+  storage
+    .getItems(["local:download-folder", "local:download-conflict"])
+    .then((res) => {
+      const folder = res[0].value;
+      const conflict = res[1].value;
+
+      if (folder) {
+        const ext = downloadItem.filename.split(".").pop()!;
+        const task = [...tasks][0];
+        if (!task) {
+          suggest();
+          return;
+        }
+
+        const file = task.currentFile;
+        let filename = `${file.article}/${file.name} ${file.id}.${ext}`;
+        console.log(file);
+
+        suggest({ filename: filename, conflictAction: conflict });
+        task.next();
+      }
+    });
+  return true;
+}
+function handleDownload(
+  request: {
+    fileList: DownloadItem[];
+    action: "download";
+  },
+  sender: chrome.runtime.MessageSender,
+  sendResponse: (arg0:boolean) => void
+) {
+  let conflict: chrome.downloads.FilenameConflictAction;
+
+  storage
+    .getItem<chrome.downloads.FilenameConflictAction>(
+      "local:download-conflict"
+    )
+    .then((res) => {
+      conflict = res ?? "uniquify";
+    });
+
+  if (request.action === "download") {
+    const fileList = request.fileList;
+    downloadImages({
+      numberOfProcessedFiles: 0,
+      filesToDownload: fileList,
+      currentFile: fileList[0],
+      next() {
+        this.numberOfProcessedFiles += 1;
+        
+        if (this.numberOfProcessedFiles === this.filesToDownload.length) {
+          tasks.delete(this);
+        }
+        this.currentFile =
+          this.filesToDownload[this.numberOfProcessedFiles];
+      },
+    }).then(()=>{sendResponse(true)});
+
+    return true;
+  }
+}
+async function downloadImages(task: Task) {
+  tasks.add(task);
+  let currentFile = 0
+  const total = task.filesToDownload.length
+  for (const image of task.filesToDownload) {
+    await new Promise<number>((resolve) => {
+      chrome.downloads.download({ url: image.originUrl }, (downloadId) => {
+        
+        if (downloadId == null) {
+          if (chrome.runtime.lastError) {
+            console.error(`${image.name}:`, chrome.runtime.lastError.message);
+          }
+          task.next();
+        }
+        currentFile += 1;
+        resolve(currentFile);
+      });
+    }).then((res)=>{
+      
+      browser.runtime.sendMessage({action:'downloading',downloadStatus:{
+        currentId:res,
+        total: total,
+        downloaded: res === total ? true:false
+      }})
+    });
+  }
+}
 
 export default defineBackground(() => {
   console.log("Hello background!", { id: browser.runtime.id });
-  function handleRename(
-    downloadItem: chrome.downloads.DownloadItem,
-    suggest: (suggestion?: chrome.downloads.DownloadFilenameSuggestion) => void
-  ) {
-    const ext = downloadItem.filename.split('.').pop()!
-    storage.getItems(["local:download-folder","local:download-conflict"]).then(res=>{
-      const folder = res[0].value
-      const conflict = res[1].value
-      console.log(current,downloadItem.filename);
-      
-      if(folder){
-        suggest({
-          filename:`${current.article}/${current.name} ${current.id}.${ext}`,
-          conflictAction:conflict
-        })
-      }
-    })
-    return true
-    //suggest({filename:'fdfdfs'})
-  }
-  function handleDownload(
-    request: {
-      fileList: DownloadItem[];
-      action: "download";
-    },
-    sender: any,
-    sendResponse: () => void
-  ) {
-    let conflict: chrome.downloads.FilenameConflictAction;
-
-    storage
-      .getItem<chrome.downloads.FilenameConflictAction>(
-        "local:download-conflict"
-      )
-      .then((res) => {
-        conflict = res ?? "uniquify";
-      });
-
-    if (request.action === "download") {
-      const fileList = request.fileList;
-      fileList.forEach((item) => {
-        current = item
-        browser.downloads.download({
-          url: item.originUrl,
-          conflictAction: conflict,
-        });
-      });
-    }
-  }
   browser.runtime.onMessage.addListener(handleDownload);
-  //browser.downloads.onDeterminingFilename.addListener(handleRename);
+  browser.downloads.onDeterminingFilename.addListener(handleRename);
 });
