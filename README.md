@@ -4,6 +4,8 @@ Chrome/Edge 拓展，用于从期刊网站上下载文章附图的原始版本�
 
 <a href='https://microsoftedge.microsoft.com/addons/detail/sci-fig-downloader/eakkjiohlkpoimlgnljjceajjpgfjdop'><img src='https://get.microsoft.com/images/en-us%20light.svg' alt='Microsoft Store' style='width: 202.5px; height: 72px;'/></a>
 
+Microsoft Store的版本较旧，可以使用[Release](https://github.com/yyngfive/sci-fig-downloader/releases)页面的最新版。
+
 ## LICENSE
 
 本拓展程序遵循 GNU GPLv3.0 协议
@@ -18,23 +20,27 @@ Chrome/Edge 拓展，用于从期刊网站上下载文章附图的原始版本�
 
 ## 目标
 
-- [x] 简单的下载管理界面
-- [ ] 支持更多的期刊
-- [ ] 可将图片分类下载到可自定义名称的文件夹
-- [x] 支持下载 SI 文件以及视频等
-- [ ] 优化插件界面
-- [x] 更方便的 Parser 添加方式
+- [x] 简单的图片浏览界面
+- [ ] 支持多种期刊网站
+- [x] 可将图片分类下载到可自定义名称的文件夹
+- [x] 支持下载补充材料文件
+- [x] 支持预览图片
+- [x] 较方便的 Parser 添加方式
 
 ## 版本更迭
 
-### 下一版本
+### 0.2.1
 
-- 界面优化
-  - [ ] 设置界面
-  - [ ] 文件类型
 - 解析器支持：
   - [ ] 牛津出版社 主要是 NAR
   - [ ] Cell 出版社(Cell 出版社的文章也可以通过 ScienceDirect 网站查看)
+
+### 0.2.0
+
+- 界面优化
+  - [x] 设置界面
+  - [x] 文件类型
+- 修复了已知的 BUG
 
 ### 0.1.3
 
@@ -46,8 +52,8 @@ Chrome/Edge 拓展，用于从期刊网站上下载文章附图的原始版本�
 
 ## 已知 BUG
 
-- 爬虫仅针对部分文章页面进行了测试，一些特殊的期刊排版可能会导致插件无法正常运行
 - Elsevier 的期刊很杂，插件只针对部分期刊进行了测试
+- 下载功能可能会与其他插件冲突和浏览器设置冲突
 
 ## 开发
 
@@ -57,9 +63,10 @@ Chrome/Edge 拓展，用于从期刊网站上下载文章附图的原始版本�
 git clone https://github.com/yyngfive/sci-fig-downloader.git
 ```
 
-安装依赖
+安装依赖(推荐使用 pnpm)
 
 ```bash
+npm install -g pnpm
 pnpm install
 ```
 
