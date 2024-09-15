@@ -143,6 +143,9 @@ function App() {
     console.log("loaded");
     setLoaded(true);
 
+    //TODO:空下载不显示动画
+    //TODO：动画显示正在创建下载项目
+    //TODO：显示下载进度条
     function handleDownloading(
       request: {
         action: string;
