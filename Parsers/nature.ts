@@ -26,15 +26,16 @@ export function getFilesFromNature(): FilesData {
     title: "Supplementary Information",
   };
   const supportedList = document.querySelector(
-    'section[data-title="Supplementary information"]'
+    'section[data-title="Supplementary information"],section[data-title="Supplementary Information"]'
   );
   if (!supportedList) {
     return filesData;
   }
-
+  //TODO :修改逻辑
   const fileLinks = supportedList.querySelectorAll(
     "div.c-article-supplementary__item"
   );
+
   fileLinks.forEach((si, index) => {
     const id = index + 1;
     const link = si.querySelector("a.print-link") as HTMLAnchorElement;
