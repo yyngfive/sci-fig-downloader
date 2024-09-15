@@ -40,9 +40,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-import type { DownloadItem,downloadStatus,Task } from "@/types/download";
-
-
+import type { DownloadItem, downloadStatus, Task } from "@/types/download";
 
 const tasks = new Set<Task>();
 
@@ -50,6 +48,12 @@ function handleRename(
   downloadItem: chrome.downloads.DownloadItem,
   suggest: (suggestion?: chrome.downloads.DownloadFilenameSuggestion) => void
 ) {
+  const task = [...tasks][0];
+  if (!task) {
+    suggest();
+    return;
+  }
+
   storage
     .getItems(["local:download-folder", "local:download-conflict"])
     .then((res) => {
@@ -58,12 +62,6 @@ function handleRename(
 
       if (folder) {
         const ext = downloadItem.filename.split(".").pop()!;
-        const task = [...tasks][0];
-        if (!task) {
-          suggest();
-          return;
-        }
-
         const file = task.currentFile;
         let filename = `${file.article}/${file.name} ${file.id}.${ext}`;
         console.log(file);
@@ -80,14 +78,12 @@ function handleDownload(
     action: "download";
   },
   sender: chrome.runtime.MessageSender,
-  sendResponse: (arg0:boolean) => void
+  sendResponse: (arg0: boolean) => void
 ) {
   let conflict: chrome.downloads.FilenameConflictAction;
 
   storage
-    .getItem<chrome.downloads.FilenameConflictAction>(
-      "local:download-conflict"
-    )
+    .getItem<chrome.downloads.FilenameConflictAction>("local:download-conflict")
     .then((res) => {
       conflict = res ?? "uniquify";
     });
@@ -100,26 +96,26 @@ function handleDownload(
       currentFile: fileList[0],
       next() {
         this.numberOfProcessedFiles += 1;
-        
+
         if (this.numberOfProcessedFiles === this.filesToDownload.length) {
           tasks.delete(this);
         }
-        this.currentFile =
-          this.filesToDownload[this.numberOfProcessedFiles];
+        this.currentFile = this.filesToDownload[this.numberOfProcessedFiles];
       },
-    }).then(()=>{sendResponse(true)});
+    }).then(() => {
+      sendResponse(true);
+    });
 
     return true;
   }
 }
 async function downloadImages(task: Task) {
   tasks.add(task);
-  let currentFile = 0
-  const total = task.filesToDownload.length
+  let currentFile = 0;
+  const total = task.filesToDownload.length;
   for (const image of task.filesToDownload) {
     await new Promise<number>((resolve) => {
       chrome.downloads.download({ url: image.originUrl }, (downloadId) => {
-        
         if (downloadId == null) {
           if (chrome.runtime.lastError) {
             console.error(`${image.name}:`, chrome.runtime.lastError.message);
@@ -129,13 +125,15 @@ async function downloadImages(task: Task) {
         currentFile += 1;
         resolve(currentFile);
       });
-    }).then((res)=>{
-      
-      browser.runtime.sendMessage({action:'downloading',downloadStatus:{
-        currentId:res,
-        total: total,
-        downloaded: res === total ? true:false
-      }})
+    }).then((res) => {
+      browser.runtime.sendMessage({
+        action: "downloading",
+        downloadStatus: {
+          currentId: res,
+          total: total,
+          downloaded: res === total ? true : false,
+        },
+      });
     });
   }
 }

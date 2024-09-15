@@ -33,6 +33,7 @@ export default defineContentScript({
     "*://*.onlinelibrary.wiley.com/*",
     "*://*.science.org/*",
     "*://*.sciencedirect.com/*",
+    "*://academic.oup.com/*",
   ],
   main() {
     function handleGetFigsData(
