@@ -41,7 +41,7 @@ export function findJournalForUrl(url: string): string | null {
   return null;
 }
 
-export const figParsers: Record<FiguresData["from"], () => FiguresData> = {
+export const figParsers: Record<FiguresData["from"], () => FiguresData | Promise<FiguresData>> = {
   nature: getFiguresFromNature,
   acs: getFiguresFromACS,
   wiley: getFiguresFromWiley,

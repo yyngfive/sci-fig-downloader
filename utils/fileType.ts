@@ -39,4 +39,5 @@ const fileExtensions: Record<string, FileInfo["fileType"]> = {
   jpg: "figure",
   png: "figure",
   jpeg: "figure",
+  zip:"zip",
 };

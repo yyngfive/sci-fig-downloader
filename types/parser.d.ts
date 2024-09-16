@@ -27,7 +27,7 @@ interface FigInfo extends Info {
 }
 
 interface FileInfo extends Info {
-  fileType: "pdf" | "video" | "audio" | "word" | "excel" |"figure"| "other";
+  fileType: "pdf" | "video" | "audio" | "word" | "excel" |"figure"| "zip" |"other";
 }
 
 interface FiguresData {

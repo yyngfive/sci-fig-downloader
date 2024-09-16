@@ -52,7 +52,17 @@ export default defineContentScript({
       }
       console.log("Journal (Figure)", request.from);
       const figsData = getFiguresFrom(request.from);
-      sendResponse(figsData);
+      console.log(figsData);
+      if(figsData instanceof(Promise)){
+        figsData.then(res=>{
+          console.log(res);
+          sendResponse(res);
+        })
+      }else{
+        sendResponse(figsData);
+      }
+      return true;
+      
     }
 
     function handleGetFilesData(
@@ -74,6 +84,7 @@ export default defineContentScript({
       console.log(filesData);
 
       sendResponse(filesData);
+      return true;
     }
 
     

@@ -31,7 +31,7 @@ export function getFilesFromNature(): FilesData {
   if (!supportedList) {
     return filesData;
   }
-  //TODO :修改逻辑
+ 
   const fileLinks = supportedList.querySelectorAll(
     "div.c-article-supplementary__item"
   );
@@ -42,6 +42,7 @@ export function getFilesFromNature(): FilesData {
     let name = link.textContent as string;
     const subName = si.querySelector(".c-article-supplementary__description");
 
+    //TODO:区分图片名称和注释
     if (subName !== null) {
       name = `${name}: ${subName.textContent}`;
     }

@@ -223,12 +223,12 @@ function App() {
       </div>
 
       <div className="m-3 flex justify-between items-center h-12 z-50">
-        <span>
+        <span className="tooltip tooltip-right" data-tip='chenhye5@outlook.com'>
           <a
             href="https://github.com/yyngfive/sci-fig-downloader/issues"
             className="link link-hover"
             target="_blank"
-            //TODO 邮箱反馈
+       
           >
           
             问题反馈
@@ -245,7 +245,7 @@ function App() {
           ) : (
             <>
               <span className="loading loading-spinner loading-xs"></span>
-              正在下载({downloadStatus.currentId}/{downloadStatus.total})
+              正在处理({downloadStatus.currentId}/{downloadStatus.total})
             </>
           )}
         </button>
