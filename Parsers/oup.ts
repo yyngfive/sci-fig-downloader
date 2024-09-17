@@ -82,8 +82,7 @@ export async function getFiguresFromOUP(): Promise<FiguresData> {
       "a.fig-view-orig"
     ) as HTMLAnchorElement;
 
-    
-    const originUrl = await fetchOriginUrlParams(originElement.href)
+    const originUrl = await fetchOriginUrlParams(originElement.href);
     const figInfo: FigInfo = {
       id,
       name,
@@ -99,37 +98,43 @@ export async function getFiguresFromOUP(): Promise<FiguresData> {
   const figureList = document.querySelectorAll(
     'div[class="fig fig-section js-fig-section"]'
   );
-  figureList.forEach(async (e) => {
-    const img = e.querySelector("img")!;
-    const label = e.querySelector("div.fig-label");
-    const caption = e.querySelector("div.fig-caption");
-    const idString = label?.textContent?.split(" ")[1].split(".")[0];
-    if (idString === undefined) {
-      return;
-    }
-    const id = Number(idString);
-    const name = caption?.textContent!;
-    const htmlUrl = img.src
-      ? (img.src as string)
-      : (img.getAttribute("data-src") as string);
-    const originElemet = e.querySelector(
-      "a.fig-view-orig"
-    ) as HTMLAnchorElement;
-    const originUrl = await fetchOriginUrlParams(originElemet.href);
+  await Promise.all(
+    Array.from(figureList).map(async (e) => {
+      const img = e.querySelector("img")!;
+      const label = e.querySelector("div.fig-label");
+      const caption = e.querySelector("div.fig-caption");
+      const idString = label?.textContent?.split(" ")[1].split(".")[0];
+      if (idString === undefined) {
+        return;
+      }
+      const id = Number(idString);
+      const name = caption?.textContent!;
+      const htmlUrl = img.src
+        ? (img.src as string)
+        : (img.getAttribute("data-src") as string);
+      const originElemet = e.querySelector(
+        "a.fig-view-orig"
+      ) as HTMLAnchorElement;
+      fetchOriginUrlParams(originElemet.href).then((originUrl) => {
+        const figInfo: FigInfo = {
+          id,
+          name,
+          htmlUrl,
+          originUrl,
+          selected: false,
+        };
+        //console.log(figInfo, "figinfo", label?.textContent);
 
-    const figInfo: FigInfo = {
-      id,
-      name,
-      htmlUrl,
-      originUrl,
-      selected: false,
-    };
-    if (label?.textContent?.startsWith("Fig")) {
-      figuresData.mainFigs.push(figInfo);
-    } else if (label?.textContent?.startsWith("Sch")) {
-      figuresData.siFigs?.push(figInfo);
-    }
-  });
+        if (label?.textContent?.startsWith("Fig")) {
+          figuresData.mainFigs.push(figInfo);
+        } else if (label?.textContent?.startsWith("Sch")) {
+          figuresData.siFigs?.push(figInfo);
+        }
+      });
+    })
+  );
+
+  console.log(figuresData.mainFigs);
 
   if (figuresData.siFigs?.length !== 0) {
     figuresData.hasSi = true;

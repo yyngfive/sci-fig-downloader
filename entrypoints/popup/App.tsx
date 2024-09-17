@@ -95,6 +95,25 @@ function App() {
     });
   }
 
+  function requestFiguresData(id: number, from: string) {
+    return new Promise<FiguresData>((resolve, reject) => {
+      browser.tabs.sendMessage(
+        id,
+        {
+          from: from,
+          action: "fig",
+        },
+        (res) => {
+          if (chrome.runtime.lastError) {
+            reject(chrome.runtime.lastError);
+          } else {
+            resolve(res);
+          }
+        }
+      );
+    });
+  }
+
   useEffect(() => {
     async function getFigsData() {
       const [tab] = await browser.tabs.query({
@@ -104,14 +123,12 @@ function App() {
       if (tab.id && figsData.title === "") {
         const currentUrl = tab.url as string;
         if (findJournalForUrl(currentUrl)) {
-          const res = await browser.tabs.sendMessage(tab.id, {
-            from: findJournalForUrl(currentUrl),
-            action: "fig",
+          requestFiguresData(tab.id,findJournalForUrl(currentUrl)!).then((res) => {
+            console.log(res);
+            if (res !== undefined) {
+              setFigsData(res);
+            }
           });
-          console.log(res);
-          if (res !== undefined) {
-            setFigsData(res);
-          }
         }
       }
     }
@@ -223,14 +240,12 @@ function App() {
       </div>
 
       <div className="m-3 flex justify-between items-center h-12 z-50">
-        <span className="tooltip tooltip-right" data-tip='chenhye5@outlook.com'>
+        <span className="tooltip tooltip-right" data-tip="chenhye5@outlook.com">
           <a
             href="https://github.com/yyngfive/sci-fig-downloader/issues"
             className="link link-hover"
             target="_blank"
-       
           >
-          
             问题反馈
           </a>
         </span>

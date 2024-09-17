@@ -23,7 +23,6 @@ import {
 } from "@/Parsers/parsers";
 import type { FiguresData, FilesData } from "@/types/parser";
 
-
 export default defineContentScript({
   matches: [
     "*://www.nature.com/*",
@@ -51,18 +50,16 @@ export default defineContentScript({
         return;
       }
       console.log("Journal (Figure)", request.from);
-      const figsData = getFiguresFrom(request.from);
-      console.log(figsData);
-      if(figsData instanceof(Promise)){
-        figsData.then(res=>{
-          console.log(res);
-          sendResponse(res);
-        })
-      }else{
-        sendResponse(figsData);
+      if (1) {
+        (async () => {
+          const figsData = await getFiguresFrom(request.from);
+          console.log(figsData);
+          
+          sendResponse(figsData);
+        })();
+        
       }
       return true;
-      
     }
 
     function handleGetFilesData(
@@ -87,10 +84,7 @@ export default defineContentScript({
       return true;
     }
 
-    
-
     browser.runtime.onMessage.addListener(handleGetFigsData);
     browser.runtime.onMessage.addListener(handleGetFilesData);
-    
   },
 });
