@@ -93,7 +93,7 @@ export function getFiguresFromACS(): FiguresData {
   if (!figureList) {
     return figuresData;
   }
-  
+  //BUG:https://pubs.acs.org/doi/10.1021/cr400354z
   const figures = figureList.querySelectorAll("figure");
   figures.forEach((element) => {
     const caption = element.querySelector("figcaption")?.textContent as string;
