@@ -17,6 +17,8 @@
 
 import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
 import { getFileType } from "@/utils/fileType";
+
+//BUG https://pubs.acs.org/doi/10.1021/ja049171k 无法识别补充材料
 export function getFilesFromACS(): FilesData {
   let filesData: FilesData = {
     from: "acs",
