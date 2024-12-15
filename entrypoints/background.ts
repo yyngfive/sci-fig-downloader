@@ -1,3 +1,5 @@
+////This TS File
+
 // Copyright (C) 2024  yyngfive
 
 // Email: chenhye5@outlook.com
@@ -15,8 +17,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-//https://github.com/PactInteractive/image-downloader
-
+////Image Downloader Code //https://github.com/PactInteractive/image-downloader
 // Copyright (c) 2012-2021 Vladimir Sabev
 
 // Permission is hereby granted, free of charge, to any person
@@ -40,9 +41,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 // OTHER DEALINGS IN THE SOFTWARE.
 
-import type { DownloadItem,downloadStatus,Task } from "@/types/download";
-
-
+import type { DownloadItem, downloadStatus, Task } from "@/types/download";
 
 const tasks = new Set<Task>();
 
@@ -80,14 +79,12 @@ function handleDownload(
     action: "download";
   },
   sender: chrome.runtime.MessageSender,
-  sendResponse: (arg0:boolean) => void
+  sendResponse: (arg0: boolean) => void
 ) {
   let conflict: chrome.downloads.FilenameConflictAction;
 
   storage
-    .getItem<chrome.downloads.FilenameConflictAction>(
-      "local:download-conflict"
-    )
+    .getItem<chrome.downloads.FilenameConflictAction>("local:download-conflict")
     .then((res) => {
       conflict = res ?? "uniquify";
     });
@@ -100,26 +97,26 @@ function handleDownload(
       currentFile: fileList[0],
       next() {
         this.numberOfProcessedFiles += 1;
-        
+
         if (this.numberOfProcessedFiles === this.filesToDownload.length) {
           tasks.delete(this);
         }
-        this.currentFile =
-          this.filesToDownload[this.numberOfProcessedFiles];
+        this.currentFile = this.filesToDownload[this.numberOfProcessedFiles];
       },
-    }).then(()=>{sendResponse(true)});
+    }).then(() => {
+      sendResponse(true);
+    });
 
     return true;
   }
 }
 async function downloadImages(task: Task) {
   tasks.add(task);
-  let currentFile = 0
-  const total = task.filesToDownload.length
+  let currentFile = 0;
+  const total = task.filesToDownload.length;
   for (const image of task.filesToDownload) {
     await new Promise<number>((resolve) => {
       chrome.downloads.download({ url: image.originUrl }, (downloadId) => {
-        
         if (downloadId == null) {
           if (chrome.runtime.lastError) {
             console.error(`${image.name}:`, chrome.runtime.lastError.message);
@@ -129,13 +126,15 @@ async function downloadImages(task: Task) {
         currentFile += 1;
         resolve(currentFile);
       });
-    }).then((res)=>{
-      
-      browser.runtime.sendMessage({action:'downloading',downloadStatus:{
-        currentId:res,
-        total: total,
-        downloaded: res === total ? true:false
-      }})
+    }).then((res) => {
+      browser.runtime.sendMessage({
+        action: "downloading",
+        downloadStatus: {
+          currentId: res,
+          total: total,
+          downloaded: res === total ? true : false,
+        },
+      });
     });
   }
 }
@@ -144,4 +143,29 @@ export default defineBackground(() => {
   console.log("Hello background!", { id: browser.runtime.id });
   browser.runtime.onMessage.addListener(handleDownload);
   browser.downloads.onDeterminingFilename.addListener(handleRename);
+  browser.runtime.onInstalled.addListener(async (details) => {
+    if (details.reason === "update" || details.reason === "install") {
+      // Get the current version from manifest
+      const currentVersion = browser.runtime.getManifest().version;
+      console.log(currentVersion, "current");
+
+      // Get the previously stored version from storage
+      const { previousVersion } = await browser.storage.local.get(
+        "previousVersion"
+      );
+
+      // Compare versions and show popup if different
+      if (currentVersion !== previousVersion) {
+        // Open a new tab or popup
+        console.log(previousVersion, "previous");
+        browser.tabs.create({
+          url: browser.runtime.getURL("/changelog.html"),
+          active: true,
+        });
+
+        // Update the stored version
+        await browser.storage.local.set({ previousVersion: currentVersion });
+      }
+    }
+  });
 });

@@ -25,9 +25,18 @@ export function getFilesFromNature(): FilesData {
     srcFiles: [],
     title: "Supplementary Information",
   };
-  const supportedList = document.querySelector(
-    'section[data-title="Supplementary information"]'
-  );
+  const supportedTitles = [
+    'Supplementary information',
+    'Electronic supplementary material',
+  ]
+  const sections = document.querySelectorAll("section");
+  let supportedList;
+  for (const e of sections) {
+    if (supportedTitles.includes(e.getAttribute("data-title") as string)) {
+      supportedList = e;
+      break;
+    }
+  }
   if (!supportedList) {
     return filesData;
   }
@@ -105,7 +114,8 @@ export function getFiguresFromNature(): FiguresData {
   }
   const figures = figureList.querySelectorAll("figure");
   figures.forEach((element) => {
-    const caption = element.querySelector("b")?.textContent as string;
+    const caption = element.querySelector("figcaption")?.querySelector("b")?.textContent as string;
+    const bottom_caption = element.querySelector(".c-article-section__figure-description")?.textContent as string;
     const { id, name } = extractFigureInfo(caption);
     const img = element.querySelector("img");
     if (!img || id === 0) {
@@ -119,7 +129,7 @@ export function getFiguresFromNature(): FiguresData {
 
     const fig_info: FigInfo = {
       id,
-      name,
+      name:name ? name : bottom_caption,
       htmlUrl,
       originUrl,
       selected: false,
@@ -142,7 +152,7 @@ export function getFiguresFromNature(): FiguresData {
     }
   }
 
-  console.log(siFigList?.querySelectorAll("a"), "AAA");
+  console.log(siFigList?.querySelectorAll("a"), "SI FIG LIST");
   if (!siFigList) {
     return figuresData;
   }
