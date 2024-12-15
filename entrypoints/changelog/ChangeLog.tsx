@@ -29,17 +29,17 @@ const content = [
 ];
 
 function ChangeLog() {
-  return <div>
+  return <div className="m-3 p-3">
     <div>
-        <h1>ChangeLog</h1>
+        <h1 className="text-3xl font-bold my-2">ChangeLog</h1>
     </div>
     <div>
       {content.map((item, index) => (
         <div key={index}>
-          <h2>{item.version}</h2>
+          <h2 className="text-xl font-bold my-1">{item.version}</h2>
           <ul>
             {item.description.map((desc, descIndex) => (
-              <li key={descIndex}>{desc}</li>
+              <li className="my-1 text-lg" key={descIndex}>{desc}</li>
             ))}
           </ul>
         </div>
