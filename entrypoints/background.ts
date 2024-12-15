@@ -144,7 +144,7 @@ export default defineBackground(() => {
   browser.runtime.onMessage.addListener(handleDownload);
   browser.downloads.onDeterminingFilename.addListener(handleRename);
   browser.runtime.onInstalled.addListener(async (details) => {
-    if (details.reason === "update") {
+    if (details.reason === "update" || details.reason === "install") {
       // Get the current version from manifest
       const currentVersion = browser.runtime.getManifest().version;
       console.log(currentVersion, "current");
