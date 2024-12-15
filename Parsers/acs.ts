@@ -52,7 +52,7 @@ export function getFilesFromACS(): FilesData {
   return filesData;
 }
 
-//BUG https://pubs.acs.org/doi/10.1021/acs.chemrev.2c00050 无法识别图片
+//BUG https://pubs.acs.org/doi/10.1021/acs.chemrev.2c00050 无法识别图片 https://pubs.acs.org/doi/full/10.1021/acs.accounts.2c00061
 
 export function getFiguresFromACS(): FiguresData {
   let figuresData: FiguresData = {
