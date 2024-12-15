@@ -37,7 +37,7 @@ export function getFilesFromScience(): FilesData {
     const id = index + 1;
     const description = si
       .querySelector(".core-description")
-      ?.querySelectorAll("div") as NodeListOf<HTMLDivElement>;
+      ?.querySelectorAll("div, span") as NodeListOf<HTMLDivElement>;
     const name = Array.from(description)
       .map((element) => {
         return element.textContent || "";
@@ -120,13 +120,12 @@ export function getFiguresFromScience(): FiguresData {
     if (captionElement?.querySelector(".caption")) {
       captionElement = captionElement.querySelector(".caption");
     }
-    const caption = captionElement?.textContent
-      ?.replace(/(\s|&nbsp;)+/g, " ")
-      .split(". ") as string[];
-    console.log(caption);
-
-    const [type, id] = caption;
-    const name = caption.slice(2).join(". ");
+    const heading = captionElement?.querySelector(".heading")?.textContent?.replace(/(\s|&nbsp;)+/g, " ") as string;
+    let captionCopy = captionElement?.cloneNode(true) as HTMLDivElement;
+    captionCopy.removeChild(captionCopy.querySelector(".heading") as Node)
+    const figName = captionCopy.textContent?.replace(/(\s|&nbsp;)+/g, " ") as string;
+    const name = figName.slice(0,2) === ". " ? figName.slice(2)  : figName;
+    const [type, id] = heading.split(". ") || ["",""]
     const baseUrl = element.querySelector("img")?.src
       ? (element.querySelector("img")?.src as string)
       : (element.querySelector("img")?.getAttribute("data-src") as string);
