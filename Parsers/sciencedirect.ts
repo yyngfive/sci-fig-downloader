@@ -14,7 +14,7 @@
 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
+// https://www.sciencedirect.com/science/article/pii/S2162253117300707#cesec50
 import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
 import { getFileType } from "@/utils/fileType";
 export function getFilesFromScienceDirect(): FilesData {
