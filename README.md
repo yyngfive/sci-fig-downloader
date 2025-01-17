@@ -31,9 +31,7 @@ Microsoft Store的版本较旧，可以使用[Release](https://github.com/yyngfi
 
 ### 0.2.1
 
-- 解析器支持：
-  - [ ] 牛津出版社 主要是 NAR
-  - [ ] Cell 出版社(Cell 出版社的文章也可以通过 ScienceDirect 网站查看)
+- 修复了已知的 BUG，详见Release页面
 
 ### 0.2.0
 
