@@ -4,7 +4,7 @@ Chrome/Edge 拓展，用于从期刊网站上下载文章附图的原始版本�
 
 <a href='https://microsoftedge.microsoft.com/addons/detail/sci-fig-downloader/eakkjiohlkpoimlgnljjceajjpgfjdop'><img src='https://get.microsoft.com/images/en-us%20light.svg' alt='Microsoft Store' style='width: 202.5px; height: 72px;'/></a>
 
-<a href='https://chromewebstore.google.com/detail/sci-fig-downloader/dooahdhpalnmkjkmdnhchoihgfmhfjkj'><img src='https://developer.chrome.com/static/docs/webstore/branding/image/206x58-chrome-web-bcb82d15b2486.png' alt='Chrome Web Store' style='width: 202.5px; height 72px;' /></a>
+<a href='https://chromewebstore.google.com/detail/sci-fig-downloader/dooahdhpalnmkjkmdnhchoihgfmhfjkj'><img src='https://developer.chrome.com/static/docs/webstore/branding/image/206x58-chrome-web-bcb82d15b2486.png' alt='Chrome Web Store' style='height 72px;' /></a>
 
 
 ## LICENSE
