@@ -15,6 +15,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+//TODO：缓存机制，临时保存页面解析结果，定时清除。
+//TODO：可以下载文章PDF文件
+
 import { useEffect, useState } from "react";
 import { useImmer } from "use-immer";
 import "./App.css";

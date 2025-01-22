@@ -69,32 +69,6 @@ export async function getFiguresFromOUP(): Promise<FiguresData> {
 
   const toc = document.querySelector('div[class="fig fig-section"]');
 
-  if (toc) {
-    const img = toc.querySelector("img")!;
-
-    const id = 1;
-    const name = "Graphical Abstract";
-
-    const htmlUrl = img.src
-      ? (img.src as string)
-      : (img.getAttribute("data-src") as string);
-    const originElement = toc.querySelector(
-      "a.fig-view-orig"
-    ) as HTMLAnchorElement;
-
-    const originUrl = await fetchOriginUrlParams(originElement.href);
-    const figInfo: FigInfo = {
-      id,
-      name,
-      htmlUrl,
-      originUrl,
-      selected: false,
-    };
-    figuresData.tocFig = figInfo;
-    figuresData.hasToc = true;
-    console.log("1", figuresData);
-  }
-
   const figureList = document.querySelectorAll(
     'div[class="fig fig-section js-fig-section"]'
   );
@@ -140,6 +114,38 @@ export async function getFiguresFromOUP(): Promise<FiguresData> {
     figuresData.hasSi = true;
     figuresData.siTitle = "Scheme";
   }
+
+  if (toc) {
+    const img = toc.querySelector("img")!;
+
+    const id = 1;
+    const name = "Graphical Abstract";
+
+    const htmlUrl = img.src
+      ? (img.src as string)
+      : (img.getAttribute("data-src") as string);
+    const originElement = toc.querySelector(
+      "a.fig-view-orig"
+    ) as HTMLAnchorElement;
+
+    const originUrl = await fetchOriginUrlParams(originElement.href);
+    const figInfo: FigInfo = {
+      id,
+      name,
+      htmlUrl,
+      originUrl,
+      selected: false,
+    };
+    figuresData.tocFig = figInfo;
+    figuresData.hasToc = true;
+    console.log("1", figuresData);
+  }
+
+  figuresData = {
+    ...figuresData,
+    mainFigs: sortFigsById(figuresData.mainFigs),
+    siFigs: sortFigsById(figuresData.siFigs as FigInfo[]),
+  };
   console.log("2", figuresData);
 
   return figuresData;
@@ -164,4 +170,8 @@ async function fetchOriginUrlParams(imgUrl: string) {
     });
 
   return originUrl;
+}
+
+function sortFigsById(arr: FigInfo[]): FigInfo[] {
+  return arr.sort((a, b) => a.id - b.id);
 }

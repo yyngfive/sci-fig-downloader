@@ -35,6 +35,9 @@ export default defineContentScript({
     "*://academic.oup.com/*",
   ],
   main() {
+    function isPromise<T>(value: any): value is Promise<T> {
+      return value instanceof Promise;
+    }
     function handleGetFigsData(
       request: {
         from: FiguresData["from"];
@@ -50,14 +53,16 @@ export default defineContentScript({
         return;
       }
       console.log("Journal (Figure)", request.from);
-      if (1) {
-        (async () => {
-          const figsData = await getFiguresFrom(request.from);
-          console.log(figsData);
-          
+      const data = getFiguresFrom(request.from);
+      if (isPromise<FiguresData>(data)) {
+        data.then((figsData) => {
+          console.log(figsData,'promise');
           sendResponse(figsData);
-        })();
-        
+        })
+      }else{
+        const figsData = data;
+        console.log(figsData);
+        sendResponse(figsData);
       }
       return true;
     }
