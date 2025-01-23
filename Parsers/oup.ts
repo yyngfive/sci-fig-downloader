@@ -72,7 +72,7 @@ export async function getFiguresFromOUP(): Promise<FiguresData> {
   const figureList = document.querySelectorAll(
     'div[class="fig fig-section js-fig-section"]'
   );
-  await Promise.all(
+  const results = await Promise.allSettled(
     Array.from(figureList).map(async (e) => {
       const img = e.querySelector("img")!;
       const label = e.querySelector("div.fig-label");
@@ -108,7 +108,7 @@ export async function getFiguresFromOUP(): Promise<FiguresData> {
     })
   );
 
-  console.log(figuresData.mainFigs);
+  
 
   if (figuresData.siFigs?.length !== 0) {
     figuresData.hasSi = true;
@@ -146,7 +146,10 @@ export async function getFiguresFromOUP(): Promise<FiguresData> {
     mainFigs: sortFigsById(figuresData.mainFigs),
     siFigs: sortFigsById(figuresData.siFigs as FigInfo[]),
   };
+  console.log(figuresData.mainFigs);
   console.log("2", figuresData);
+  console.log("3", figuresData);
+  console.log(results);
 
   return figuresData;
 }
