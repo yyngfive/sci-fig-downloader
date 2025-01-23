@@ -5,7 +5,7 @@ import { resolve } from "path";
 export default defineConfig({
   //modules: ["@wxt-dev/module-react"],
   manifest: {
-    permissions: ["webNavigation", "activeTab", "downloads", "storage"],
+    permissions: ["activeTab", "downloads", "storage"],
     name: "Sci Fig Downloader",
   },
   vite: () => ({

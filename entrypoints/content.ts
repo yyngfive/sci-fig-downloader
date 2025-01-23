@@ -25,14 +25,14 @@ import type { FiguresData, FilesData } from "@/types/parser";
 
 export default defineContentScript({
   matches: [
-    "*://www.nature.com/*",
-    "*://nature.com/*",
-    "*://pubs.acs.org/*",
-    "*://onlinelibrary.wiley.com/*",
-    "*://*.onlinelibrary.wiley.com/*",
-    "*://*.science.org/*",
-    "*://*.sciencedirect.com/*",
-    "*://academic.oup.com/*",
+    "https://www.nature.com/*",
+    "https://nature.com/*",
+    "https://pubs.acs.org/*",
+    "https://onlinelibrary.wiley.com/*",
+    "https://*.onlinelibrary.wiley.com/*",
+    "https://*.science.org/*",
+    "https://*.sciencedirect.com/*",
+    "https://academic.oup.com/*",
   ],
   main() {
     function isPromise<T>(value: any): value is Promise<T> {

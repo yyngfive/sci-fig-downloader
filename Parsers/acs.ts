@@ -17,6 +17,7 @@
 
 import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
 import { getFileType } from "@/utils/fileType";
+
 export function getFilesFromACS(): FilesData {
   let filesData: FilesData = {
     from: "acs",
@@ -25,15 +26,24 @@ export function getFilesFromACS(): FilesData {
     title: "Supporting Information",
   };
   const supportedList = document.querySelector(".NLM_list-list_type-label");
+  let supportedAnchor
   if (!supportedList) {
-    return filesData;
+    supportedAnchor = document.querySelector(".supInfoBoxOnFTP ");
+    if(!supportedAnchor) {
+      return filesData;
+    }
   }
 
-  const fileLinks = supportedList?.querySelectorAll("p");
+  let fileLinks
+  if(!supportedList?.querySelectorAll("p")) {
+    fileLinks = supportedAnchor?.querySelectorAll("li");
+  }else{
+    fileLinks = supportedList.querySelectorAll("p");
+  }
   fileLinks?.forEach((si, index) => {
     const id = index + 1;
     const name = si.textContent?.replace(/\(.*?\)$/, '') as string
-    const link = si.querySelector("a.ext-link") as HTMLAnchorElement;
+    const link = si.querySelector("a.ext-link") ? si.querySelector("a.ext-link") as HTMLAnchorElement : si.querySelector("a") as HTMLAnchorElement;
     const originUrl = link.href;
     const fileType = getFileType(originUrl.split("/").pop() as string);
     const fileInfo: FileInfo = {
@@ -48,8 +58,6 @@ export function getFilesFromACS(): FilesData {
 
   return filesData;
 }
-
-
 
 export function getFiguresFromACS(): FiguresData {
   let figuresData: FiguresData = {
@@ -95,9 +103,15 @@ export function getFiguresFromACS(): FiguresData {
   }
   //BUG:https://pubs.acs.org/doi/10.1021/cr400354z
   const figures = figureList.querySelectorAll("figure");
+  console.log(figures.length);
+  
   figures.forEach((element) => {
-    const caption = element.querySelector("figcaption")?.textContent as string;
+    const caption = element.querySelector("figcaption")?.textContent;
+    if (!caption) {
+      return figuresData;
+    }
     const { type, id, name } = extractFigureInfo(caption);
+   
     const baseUrl = element.querySelector("img")?.src
       ? (element.querySelector("img")?.src as string)
       : (element.querySelector("img")?.getAttribute("data-src") as string);
@@ -111,6 +125,7 @@ export function getFiguresFromACS(): FiguresData {
       originUrl,
       selected: false,
     };    
+    
 
     if (type.startsWith("Scheme")) {
       figuresData.siFigs?.push(figInfo);
@@ -132,12 +147,15 @@ function extractFigureInfo(input: string): {
   name: string;
 } {
   const regex = /(Scheme|Figure)\s+(\d+)\.\s*(.*)/;
-  const match = input.match(regex);
-  if (match) {
+  
+  const match_title = input.match(regex);
+  
+  if (match_title) {
+    
     return {
-      type: match[1],
-      id: Number(match[2]),
-      name: match[3],
+      type: match_title[1],
+      id: Number(match_title[2]),
+      name: match_title[3],
     };
   }
   return {

@@ -1,4 +1,4 @@
-// Copyright (C) 2024  yyngfive 
+// Copyright (C) 2024  yyngfive
 
 // Email: chenhye5@outlook.com
 
@@ -14,7 +14,7 @@
 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
+// https://www.sciencedirect.com/science/article/pii/S2162253117300707#cesec50
 import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
 import { getFileType } from "@/utils/fileType";
 export function getFilesFromScienceDirect(): FilesData {
@@ -38,7 +38,9 @@ export function getFilesFromScienceDirect(): FilesData {
   fileLinks?.forEach((si, index) => {
     const id = index + 1;
     let name = si.querySelector(".captions")?.textContent;
-    if(typeof name !== 'string'){name = ''}
+    if (typeof name !== "string") {
+      name = "";
+    }
     const link = si.querySelector("a.download-link") as HTMLAnchorElement;
     let originUrl = link.href;
     const fileType = getFileType(originUrl.split("/").pop() as string);
@@ -112,15 +114,15 @@ export function getFiguresFromScienceDirect(): FiguresData {
   const figures = figureList.querySelectorAll("figure.figure");
   figures.forEach((element) => {
     let caption = element.querySelector(".captions")?.textContent;
-    if(!caption){
-      caption = ''
+    if (!caption) {
+      caption = "";
     }
-    
+
     const name = caption
       .replace(/(\s|&nbsp;)+/g, " ")
       .replace(/^(Figure|Fig\.|Scheme)(?:\s\d+\.?)?\s*/, "");
 
-    let { type, id } = extractFigureInfo(element.id);
+    let { type, id } = extractFigureInfo(caption);
     const figList = element.querySelectorAll("ol li");
     const hasHiRes = figList.length >= 2 ? true : false;
     const htmlUrl = hasHiRes
@@ -143,9 +145,15 @@ export function getFiguresFromScienceDirect(): FiguresData {
       figuresData.mainFigs.push(figInfo);
     }
   });
-  figuresData.mainFigs.forEach((e,i)=>{
-    e.id = i +1
-  })
+  figuresData.mainFigs.forEach((e, i) => {
+    e.id = i + 1;
+  });
+  if (figuresData.siFigs) {
+    figuresData.siFigs.forEach((e, i) => {
+      e.id = i + 1;
+    });
+  }
+
   if (figuresData.siFigs?.length !== 0) {
     figuresData.hasSi = true;
     figuresData.siTitle = "Scheme";
@@ -154,7 +162,7 @@ export function getFiguresFromScienceDirect(): FiguresData {
   return figuresData;
 }
 
-function extractFigureInfo(input: string): {
+function extractFigureInfo_old(input: string): {
   type: string;
   id: number;
 } {
@@ -175,5 +183,29 @@ function extractFigureInfo(input: string): {
   return {
     type: "",
     id: 0,
+  };
+}
+
+function extractFigureInfo(input: string): {
+  type: string;
+  id: number;
+  name: string;
+} {
+  const regex = /^(Figure|Fig\.|Scheme)\s+(\d+)\.\s*(.*)/;
+  const match = input.match(regex);
+  console.log(match);
+
+  if (match) {
+    const fig_type = match[1] === "Scheme" ? "sch" : "fig";
+    return {
+      type: fig_type,
+      id: Number(match[2]),
+      name: match[3],
+    };
+  }
+  return {
+    type: "Figure",
+    id: 0,
+    name: "",
   };
 }

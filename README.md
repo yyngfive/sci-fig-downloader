@@ -4,7 +4,8 @@ Chrome/Edge 拓展，用于从期刊网站上下载文章附图的原始版本�
 
 <a href='https://microsoftedge.microsoft.com/addons/detail/sci-fig-downloader/eakkjiohlkpoimlgnljjceajjpgfjdop'><img src='https://get.microsoft.com/images/en-us%20light.svg' alt='Microsoft Store' style='width: 202.5px; height: 72px;'/></a>
 
-Microsoft Store的版本较旧，可以使用[Release](https://github.com/yyngfive/sci-fig-downloader/releases)页面的最新版。
+<a href='https://chromewebstore.google.com/detail/sci-fig-downloader/dooahdhpalnmkjkmdnhchoihgfmhfjkj'><img src='https://developer.chrome.com/static/docs/webstore/branding/image/206x58-chrome-web-bcb82d15b2486.png' alt='Chrome Web Store' style='height 72px;' /></a>
+
 
 ## LICENSE
 
@@ -32,9 +33,7 @@ Microsoft Store的版本较旧，可以使用[Release](https://github.com/yyngfi
 
 ### 0.2.1
 
-- 解析器支持：
-  - [ ] 牛津出版社 主要是 NAR
-  - [ ] Cell 出版社(Cell 出版社的文章也可以通过 ScienceDirect 网站查看)
+- 修复了已知的 BUG，详见Release页面
 
 ### 0.2.0
 

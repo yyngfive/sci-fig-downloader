@@ -1,3 +1,5 @@
+////This TS File
+
 // Copyright (C) 2024  yyngfive
 
 // Email: chenhye5@outlook.com
@@ -15,8 +17,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-//https://github.com/PactInteractive/image-downloader
-
+////Image Downloader Code //https://github.com/PactInteractive/image-downloader
 // Copyright (c) 2012-2021 Vladimir Sabev
 
 // Permission is hereby granted, free of charge, to any person
@@ -142,4 +143,29 @@ export default defineBackground(() => {
   console.log("Hello background!", { id: browser.runtime.id });
   browser.runtime.onMessage.addListener(handleDownload);
   browser.downloads.onDeterminingFilename.addListener(handleRename);
+  browser.runtime.onInstalled.addListener(async (details) => {
+    if (details.reason === "update" || details.reason === "install") {
+      // Get the current version from manifest
+      const currentVersion = browser.runtime.getManifest().version;
+      console.log(currentVersion, "current");
+
+      // Get the previously stored version from storage
+      const { previousVersion } = await browser.storage.local.get(
+        "previousVersion"
+      );
+
+      // Compare versions and show popup if different
+      if (currentVersion !== previousVersion) {
+        // Open a new tab or popup
+        console.log(previousVersion, "previous");
+        browser.tabs.create({
+          url: browser.runtime.getURL("/changelog.html"),
+          active: true,
+        });
+
+        // Update the stored version
+        await browser.storage.local.set({ previousVersion: currentVersion });
+      }
+    }
+  });
 });
