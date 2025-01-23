@@ -23,7 +23,6 @@ import {
 } from "@/Parsers/parsers";
 import type { FiguresData, FilesData } from "@/types/parser";
 
-
 export default defineContentScript({
   matches: [
     "https://www.nature.com/*",
@@ -33,8 +32,12 @@ export default defineContentScript({
     "https://*.onlinelibrary.wiley.com/*",
     "https://*.science.org/*",
     "https://*.sciencedirect.com/*",
+    "https://academic.oup.com/*",
   ],
   main() {
+    function isPromise<T>(value: any): value is Promise<T> {
+      return value instanceof Promise;
+    }
     function handleGetFigsData(
       request: {
         from: FiguresData["from"];
@@ -50,8 +53,18 @@ export default defineContentScript({
         return;
       }
       console.log("Journal (Figure)", request.from);
-      const figsData = getFiguresFrom(request.from);
-      sendResponse(figsData);
+      const data = getFiguresFrom(request.from);
+      if (isPromise<FiguresData>(data)) {
+        data.then((figsData) => {
+          console.log(figsData,'promise');
+          sendResponse(figsData);
+        })
+      }else{
+        const figsData = data;
+        console.log(figsData);
+        sendResponse(figsData);
+      }
+      return true;
     }
 
     function handleGetFilesData(
@@ -73,12 +86,10 @@ export default defineContentScript({
       console.log(filesData);
 
       sendResponse(filesData);
+      return true;
     }
-
-    
 
     browser.runtime.onMessage.addListener(handleGetFigsData);
     browser.runtime.onMessage.addListener(handleGetFilesData);
-    
   },
 });

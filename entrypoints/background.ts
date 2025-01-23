@@ -49,6 +49,12 @@ function handleRename(
   downloadItem: chrome.downloads.DownloadItem,
   suggest: (suggestion?: chrome.downloads.DownloadFilenameSuggestion) => void
 ) {
+  const task = [...tasks][0];
+  if (!task) {
+    suggest();
+    return;
+  }
+
   storage
     .getItems(["local:download-folder", "local:download-conflict"])
     .then((res) => {
@@ -57,12 +63,6 @@ function handleRename(
 
       if (folder) {
         const ext = downloadItem.filename.split(".").pop()!;
-        const task = [...tasks][0];
-        if (!task) {
-          suggest();
-          return;
-        }
-
         const file = task.currentFile;
         let filename = `${file.article}/${file.name} ${file.id}.${ext}`;
         console.log(file);

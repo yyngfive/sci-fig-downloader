@@ -25,6 +25,7 @@ export function getFilesFromNature(): FilesData {
     srcFiles: [],
     title: "Supplementary Information",
   };
+
   const supportedTitles = [
     'Supplementary information',
     'Electronic supplementary material',
@@ -40,16 +41,18 @@ export function getFilesFromNature(): FilesData {
   if (!supportedList) {
     return filesData;
   }
-
+ 
   const fileLinks = supportedList.querySelectorAll(
     "div.c-article-supplementary__item"
   );
+
   fileLinks.forEach((si, index) => {
     const id = index + 1;
     const link = si.querySelector("a.print-link") as HTMLAnchorElement;
     let name = link.textContent as string;
     const subName = si.querySelector(".c-article-supplementary__description");
 
+    //TODO:区分图片名称和注释
     if (subName !== null) {
       name = `${name}: ${subName.textContent}`;
     }

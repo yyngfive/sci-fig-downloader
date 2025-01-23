@@ -14,7 +14,9 @@
 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
-//TODO 添加更新日志提示
+
+//TODO：缓存机制，临时保存页面解析结果，定时清除。
+//TODO：可以下载文章PDF文件
 import { useEffect, useState } from "react";
 import { useImmer } from "use-immer";
 import "./App.css";
@@ -95,6 +97,25 @@ function App() {
     });
   }
 
+  function requestFiguresData(id: number, from: string) {
+    return new Promise<FiguresData>((resolve, reject) => {
+      browser.tabs.sendMessage(
+        id,
+        {
+          from: from,
+          action: "fig",
+        },
+        (res) => {
+          if (chrome.runtime.lastError) {
+            reject(chrome.runtime.lastError);
+          } else {
+            resolve(res);
+          }
+        }
+      );
+    });
+  }
+
   useEffect(() => {
     async function getFigsData() {
       const [tab] = await browser.tabs.query({
@@ -104,14 +125,12 @@ function App() {
       if (tab.id && figsData.title === "") {
         const currentUrl = tab.url as string;
         if (findJournalForUrl(currentUrl)) {
-          const res = await browser.tabs.sendMessage(tab.id, {
-            from: findJournalForUrl(currentUrl),
-            action: "fig",
+          requestFiguresData(tab.id,findJournalForUrl(currentUrl)!).then((res) => {
+            console.log(res);
+            if (res !== undefined) {
+              setFigsData(res);
+            }
           });
-          console.log(res);
-          if (res !== undefined) {
-            setFigsData(res);
-          }
         }
       }
     }
@@ -143,6 +162,9 @@ function App() {
     console.log("loaded");
     setLoaded(true);
 
+    //TODO:空下载不显示动画
+    //TODO：动画显示正在创建下载项目
+    //TODO：显示下载进度条
     function handleDownloading(
       request: {
         action: string;
@@ -220,7 +242,7 @@ function App() {
       </div>
       {/* TODO：问题反馈直接获取当前url，发送提交信息 */}
       <div className="m-3 flex justify-between items-center h-12 z-50">
-        <span>
+        <span className="tooltip tooltip-right" data-tip="chenhye5@outlook.com">
           <a
             href="https://github.com/yyngfive/sci-fig-downloader/issues"
             className="link link-hover"
@@ -240,7 +262,7 @@ function App() {
           ) : (
             <>
               <span className="loading loading-spinner loading-xs"></span>
-              正在下载({downloadStatus.currentId}/{downloadStatus.total})
+              正在处理({downloadStatus.currentId}/{downloadStatus.total})
             </>
           )}
         </button>
