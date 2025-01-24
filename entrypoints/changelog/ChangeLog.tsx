@@ -17,6 +17,12 @@
 
 const content = [
   {
+    version: "0.3.0",
+    description: [
+     "新增了对Oxford期刊的支持", 
+    ]
+  },
+  {
     version: "0.2.1",
     description: [
       "修复了部分Nature系列期刊页面插件显示空图片名称的问题",
