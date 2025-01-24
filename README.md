@@ -11,13 +11,14 @@ Chrome/Edge 拓展，用于从期刊网站上下载文章附图的原始版本�
 
 本拓展程序遵循 GNU GPLv3.0 协议
 
-## 支持的期刊
+## 支持的期刊网站
 
 - nature.com (Nature)
 - pubs.acs.org (ACS)
 - onlinelibrary.wiley.com (Wiley)
 - science.org (Science)
 - sciencedirect.com (Elsevier)
+- academic.oup.com (Oxford)
 
 ## 目标
 

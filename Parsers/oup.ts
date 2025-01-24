@@ -79,6 +79,7 @@ export async function getFiguresFromOUP(): Promise<FiguresData> {
       const caption = e.querySelector("div.fig-caption");
       const idString = label?.textContent?.split(" ")[1].split(".")[0];
       if (idString === undefined) {
+        console.log("idString is undefined");
         return;
       }
       const id = Number(idString);
@@ -104,11 +105,11 @@ export async function getFiguresFromOUP(): Promise<FiguresData> {
         } else if (label?.textContent?.startsWith("Sch")) {
           figuresData.siFigs?.push(figInfo);
         }
+        console.log(`${figInfo.id} Got`);
+        
       });
     })
   );
-
-  
 
   if (figuresData.siFigs?.length !== 0) {
     figuresData.hasSi = true;
@@ -141,21 +142,24 @@ export async function getFiguresFromOUP(): Promise<FiguresData> {
     console.log("1", figuresData);
   }
 
+  // wait for all promises to resolve
+  const wait = await fetchOriginUrlParams('https://academic.oup.com/');
+
   figuresData = {
     ...figuresData,
     mainFigs: sortFigsById(figuresData.mainFigs),
     siFigs: sortFigsById(figuresData.siFigs as FigInfo[]),
   };
-  console.log(figuresData.mainFigs);
+  
   console.log("2", figuresData);
-  console.log("3", figuresData);
+  console.log([...figuresData.mainFigs]);
   console.log(results);
 
   return figuresData;
 }
 
-async function fetchOriginUrlParams(imgUrl: string) {
-  const originUrl = await fetch(imgUrl)
+function fetchOriginUrlParams(imgUrl: string) {
+  const originUrl = fetch(imgUrl)
     .then((res) => res.text())
     .then((html) => {
       const parser = new DOMParser();
