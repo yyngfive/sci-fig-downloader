@@ -1,4 +1,4 @@
-# Sci Fig Downloader
+# Sci Fig Downloader (SFD)
 
 Chrome/Edge 拓展，用于从期刊网站上下载文章附图的原始版本以及文章的补充材料
 
@@ -21,14 +21,13 @@ Chrome/Edge 拓展，用于从期刊网站上下载文章附图的原始版本�
 - academic.oup.com (Oxford)
 - pubs.rsc.org (RSC)
 
-## 目标
+## 功能
 
 - [x] 简单的图片浏览界面
 - [ ] 支持多种期刊网站
 - [x] 可将图片分类下载到文件夹
 - [x] 支持下载补充材料文件
 - [x] 支持预览图片
-- [x] 较方便的 Parser 添加方式
 - [ ] 显示下载进度
 
 ## 版本更迭
