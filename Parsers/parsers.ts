@@ -21,10 +21,11 @@ import { getFiguresFromWiley, getFilesFromWiley } from "@/Parsers/wiley";
 import { getFiguresFromScience, getFilesFromScience } from "./science";
 import { getFiguresFromScienceDirect,getFilesFromScienceDirect } from "./sciencedirect";
 import { getFiguresFromOUP,getFilesFromOUP } from "./oup";
+import { getFiguresFromRSC,getFilesFromRSC } from "./rsc";
 import { FiguresData, FilesData } from "@/types/parser";
 
 export function findJournalForUrl(url: string): string | null {
-  const supportWebsites = ["nature", "acs", "wiley", "science","sciencedirect","oup"];
+  const supportWebsites = ["nature", "acs", "wiley", "science","sciencedirect","oup","rsc"];
   console.log(url);
   if (!url.startsWith("http")) {
     return null;
@@ -48,6 +49,7 @@ export const figParsers: Record<FiguresData["from"], () => FiguresData | Promise
   science: getFiguresFromScience,
   sciencedirect:getFiguresFromScienceDirect,
   oup:getFiguresFromOUP,
+  rsc:getFiguresFromRSC,
 };
 
 export const fileParsers: Record<FilesData["from"], () => FilesData> = {
@@ -57,6 +59,7 @@ export const fileParsers: Record<FilesData["from"], () => FilesData> = {
   wiley: getFilesFromWiley,
   sciencedirect:getFilesFromScienceDirect,
   oup:getFilesFromOUP,
+  rsc:getFilesFromRSC,
 };
 
 export function getFiguresFrom(Journal: FiguresData["from"]) {

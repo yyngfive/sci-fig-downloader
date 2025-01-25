@@ -21,8 +21,9 @@ import { useEffect, useState } from "react";
 import { useImmer } from "use-immer";
 import "./App.css";
 import { FigCard, FigCardTOC } from "@/components/FigCard";
-import { FileCard } from "@/components/FileCard";
+import { FileCard,FileCardSingle } from "@/components/FileCard";
 import type { FiguresData, FilesData } from "@/types/parser";
+import { default_file } from "@/utils/fileType";
 import type { DownloadItem, downloadStatus } from "@/types/download";
 import { Tab } from "@/components/Tab";
 import { findJournalForUrl } from "@/Parsers/parsers";
@@ -43,6 +44,7 @@ function App() {
     from: "acs",
     title: "",
     hasSrc: false,
+    article: default_file,
   });
   const [downloads, setDownloads] = useImmer<DownloadItem[]>([]);
   const [loaded, setLoaded] = useState(false);
@@ -81,6 +83,11 @@ function App() {
         );
       }
     });
+    if (filesData.article.selected) {
+      selectedFiles.push(
+        info2Download(filesData.article, figsData.title, "Article")
+      ); 
+    }
     setDownloads(selectedFiles);
   }, [figsData, filesData]);
 
@@ -125,12 +132,14 @@ function App() {
       if (tab.id && figsData.title === "") {
         const currentUrl = tab.url as string;
         if (findJournalForUrl(currentUrl)) {
-          requestFiguresData(tab.id,findJournalForUrl(currentUrl)!).then((res) => {
-            console.log(res);
-            if (res !== undefined) {
-              setFigsData(res);
+          requestFiguresData(tab.id, findJournalForUrl(currentUrl)!).then(
+            (res) => {
+              console.log(res);
+              if (res !== undefined) {
+                setFigsData(res);
+              }
             }
-          });
+          );
         }
       }
     }
@@ -227,10 +236,19 @@ function App() {
           </Tab>
 
           <Tab name="文件" loaded={loaded}>
+            {filesData.article.originUrl !== "" && (
+              <FileCardSingle
+                title="Article"
+                fileInfo={filesData.article}
+                type="article"
+                setFilesData={setFilesData}
+                />
+            )}
             {filesData.files.length !== 0 && (
               <FileCard
                 title={filesData.title}
                 filesData={filesData}
+                type="files"
                 setFilesData={setFilesData}
               />
             )}

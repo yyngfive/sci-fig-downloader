@@ -33,6 +33,7 @@ export default defineContentScript({
     "https://*.science.org/*",
     "https://*.sciencedirect.com/*",
     "https://academic.oup.com/*",
+    "https://pubs.rsc.org/*"
   ],
   main() {
     function isPromise<T>(value: any): value is Promise<T> {

@@ -16,7 +16,8 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import type { FiguresData, FigInfo,FileInfo,FilesData } from "@/types/parser";
-import { getFileType } from "@/utils/fileType";
+
+import { getFileType,default_file } from "@/utils/fileType";
 import { parseQueryParameters } from "@/utils/parseUrl";
 export function getFilesFromWiley(): FilesData {
   let filesData: FilesData = {
@@ -24,6 +25,7 @@ export function getFilesFromWiley(): FilesData {
     files: [],
     hasSrc:false,
     title: "Supporting Information",
+    article:default_file,
   };
   const supportedTable = document.querySelector(".support-info__table");
   if (!supportedTable) {

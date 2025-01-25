@@ -16,13 +16,15 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 // https://www.sciencedirect.com/science/article/pii/S2162253117300707#cesec50
 import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
-import { getFileType } from "@/utils/fileType";
+
+import { getFileType,default_file } from "@/utils/fileType";
 export function getFilesFromScienceDirect(): FilesData {
   let filesData: FilesData = {
     from: "sciencedirect",
     files: [],
     hasSrc: false,
     title: "",
+    article: default_file,
   };
   //抓display class
   const supportedList = document.querySelector(".Appendices");
