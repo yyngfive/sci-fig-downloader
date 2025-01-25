@@ -19,6 +19,7 @@ Chrome/Edge 拓展，用于从期刊网站上下载文章附图的原始版本�
 - science.org (Science)
 - sciencedirect.com (Elsevier)
 - academic.oup.com (Oxford)
+- pubs.rsc.org (RSC)
 
 ## 目标
 

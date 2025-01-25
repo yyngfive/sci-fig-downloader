@@ -23,7 +23,7 @@ export function getFilesFromRSC(): FilesData {
     files: [],
     hasSrc: false,
     srcFiles: [],
-    title: "Supplementary Information",
+    title: "Supplementary files",
   };
 
   return filesData;
@@ -39,21 +39,77 @@ export function getFiguresFromRSC(): FiguresData {
     from: "rsc",
   };
 
-  const titleNode = document.querySelector(".article__title")?.querySelector("h2");
+  const titleNode = document
+    .querySelector(".article__title")
+    ?.querySelector("h2");
   if (!titleNode) {
     return figuresData;
   }
   const title = Array.from(titleNode.childNodes)
-  .filter(node => node.nodeType === Node.TEXT_NODE)
-  .map(node => node.nodeValue)
-  .join('').trim();
+    .filter((node) => node.nodeType === Node.TEXT_NODE)
+    .map((node) => node.nodeValue)
+    .join("")
+    .trim();
   console.log("title", title);
   if (typeof title !== "string") {
     return figuresData;
   }
   figuresData.title = title;
 
-  
+  const abs = document.querySelector(".capsule__article-image");
+  const img = abs?.querySelector("img");
+  if (img) {
+    figuresData.hasToc = true;
+    const id = 1;
+    const name = "Graphical Abstract";
+    const htmlUrl = img.src
+      ? (img.src as string)
+      : (img.getAttribute("data-src") as string);
+    const originUrl = htmlUrl;
+    const figInfo: FigInfo = {
+      id,
+      name,
+      htmlUrl,
+      originUrl,
+      selected: false,
+    };
+    figuresData.tocFig = figInfo;
+  }
+
+  const figureList = document.querySelectorAll("figure.img-tbl__image");
+  figureList.forEach((element, index) => {
+    const caption = element.querySelectorAll("figcaption span");
+    if (!caption) {
+      return; 
+    }
+    
+    const type_id = caption[0]?.textContent?.trim() as string;
+    console.log(type_id);
+    
+    const id = Number(type_id.split(" ")[1]);
+    const name = caption[1]?.textContent?.trim() as string;
+    const img = element.querySelector("img");
+    const htmlUrl = img?.src
+    ? (img?.src as string)
+    : (img?.getAttribute("data-src") as string);
+    const originUrl = element.querySelector("a")?.href as string;
+    const figInfo: FigInfo = {
+      id,
+      name,
+      htmlUrl,
+      originUrl,
+      selected: false,
+    };
+    if(type_id.startsWith("Fig")){
+      figuresData.mainFigs.push(figInfo);
+    }else{
+      figuresData.siFigs?.push(figInfo);
+    }
+  });
+  if (figuresData.siFigs?.length!== 0) {
+    figuresData.hasSi = true;
+    figuresData.siTitle = "Scheme"; 
+  }
   return figuresData;
 }
 
