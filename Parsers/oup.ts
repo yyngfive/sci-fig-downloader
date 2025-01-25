@@ -16,7 +16,8 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
-import { getFileType } from "@/utils/fileType";
+
+import { getFileType,default_file } from "@/utils/fileType";
 
 export function getFilesFromOUP(): FilesData {
   let filesData: FilesData = {
@@ -25,6 +26,7 @@ export function getFilesFromOUP(): FilesData {
     hasSrc: false,
     srcFiles: [],
     title: "Supplementary Data",
+    article: default_file,
   };
 
   const fileLinks = document.querySelectorAll("div.dataSuppLink");

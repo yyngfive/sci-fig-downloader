@@ -16,7 +16,8 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
-import { getFileType } from "@/utils/fileType";
+
+import { getFileType,default_file } from "@/utils/fileType";
 export function getFilesFromNature(): FilesData {
   let filesData: FilesData = {
     from: "nature",
@@ -24,12 +25,13 @@ export function getFilesFromNature(): FilesData {
     hasSrc: false,
     srcFiles: [],
     title: "Supplementary Information",
+    article:default_file,
   };
 
   const supportedTitles = [
-    'Supplementary information',
-    'Electronic supplementary material',
-  ]
+    "Supplementary information",
+    "Electronic supplementary material",
+  ];
   const sections = document.querySelectorAll("section");
   let supportedList;
   for (const e of sections) {
@@ -41,7 +43,7 @@ export function getFilesFromNature(): FilesData {
   if (!supportedList) {
     return filesData;
   }
- 
+
   const fileLinks = supportedList.querySelectorAll(
     "div.c-article-supplementary__item"
   );
@@ -117,8 +119,11 @@ export function getFiguresFromNature(): FiguresData {
   }
   const figures = figureList.querySelectorAll("figure");
   figures.forEach((element) => {
-    const caption = element.querySelector("figcaption")?.querySelector("b")?.textContent as string;
-    const bottom_caption = element.querySelector(".c-article-section__figure-description")?.textContent as string;
+    const caption = element.querySelector("figcaption")?.querySelector("b")
+      ?.textContent as string;
+    const bottom_caption = element.querySelector(
+      ".c-article-section__figure-description"
+    )?.textContent as string;
     const { id, name } = extractFigureInfo(caption);
     const img = element.querySelector("img");
     if (!img || id === 0) {
@@ -132,7 +137,7 @@ export function getFiguresFromNature(): FiguresData {
 
     const fig_info: FigInfo = {
       id,
-      name:name ? name : bottom_caption,
+      name: name ? name : bottom_caption,
       htmlUrl,
       originUrl,
       selected: false,

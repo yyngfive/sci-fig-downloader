@@ -17,6 +17,14 @@
 
 import type { FileInfo } from "@/types/parser";
 
+export const default_file: FileInfo = {
+  id: 0,
+  name: "",
+  originUrl: "",
+  selected: false,
+  fileType: "pdf",
+}
+
 export function getFileType(filename: string): FileInfo["fileType"] {
   const ext = filename
     .toLowerCase()

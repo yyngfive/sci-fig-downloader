@@ -16,7 +16,8 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
-import { getFileType } from "@/utils/fileType";
+
+import { getFileType,default_file } from "@/utils/fileType";
 export function getFilesFromRSC(): FilesData {
   let filesData: FilesData = {
     from: "rsc",
@@ -24,7 +25,54 @@ export function getFilesFromRSC(): FilesData {
     hasSrc: false,
     srcFiles: [],
     title: "Supplementary files",
+    article: default_file,
   };
+
+  const article_section = document.querySelector("#DownloadOption")?.querySelector("a")
+  if(!article_section) {
+    return filesData; 
+  }
+  const titleNode = document
+    .querySelector(".article__title")
+    ?.querySelector("h2");
+  if (!titleNode) {
+    return filesData;
+  }
+  const title = getTextOnly(titleNode).trim();
+  if (typeof title !== "string") {
+    return filesData;
+  }
+  const article:FileInfo = {
+    id: 0,
+    name: title,
+    fileType: "pdf",
+    originUrl: article_section.href,
+    selected: false,
+  }
+  filesData.article = article;
+
+  const sections = document.querySelector("div.list-control ul.list__collection");
+  if (!sections) {
+    return filesData;
+  }
+  const files = sections.querySelectorAll("li");
+  console.log(files);
+  
+  files.forEach((si, index) => {
+    const id = index + 1;
+    const link = si.querySelector("a") as HTMLAnchorElement;
+    let name = getTextOnly(link.querySelector('span') as HTMLSpanElement).trim();
+    const originUrl = link.href;
+    const fileType = getFileType(originUrl.split("/").pop() as string);
+    const fileInfo: FileInfo = {
+      id,
+      name,
+      fileType,
+      originUrl,
+      selected: false,
+    };
+    filesData.files.push(fileInfo);
+  });
 
   return filesData;
 }
@@ -45,11 +93,7 @@ export function getFiguresFromRSC(): FiguresData {
   if (!titleNode) {
     return figuresData;
   }
-  const title = Array.from(titleNode.childNodes)
-    .filter((node) => node.nodeType === Node.TEXT_NODE)
-    .map((node) => node.nodeValue)
-    .join("")
-    .trim();
+  const title = getTextOnly(titleNode).trim();
   console.log("title", title);
   if (typeof title !== "string") {
     return figuresData;
@@ -80,18 +124,17 @@ export function getFiguresFromRSC(): FiguresData {
   figureList.forEach((element, index) => {
     const caption = element.querySelectorAll("figcaption span");
     if (!caption) {
-      return; 
+      return;
     }
-    
+
     const type_id = caption[0]?.textContent?.trim() as string;
-    console.log(type_id);
-    
+
     const id = Number(type_id.split(" ")[1]);
     const name = caption[1]?.textContent?.trim() as string;
     const img = element.querySelector("img");
     const htmlUrl = img?.src
-    ? (img?.src as string)
-    : (img?.getAttribute("data-src") as string);
+      ? (img?.src as string)
+      : (img?.getAttribute("data-src") as string);
     const originUrl = element.querySelector("a")?.href as string;
     const figInfo: FigInfo = {
       id,
@@ -100,31 +143,23 @@ export function getFiguresFromRSC(): FiguresData {
       originUrl,
       selected: false,
     };
-    if(type_id.startsWith("Fig")){
+    if (type_id.startsWith("Fig")) {
       figuresData.mainFigs.push(figInfo);
-    }else{
+    } else {
       figuresData.siFigs?.push(figInfo);
     }
   });
-  if (figuresData.siFigs?.length!== 0) {
+  if (figuresData.siFigs?.length !== 0) {
     figuresData.hasSi = true;
-    figuresData.siTitle = "Scheme"; 
+    figuresData.siTitle = "Scheme";
   }
   return figuresData;
 }
 
-function extractFigureInfo(input: string): { id: number; name: string } {
-  const regex =
-    /(Figure|Fig\.|Extended Data Fig\.|Supplementary Figure) (\d+):?\s*(.*)/;
-  const match = input.match(regex);
-  if (match) {
-    return {
-      id: Number(match[2]),
-      name: match[3],
-    };
-  }
-  return {
-    id: 0,
-    name: "",
-  };
+function getTextOnly(node: Node): string {
+  const text = Array.from(node.childNodes)
+    .filter((node) => node.nodeType === Node.TEXT_NODE)
+    .map((node) => node.nodeValue)
+    .join("")
+  return text;
 }

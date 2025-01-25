@@ -16,7 +16,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
-import { getFileType } from "@/utils/fileType";
+import { getFileType ,default_file} from "@/utils/fileType";
 
 export function getFilesFromACS(): FilesData {
   let filesData: FilesData = {
@@ -24,6 +24,7 @@ export function getFilesFromACS(): FilesData {
     files: [],
     hasSrc:false,
     title: "Supporting Information",
+    article: default_file,
   };
   const supportedList = document.querySelector(".NLM_list-list_type-label");
   let supportedAnchor

@@ -47,6 +47,7 @@ interface FilesData {
   hasSrc: boolean;
   srcFiles?: FileInfo[];
   files: FileInfo[];
+  article: FileInfo;
 }
 
-export { FiguresData, FigInfo, FileInfo, FilesData };
+export { FiguresData, FigInfo, FileInfo, FilesData};
