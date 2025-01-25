@@ -20,6 +20,8 @@ const content = [
     version: "0.3.0",
     description: [
      "新增了对Oxford期刊的支持", 
+     "新增了对RSC期刊的支持",
+     "可以下载文章的正文PDF文件(部分出版社)",
     ]
   },
   {
