@@ -16,7 +16,6 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 //TODO：缓存机制，临时保存页面解析结果，定时清除。
-//TODO：可以下载文章PDF文件
 import { useEffect, useState } from "react";
 import { useImmer } from "use-immer";
 import "./App.css";
@@ -171,8 +170,7 @@ function App() {
     console.log("loaded");
     setLoaded(true);
 
-    //TODO:空下载不显示动画
-    //TODO：动画显示正在创建下载项目
+    //BUG:空下载导致动画循环卡死
     //TODO：显示下载进度条
     function handleDownloading(
       request: {

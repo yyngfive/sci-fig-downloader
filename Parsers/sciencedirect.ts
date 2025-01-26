@@ -168,7 +168,6 @@ function extractFigureInfo_old(input: string): {
   type: string;
   id: number;
 } {
-  //BUG https://www.sciencedirect.com/science/article/pii/S1385894724022514#f0005
   if (/^\d+$/.test(input)) {
     return {
       type: "fig",
