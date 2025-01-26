@@ -20,15 +20,15 @@ Chrome/Edge 拓展，用于从期刊网站上下载文章附图的原始版本�
 - sciencedirect.com (Elsevier)
 - academic.oup.com (Oxford)
 - pubs.rsc.org (RSC)
+- pnas.org (PNAS)
 
 ## 功能
 
-- [x] 简单的图片浏览界面
-- [ ] 支持多种期刊网站
-- [x] 可将图片分类下载到文件夹
-- [x] 支持下载补充材料文件
-- [x] 支持预览图片
-- [ ] 显示下载进度
+- 在一个界面查看文章的所有图片
+- 快速预览图片内容
+- 同时下载原图与补充材料
+- 自动整理下载的图片和文件（暂未完全实现）
+- 支持多种期刊网站（Nature，Science，ACS，Wiley，Elsevier，Oxford，PNAS）
 
 ## 版本更迭
 
