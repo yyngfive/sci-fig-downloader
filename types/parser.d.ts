@@ -1,4 +1,4 @@
-// Copyright (C) 2024  yyngfive 
+// Copyright (C) 2024  yyngfive
 
 // Email: chenhye5@outlook.com
 
@@ -27,15 +27,31 @@ interface FigInfo extends Info {
 }
 
 interface FileInfo extends Info {
-  fileType: "pdf" | "video" | "audio" | "word" | "excel" |"figure"| "zip" |"other";
+  fileType:
+    | "pdf"
+    | "video"
+    | "audio"
+    | "word"
+    | "excel"
+    | "figure"
+    | "zip"
+    | "other";
 }
 
 interface FiguresData {
   title: string; //文章标题
   hasToc: boolean; //是否有图片摘要
   hasSi: boolean; //是否提供可直接下载的补充材料图片或者反应体系图（有机反应文章常见）
-  from: "nature" | "acs" | "wiley" | "science" | "sciencedirect" | "oup" | "rsc"; //支持的杂志网站
-  siTitle?: "Scheme" | "Extended Data Figure"; //补充图片的类别
+  from:
+    | "nature"
+    | "acs"
+    | "wiley"
+    | "science"
+    | "sciencedirect"
+    | "oup"
+    | "rsc"
+    | "pnas"; //支持的杂志网站
+  siTitle?: "Scheme" | "Extended Data Figure" | "SI Figure"; //补充图片的类别
   tocFig?: FigInfo; //图片摘要
   mainFigs: FigInfo[]; //正文图片
   siFigs?: FigInfo[]; //补充图片或反应体系
@@ -43,11 +59,19 @@ interface FiguresData {
 
 interface FilesData {
   title: string;
-  from: "acs" | "nature" | "science" | "wiley"|"sciencedirect" | "oup" | "rsc";
+  from:
+    | "acs"
+    | "nature"
+    | "science"
+    | "wiley"
+    | "sciencedirect"
+    | "oup"
+    | "rsc"
+    | "pnas";
   hasSrc: boolean;
   srcFiles?: FileInfo[];
   files: FileInfo[];
   article: FileInfo;
 }
 
-export { FiguresData, FigInfo, FileInfo, FilesData};
+export { FiguresData, FigInfo, FileInfo, FilesData };
