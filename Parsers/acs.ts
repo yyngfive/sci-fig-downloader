@@ -26,6 +26,24 @@ export function getFilesFromACS(): FilesData {
     title: "Supporting Information",
     article: default_file,
   };
+
+  const title = document.querySelector(".hlFld-Title")?.textContent;
+  console.log("title", title);
+  if (typeof title === "string") {
+    const article_title = title
+    const article_link = document.querySelector('a.article__btn__secondary')
+    if(article_link instanceof HTMLAnchorElement) {
+      const article:FileInfo = {
+        name: article_title,
+        id: 0,
+        originUrl: article_link.href.split('?')[0].replace('epdf','pdf'),
+        fileType: "pdf",
+        selected: false,
+      }
+      filesData.article = article
+    }
+  }
+
   const supportedList = document.querySelector(".NLM_list-list_type-label");
   let supportedAnchor
   if (!supportedList) {
