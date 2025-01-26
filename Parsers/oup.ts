@@ -29,6 +29,24 @@ export function getFilesFromOUP(): FilesData {
     article: default_file,
   };
 
+  const title = document.querySelector("h1.wi-article-title")?.textContent;
+  if (typeof title === "string") {
+    const article_title = title.trim();
+    const article_url = document.querySelector(
+      'a.al-link.pdf.article-pdfLink'
+    );
+    if (article_url instanceof HTMLAnchorElement) {
+      const article: FileInfo = {
+        id: 0,
+        name: article_title,
+        fileType: "pdf",
+        originUrl: article_url.href,
+        selected: false,
+      };
+      filesData.article = article;
+    }
+  }
+
   const fileLinks = document.querySelectorAll("div.dataSuppLink");
 
   fileLinks.forEach((si, index) => {

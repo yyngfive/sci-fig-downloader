@@ -39,7 +39,7 @@ export function getFilesFromNature(): FilesData {
         id: 0,
         name: article_title,
         fileType: "pdf",
-        originUrl: article_url.href.replace("reader", "pdf"),
+        originUrl: article_url.href,
         selected: false,
       };
       filesData.article = article;
