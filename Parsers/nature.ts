@@ -28,6 +28,24 @@ export function getFilesFromNature(): FilesData {
     article:default_file,
   };
 
+  const title = document.querySelector("h1")?.textContent;
+  if (typeof title === "string") {
+    const article_title = title;
+    const article_url = document.querySelector(
+      'div.js-pdf-download a'
+    );
+    if (article_url instanceof HTMLAnchorElement) {
+      const article: FileInfo = {
+        id: 0,
+        name: article_title,
+        fileType: "pdf",
+        originUrl: article_url.href,
+        selected: false,
+      };
+      filesData.article = article;
+    }
+  }
+
   const supportedTitles = [
     "Supplementary information",
     "Electronic supplementary material",

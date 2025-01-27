@@ -23,11 +23,12 @@ export function info2Download(
   article: string,
   name: string
 ): DownloadItem {
-const articleTitle = article.replace(/[\\/:*?<>|]/g,'')
+  const articleTitle = article.replace(/[\\/:*?<>|]/g, "");
+
   return {
     id: item.id,
     originUrl: item.originUrl,
-    article:articleTitle,
+    article: articleTitle,
     name,
   };
 }

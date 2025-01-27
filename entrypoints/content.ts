@@ -32,8 +32,10 @@ export default defineContentScript({
     "https://*.onlinelibrary.wiley.com/*",
     "https://*.science.org/*",
     "https://*.sciencedirect.com/*",
+    "https://pdf.sciencedirectassets.com/*",
     "https://academic.oup.com/*",
     "https://pubs.rsc.org/*",
+    "https://pnas.org/*",
     "https://www.pnas.org/*",
   ],
   main() {
@@ -93,5 +95,6 @@ export default defineContentScript({
 
     browser.runtime.onMessage.addListener(handleGetFigsData);
     browser.runtime.onMessage.addListener(handleGetFilesData);
+    
   },
 });

@@ -27,6 +27,24 @@ export function getFilesFromScience(): FilesData {
     title: "Supplementary Materials",
     article:default_file,
   };
+
+  const title = document.querySelector("h1")?.textContent;
+  if (typeof title === "string") {
+    const article_title = title
+    const article_link = document.querySelector('.info-panel a[aria-label="PDF"]')
+    if(article_link instanceof HTMLAnchorElement) {
+      const article:FileInfo = {
+        name: article_title,
+        id: 0,
+        originUrl: article_link.href.split('?')[0].replace('reader','pdf'),
+        fileType: "pdf",
+        selected: false,
+      }
+      filesData.article = article
+    }
+  }
+
+
   const supportedList = document.querySelector("#supplementary-materials");
   if (!supportedList) {
     return filesData;

@@ -1,4 +1,4 @@
-// Copyright (C) 2024  yyngfive 
+// Copyright (C) 2024  yyngfive
 
 // Email: chenhye5@outlook.com
 
@@ -15,33 +15,53 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import type { FiguresData, FigInfo,FileInfo,FilesData } from "@/types/parser";
+import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
 
-import { getFileType,default_file } from "@/utils/fileType";
+import { getFileType, default_file } from "@/utils/fileType";
 import { parseQueryParameters } from "@/utils/parseUrl";
 export function getFilesFromWiley(): FilesData {
   let filesData: FilesData = {
     from: "wiley",
     files: [],
-    hasSrc:false,
+    hasSrc: false,
     title: "Supporting Information",
-    article:default_file,
+    article: default_file,
   };
+
+  const title = document.querySelector(".citation__title")?.textContent;
+  if (typeof title === "string") {
+    const article_title = title;
+    const article_url = document.querySelector("a.pdf-download");
+    if (article_url instanceof HTMLAnchorElement) {
+      const article: FileInfo = {
+        id: 0,
+        name: article_title,
+        fileType: "pdf",
+        originUrl: article_url.href.replace("epdf", "pdf"),
+        selected: false,
+      };
+      console.log("article", article);
+      
+      filesData.article = article;
+    }
+  }
+
   const supportedTable = document.querySelector(".support-info__table");
   if (!supportedTable) {
     return filesData;
   }
-  console.log(window.location.href);
-  
+
   const fileLinks = supportedTable?.querySelectorAll("tr");
   fileLinks?.forEach((si, index) => {
-    if(index === 0){return}
+    if (index === 0) {
+      return;
+    }
     const id = index;
-    const cells = si.querySelectorAll('td')
-    const name = cells[1].textContent as string
-    const originUrl = cells[0].querySelector('a')?.href as string
+    const cells = si.querySelectorAll("td");
+    const name = cells[1].textContent as string;
+    const originUrl = cells[0].querySelector("a")?.href as string;
 
-    const fileName = parseQueryParameters(originUrl)
+    const fileName = parseQueryParameters(originUrl);
     const fileType = getFileType(originUrl.split("/").pop() as string);
     const fileInfo: FileInfo = {
       id,
@@ -57,9 +77,8 @@ export function getFilesFromWiley(): FilesData {
 }
 
 export function getFiguresFromWiley(): FiguresData {
-  
   let figuresData: FiguresData = {
-    title: '请等待页面加载完成后重新加载',
+    title: "请等待页面加载完成后重新加载",
     hasSi: false,
     hasToc: false,
     mainFigs: [],
@@ -67,14 +86,13 @@ export function getFiguresFromWiley(): FiguresData {
     from: "wiley",
   };
 
-  const title = document.querySelector(".citation__title")
-    ?.textContent;
-  if(typeof title !== 'string'){
-    return figuresData
+  const title = document.querySelector(".citation__title")?.textContent;
+  if (typeof title !== "string") {
+    return figuresData;
   }
   console.log("title", title);
-  figuresData.title = title
-  
+  figuresData.title = title;
+
   const abstract = document.querySelector(".abstract-group");
   const abstractFigElement = abstract
     ?.querySelector("figure")
@@ -96,18 +114,17 @@ export function getFiguresFromWiley(): FiguresData {
     figuresData.hasToc = true;
   }
 
-  const figureList = document.querySelector(
-    ".article-section__full"
-  );
-  if(!figureList){return figuresData}
+  const figureList = document.querySelector(".article-section__full");
+  if (!figureList) {
+    return figuresData;
+  }
   const figures = figureList.querySelectorAll("figure");
-  console.log(figureList);
 
   figures.forEach((element) => {
-    const captionText = element.querySelector(
-      ".figure__caption-text"
-    )
-    if(!captionText){return}
+    const captionText = element.querySelector(".figure__caption-text");
+    if (!captionText) {
+      return;
+    }
     const name = getTextWithoutRef(captionText as HTMLElement, "bibLink");
     const captionTitle = element.querySelector(".figure__title")
       ?.textContent as string;
@@ -131,8 +148,6 @@ export function getFiguresFromWiley(): FiguresData {
       originUrl,
       selected: false,
     };
-    console.log(figInfo);
-    
 
     if (type.startsWith("Scheme")) {
       figuresData.siFigs?.push(figInfo);
@@ -145,8 +160,6 @@ export function getFiguresFromWiley(): FiguresData {
     figuresData.siTitle = "Scheme";
   }
 
-  
-
   return figuresData;
 }
 
@@ -154,11 +167,10 @@ function getTextWithoutRef(element: HTMLElement, className: string) {
   // const children: HTMLElement[] = Array.from(element.childNodes).filter(
   //   (node): node is HTMLElement => {
   //     console.log('node '+node);
-      
+
   //     return node.nodeType === Node.ELEMENT_NODE;
   //   }
   // );
-  
 
   // 过滤掉具有指定类名的节点
   // const filteredChildren = children.filter(
@@ -168,10 +180,10 @@ function getTextWithoutRef(element: HTMLElement, className: string) {
   // 将过滤后的节点的textContent合并
   //return filteredChildren.map((node) => node.textContent).join("");
   const node = element.cloneNode(true) as HTMLElement;
-  const refLinks = node.querySelectorAll(`a.${className}`)
-  refLinks.forEach((e)=>{
-    e.remove()
-  })
-  const text = node.textContent!
-  return text
+  const refLinks = node.querySelectorAll(`a.${className}`);
+  refLinks.forEach((e) => {
+    e.remove();
+  });
+  const text = node.textContent!;
+  return text;
 }
