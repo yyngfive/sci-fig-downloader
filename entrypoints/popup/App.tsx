@@ -84,11 +84,11 @@ function App() {
     });
     if (filesData.article.selected) {
       //Fix for sciencedirect
-      if (filesData.from === "sciencedirect") {
+      if (filesData.from === "wiley") {
         selectedFiles.push(
           info2Download({
             ...filesData.article,
-            originUrl:filesData.article.originUrl
+            originUrl:filesData.article.originUrl,
           }, figsData.title, "Article")
         );
       } else {
