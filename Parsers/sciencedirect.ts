@@ -17,7 +17,7 @@
 // https://www.sciencedirect.com/science/article/pii/S2162253117300707#cesec50
 import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
 
-import { getFileType,default_file } from "@/utils/fileType";
+import { getFileType, default_file } from "@/utils/fileType";
 export function getFilesFromScienceDirect(): FilesData {
   let filesData: FilesData = {
     from: "sciencedirect",
@@ -26,16 +26,41 @@ export function getFilesFromScienceDirect(): FilesData {
     title: "",
     article: default_file,
   };
+
+  const title = document.querySelector("h1 .title-text")?.textContent;
+  if (typeof title === "string") {
+    const article_title = title;
+    const article_link = document.querySelector(
+      'a[aria-label="View PDF. Opens in a new window."]'
+    );
+    if (article_link instanceof HTMLAnchorElement) {
+
+      const article: FileInfo = {
+        name: article_title,
+        id: 0,
+        originUrl: article_link.href,
+        fileType: "pdf",
+        selected: false,
+      };
+      filesData.article = article;
+      console.log("article", article);
+    }
+  }
+
   //抓display class
   const supportedList = document.querySelector(".Appendices");
   if (!supportedList) {
     return filesData;
   }
-  const title = supportedList.querySelector("h2")?.textContent;
-  if (typeof title !== "string") {
-    return filesData;
-  }
-  filesData.title = title;
+
+  const si_titles = supportedList.querySelectorAll("section");
+
+  si_titles.forEach((e) => {
+    if (e.querySelectorAll(".display").length !== 0) {
+      filesData.title = e.querySelector("h2")?.textContent as string;
+    }
+  });
+
   const fileLinks = supportedList?.querySelectorAll(".display");
   fileLinks?.forEach((si, index) => {
     const id = index + 1;
@@ -194,7 +219,7 @@ function extractFigureInfo(input: string): {
 } {
   const regex = /^(Figure|Fig\.|Scheme)\s+(\d+)\.\s*(.*)/;
   const match = input.match(regex);
-  console.log(match);
+  //console.log(match);
 
   if (match) {
     const fig_type = match[1] === "Scheme" ? "sch" : "fig";

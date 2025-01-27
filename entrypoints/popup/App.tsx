@@ -20,7 +20,7 @@ import { useEffect, useState } from "react";
 import { useImmer } from "use-immer";
 import "./App.css";
 import { FigCard, FigCardTOC } from "@/components/FigCard";
-import { FileCard,FileCardSingle } from "@/components/FileCard";
+import { FileCard, FileCardSingle } from "@/components/FileCard";
 import type { FiguresData, FilesData } from "@/types/parser";
 import { default_file } from "@/utils/fileType";
 import type { DownloadItem, downloadStatus } from "@/types/download";
@@ -83,9 +83,19 @@ function App() {
       }
     });
     if (filesData.article.selected) {
-      selectedFiles.push(
-        info2Download(filesData.article, figsData.title, "Article")
-      ); 
+      //Fix for sciencedirect
+      if (filesData.from === "sciencedirect") {
+        selectedFiles.push(
+          info2Download({
+            ...filesData.article,
+            originUrl:filesData.article.originUrl
+          }, figsData.title, "Article")
+        );
+      } else {
+        selectedFiles.push(
+          info2Download(filesData.article, figsData.title, "Article")
+        );
+      }
     }
     setDownloads(selectedFiles);
   }, [figsData, filesData]);
@@ -240,7 +250,7 @@ function App() {
                 fileInfo={filesData.article}
                 type="article"
                 setFilesData={setFilesData}
-                />
+              />
             )}
             {filesData.files.length !== 0 && (
               <FileCard
