@@ -1,5 +1,6 @@
 import { defineConfig } from "wxt";
 import react from "@vitejs/plugin-react-swc";
+import mdx from "@mdx-js/rollup";
 import { resolve } from "path";
 // See https://wxt.dev/api/config.html
 export default defineConfig({
@@ -9,7 +10,7 @@ export default defineConfig({
     name: "Sci Fig Downloader",
   },
   vite: () => ({
-    plugins: [react()],
+    plugins: [mdx(), react()],
     resolve: {
       alias: {
         "@": resolve(__dirname, "/"),

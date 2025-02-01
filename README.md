@@ -13,14 +13,14 @@ Chrome/Edge 拓展，用于从期刊网站上下载文章附图的原始版本�
 
 ## 支持的期刊网站
 
-- nature.com (Nature)
-- pubs.acs.org (ACS)
-- onlinelibrary.wiley.com (Wiley)
-- science.org (Science)
-- sciencedirect.com (Elsevier)
-- academic.oup.com (Oxford)
-- pubs.rsc.org (RSC)
-- pnas.org (PNAS)
+- [Nature](https://nature.com)
+- [ACS](https://pubs.acs.org)
+- [Wiley](https://onlinelibrary.wiley.com)
+- [Science](https://science.org)
+- [Elsevier](https://sciencedirect.com)
+- [Oxford](https://academic.oup.com) 
+- [RSC](https://pubs.rsc.org) 
+- [PNAS](https://pnas.org) 
 
 ## 功能
 
@@ -28,34 +28,7 @@ Chrome/Edge 拓展，用于从期刊网站上下载文章附图的原始版本�
 - 快速预览图片内容
 - 同时下载原图与补充材料
 - 自动整理下载的图片和文件（暂未完全实现）
-- 支持多种期刊网站（Nature，Science，ACS，Wiley，Elsevier，Oxford，PNAS）
-
-## 版本更迭
-
-### 0.3.0
-
-- 增加对Oxford和RSC系列期刊的支持
-- 增加对文章PDF下载的支持
-- 修复了已知Bug
-
-### 0.2.1
-
-- 修复了已知的 BUG，详见Release页面
-
-### 0.2.0
-
-- 界面优化
-  - 设置界面
-  - 文件类型
-- 修复了已知的 BUG
-
-### 0.1.3
-
-- 解析器支持：
-  - Science 网站
-  - ScienceDirect 网站
-  - nature 系列网站（文件）
-  - wiley 网站（文件）
+- 支持多种期刊网站
 
 ## 已知 BUG
 
@@ -65,6 +38,8 @@ Chrome/Edge 拓展，用于从期刊网站上下载文章附图的原始版本�
   - Edge浏览器的在浏览器中查看Office文件功能会导致插件界面关闭，影响下载到文件夹功能
   - 下载功能可能无法正确重命名并创建文件夹
   - 下载功能可能没有进度条显示
+- Elsevier和Wiley系列期刊网站无法通过插件直接下载正文PDF
+- 在RSC网站使用插件时，图片需要等网页图片加载完毕后才可预览
 
 ## 开发
 
