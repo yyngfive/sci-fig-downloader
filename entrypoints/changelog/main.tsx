@@ -1,4 +1,4 @@
-// Copyright (C) 2024  yyngfive 
+// Copyright (C) 2024  yyngfive
 
 // Email: chenhye5@outlook.com
 
@@ -15,13 +15,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import ChangeLog from './ChangeLog.tsx';
-import '@/assets/css/style.css';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import Changelog from "./Changelog.mdx";
+import "@/assets/css/style.css";
 
-ReactDOM.createRoot(document.getElementById('changelog')!).render(
+ReactDOM.createRoot(document.getElementById("changelog")!).render(
   <React.StrictMode>
-    <ChangeLog />
-  </React.StrictMode>,
+    <article className="prose dark:prose-invert m-6">
+      <Changelog />
+    </article>
+  </React.StrictMode>
 );

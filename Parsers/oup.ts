@@ -107,10 +107,10 @@ export async function getFiguresFromOUP(): Promise<FiguresData> {
       const htmlUrl = img.src
         ? (img.src as string)
         : (img.getAttribute("data-src") as string);
-      const originElemet = e.querySelector(
+      const originElement = e.querySelector(
         "a.fig-view-orig"
       ) as HTMLAnchorElement;
-      fetchOriginUrlParams(originElemet.href).then((originUrl) => {
+      fetchOriginUrlParams(originElement.href).then((originUrl) => {
         const figInfo: FigInfo = {
           id,
           name,
