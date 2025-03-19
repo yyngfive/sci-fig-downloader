@@ -52,7 +52,7 @@ git clone https://github.com/yyngfive/sci-fig-downloader.git
 安装依赖(推荐使用 pnpm)
 
 ```bash
-npm install -g pnpm
+npm install pnpm
 pnpm install
 ```
 
