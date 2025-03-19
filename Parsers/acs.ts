@@ -18,6 +18,7 @@
 import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
 import { getFileType ,default_file} from "@/utils/fileType";
 
+// BUG https://pubs.acs.org/doi/10.1021/acschembio.4c00420 补充材料无名称添加默认名称
 export function getFilesFromACS(): FilesData {
   let filesData: FilesData = {
     from: "acs",
@@ -77,6 +78,8 @@ export function getFilesFromACS(): FilesData {
 
   return filesData;
 }
+
+//BUG https://pubs.acs.org/doi/full/10.1021/bi0491853 无法识别图片名称和编号
 
 export function getFiguresFromACS(): FiguresData {
   let figuresData: FiguresData = {

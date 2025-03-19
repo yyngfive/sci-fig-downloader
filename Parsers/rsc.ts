@@ -18,6 +18,8 @@
 import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
 
 import { getFileType,default_file } from "@/utils/fileType";
+
+//BUG: https://pubs.rsc.org/en/content/articlelanding/2023/cp/d3cp01147j
 export function getFilesFromRSC(): FilesData {
   let filesData: FilesData = {
     from: "rsc",

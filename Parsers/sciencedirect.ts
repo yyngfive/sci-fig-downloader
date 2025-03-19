@@ -18,6 +18,8 @@
 import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
 
 import { getFileType, default_file } from "@/utils/fileType";
+
+//BUG https://www.sciencedirect.com/science/article/pii/S1043661819322303?via%3Dihub#sec0135 没有名称的补充材料添加默认名称
 export function getFilesFromScienceDirect(): FilesData {
   let filesData: FilesData = {
     from: "sciencedirect",

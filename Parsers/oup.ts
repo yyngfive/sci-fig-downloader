@@ -18,7 +18,7 @@
 import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
 
 import { getFileType,default_file } from "@/utils/fileType";
-
+// BUG：https://academic.oup.com/nar/article/48/14/7640/5859952?login=true
 export function getFilesFromOUP(): FilesData {
   let filesData: FilesData = {
     from: "oup",
