@@ -18,8 +18,6 @@
 import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
 import { getFileType ,default_file} from "@/utils/fileType";
 
-// FIXED https://pubs.acs.org/doi/10.1021/acschembio.4c00420 补充材料无名称添加默认名称
-// FIXED https://pubs.acs.org/doi/10.1021/acs.jmedchem.3c00551 无法获取PDF
 export function getFilesFromACS(): FilesData {
   let filesData: FilesData = {
     from: "acs",
@@ -83,8 +81,6 @@ export function getFilesFromACS(): FilesData {
 
   return filesData;
 }
-
-//BUG https://pubs.acs.org/doi/full/10.1021/bi0491853 无法识别图片名称和编号
 
 export function getFiguresFromACS(): FiguresData {
   let figuresData: FiguresData = {
@@ -173,7 +169,10 @@ function extractFigureInfo(input: string): {
   id: number;
   name: string;
 } {
-  const regex = /(Scheme|Figure)\s+(\d+)\.\s*(.*)/;
+  console.log(input);
+  
+  input = input.trim();
+  const regex = /(Scheme|Figure)\s+(\d+)\.?\s*(.*)/;
   
   const match_title = input.match(regex);
   
