@@ -20,7 +20,7 @@ import { useEffect, useState } from "react";
 import { useImmer } from "use-immer";
 import "./App.css";
 import { FigCard, FigCardTOC } from "@/components/FigCard";
-import { FileCard, FileCardSingle } from "@/components/FileCard";
+import { FileCard, FileCardArticle } from "@/components/FileCard";
 import type { FiguresData, FilesData } from "@/types/parser";
 import { default_file } from "@/utils/fileType";
 import type { DownloadItem, downloadStatus } from "@/types/download";
@@ -235,9 +235,9 @@ function App() {
 
           <Tab name="文件" loaded={loaded}>
             {filesData.article.originUrl !== "" && (
-              <FileCardSingle
+              <FileCardArticle
                 title="Article"
-                fileInfo={filesData.article}
+                filesData={filesData}
                 type="article"
                 setFilesData={setFilesData}
               />

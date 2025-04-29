@@ -18,8 +18,6 @@
 import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
 import { getFileType ,default_file} from "@/utils/fileType";
 
-// BUG https://pubs.acs.org/doi/10.1021/acschembio.4c00420 补充材料无名称添加默认名称
-// BUG https://pubs.acs.org/doi/10.1021/acs.jmedchem.3c00551 无法获取PDF
 export function getFilesFromACS(): FilesData {
   let filesData: FilesData = {
     from: "acs",
@@ -34,6 +32,8 @@ export function getFilesFromACS(): FilesData {
   if (typeof title === "string") {
     const article_title = title
     const article_link = document.querySelector('a.article__btn__secondary')
+    console.log("article_link", article_link);
+    
     if(article_link instanceof HTMLAnchorElement) {
       const article:FileInfo = {
         name: article_title,
@@ -46,24 +46,26 @@ export function getFilesFromACS(): FilesData {
     }
   }
 
-  const supportedList = document.querySelector(".NLM_list-list_type-label");
+  const supportedList = document.querySelector(".article_supporting-info")?.querySelector(".NLM_list-list_type-label");
+  console.log(supportedList);
+  
   let supportedAnchor
+  let fileLinks
   if (!supportedList) {
     supportedAnchor = document.querySelector(".supInfoBoxOnFTP ");
     if(!supportedAnchor) {
       return filesData;
     }
-  }
-
-  let fileLinks
-  if(!supportedList?.querySelectorAll("p")) {
     fileLinks = supportedAnchor?.querySelectorAll("li");
   }else{
     fileLinks = supportedList.querySelectorAll("p");
   }
   fileLinks?.forEach((si, index) => {
     const id = index + 1;
-    const name = si.textContent?.replace(/\(.*?\)$/, '') as string
+    let name = si.textContent?.replace(/\s*\([^)]*\)\s*$/, '') as string;
+    if(name === ''){
+      name = `${filesData.title} ${id}`
+    }
     const link = si.querySelector("a.ext-link") ? si.querySelector("a.ext-link") as HTMLAnchorElement : si.querySelector("a") as HTMLAnchorElement;
     const originUrl = link.href;
     const fileType = getFileType(originUrl.split("/").pop() as string);
@@ -79,8 +81,6 @@ export function getFilesFromACS(): FilesData {
 
   return filesData;
 }
-
-//BUG https://pubs.acs.org/doi/full/10.1021/bi0491853 无法识别图片名称和编号
 
 export function getFiguresFromACS(): FiguresData {
   let figuresData: FiguresData = {
@@ -124,7 +124,7 @@ export function getFiguresFromACS(): FiguresData {
   if (!figureList) {
     return figuresData;
   }
-  //BUG:https://pubs.acs.org/doi/10.1021/cr400354z 无法获取abstract figure
+  //TODO:https://pubs.acs.org/doi/10.1021/cr400354z 无法获取abstract figure
   const figures = figureList.querySelectorAll("figure");
   console.log(figures.length);
   
@@ -169,7 +169,10 @@ function extractFigureInfo(input: string): {
   id: number;
   name: string;
 } {
-  const regex = /(Scheme|Figure)\s+(\d+)\.\s*(.*)/;
+  console.log(input);
+  
+  input = input.trim();
+  const regex = /(Scheme|Figure)\s+(\d+)\.?\s*(.*)/;
   
   const match_title = input.match(regex);
   

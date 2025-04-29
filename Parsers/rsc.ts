@@ -19,7 +19,6 @@ import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
 
 import { getFileType,default_file } from "@/utils/fileType";
 
-//BUG: https://pubs.rsc.org/en/content/articlelanding/2023/cp/d3cp01147j
 export function getFilesFromRSC(): FilesData {
   let filesData: FilesData = {
     from: "rsc",
@@ -53,7 +52,9 @@ export function getFilesFromRSC(): FilesData {
   }
   filesData.article = article;
 
-  const sections = document.querySelector("div.list-control ul.list__collection");
+  const sections = document.querySelector("div#divAbout div.list-control ul.list__collection");
+  console.log(sections);
+  
   if (!sections) {
     return filesData;
   }
