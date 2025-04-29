@@ -17,8 +17,7 @@
 
 import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
 
-import { getFileType,default_file } from "@/utils/fileType";
-// BUG：https://academic.oup.com/nar/article/48/14/7640/5859952?login=true
+import { getFileType, default_file } from "@/utils/fileType";
 export function getFilesFromOUP(): FilesData {
   let filesData: FilesData = {
     from: "oup",
@@ -32,9 +31,7 @@ export function getFilesFromOUP(): FilesData {
   const title = document.querySelector("h1.wi-article-title")?.textContent;
   if (typeof title === "string") {
     const article_title = title.trim();
-    const article_url = document.querySelector(
-      'a.al-link.pdf.article-pdfLink'
-    );
+    const article_url = document.querySelector("a.al-link.pdf.article-pdfLink");
     if (article_url instanceof HTMLAnchorElement) {
       const article: FileInfo = {
         id: 0,
@@ -119,22 +116,19 @@ export async function getFiguresFromOUP(): Promise<FiguresData> {
           selected: false,
         };
         //console.log(figInfo, "figinfo", label?.textContent);
+        console.log(label?.textContent);
 
         if (label?.textContent?.startsWith("Fig")) {
           figuresData.mainFigs.push(figInfo);
         } else if (label?.textContent?.startsWith("Sch")) {
+          figuresData.hasSi = true;
+          figuresData.siTitle = "Scheme";
           figuresData.siFigs?.push(figInfo);
         }
         console.log(`${figInfo.id} Got`);
-        
       });
     })
   );
-
-  if (figuresData.siFigs?.length !== 0) {
-    figuresData.hasSi = true;
-    figuresData.siTitle = "Scheme";
-  }
 
   if (toc) {
     const img = toc.querySelector("img")!;
@@ -163,14 +157,14 @@ export async function getFiguresFromOUP(): Promise<FiguresData> {
   }
 
   // wait for all promises to resolve
-  const wait = await fetchOriginUrlParams('https://academic.oup.com/');
+  const wait = await fetchOriginUrlParams("https://academic.oup.com/");
 
   figuresData = {
     ...figuresData,
     mainFigs: sortFigsById(figuresData.mainFigs),
     siFigs: sortFigsById(figuresData.siFigs as FigInfo[]),
   };
-  
+
   console.log("2", figuresData);
   console.log([...figuresData.mainFigs]);
   console.log(results);

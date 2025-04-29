@@ -19,7 +19,6 @@ import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
 
 import { getFileType, default_file } from "@/utils/fileType";
 
-//BUG https://www.sciencedirect.com/science/article/pii/S1043661819322303?via%3Dihub#sec0135 没有名称的补充材料添加默认名称
 export function getFilesFromScienceDirect(): FilesData {
   let filesData: FilesData = {
     from: "sciencedirect",
@@ -64,17 +63,23 @@ export function getFilesFromScienceDirect(): FilesData {
   });
 
   const fileLinks = supportedList?.querySelectorAll(".display");
+  
   fileLinks?.forEach((si, index) => {
     const id = index + 1;
     let name = si.querySelector(".captions")?.textContent;
+    
     if (typeof name !== "string") {
-      name = "";
+      name = `${filesData.title} ${id}`;
     }
+    
     const link = si.querySelector("a.download-link") as HTMLAnchorElement;
+    
     let originUrl = link.href;
     const fileType = getFileType(originUrl.split("/").pop() as string);
     if (fileType === "figure") {
-      const figList = si.querySelectorAll("ul li");
+      const figList = si.querySelectorAll("li");
+      console.log("figList", figList);
+      
       const hasHiRes = figList.length >= 2 ? true : false;
       originUrl = hasHiRes
         ? (figList[0].querySelector("a")?.href as string)
@@ -134,7 +139,7 @@ export function getFiguresFromScienceDirect(): FiguresData {
     figuresData.hasToc = true;
   }
 
-  const figureList = document.querySelector("#body");
+  const figureList = document.querySelector("#body")?.querySelector("div");
 
   if (!figureList) {
     return figuresData;

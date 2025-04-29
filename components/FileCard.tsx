@@ -117,14 +117,14 @@ function FileCard({
   );
 }
 
-function FileCardSingle({
+function FileCardArticle({
   title,
-  fileInfo,
+  filesData,
   type,
   setFilesData,
 }: {
   title: string;
-  fileInfo: FileInfo;
+  filesData: FilesData;
   type: "article";
   setFilesData: Updater<FilesData>;
 }) {
@@ -135,6 +135,15 @@ function FileCardSingle({
       draftInfo.selected = !figInfo.selected;
     });
   }
+
+  const fileInfo = filesData.article;
+  const from = filesData.from;
+  let from_flag = false;
+  if (from === "wiley" || from === "sciencedirect") {
+    from_flag = true;
+  }
+  console.log(from);
+  
 
   return (
     <>
@@ -151,6 +160,7 @@ function FileCardSingle({
               <div className="flex gap-1 w-[calc(100%-24px)] ml-1 my-1">
                 <input
                   type="checkbox"
+                  disabled={from_flag}
                   className="checkbox checkbox-sm"
                   checked={fileInfo.selected}
                   onChange={() => {
@@ -160,12 +170,13 @@ function FileCardSingle({
                 <span
                   className="grow truncate"
                   onClick={() => {
-                    handleSelect(fileInfo);
+                    if(!from_flag) {
+                      handleSelect(fileInfo);
+                    }
+                    
                   }}
                 >
-                  <Truncate className="text-sm">
-                    {fileInfo.name}
-                  </Truncate>
+                  <Truncate className="text-sm">{fileInfo.name}</Truncate>
                 </span>
               </div>
               <div className="size-5 p-0.5 rounded-md hover:bg-base-300 my-1 mr-1">
@@ -184,4 +195,4 @@ function FileCardSingle({
   );
 }
 
-export { FileCard, FileCardSingle };
+export { FileCard, FileCardArticle };
