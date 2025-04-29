@@ -16,7 +16,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
-
+//BUG https://chemistry-europe.onlinelibrary.wiley.com/doi/10.1002/cbic.202200651 过长图片描述不正确截短
 import { getFileType, default_file } from "@/utils/fileType";
 import { parseQueryParameters } from "@/utils/parseUrl";
 export function getFilesFromWiley(): FilesData {
