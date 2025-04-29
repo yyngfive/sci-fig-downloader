@@ -60,8 +60,13 @@ function DownloadOptionCard() {
   async function initOptions(){
   
     const folder = await storage.getItem<boolean>('local:download-folder') ?? false
-    const conflict = await storage.getItem<chrome.downloads.FilenameConflictAction>('local:download-conflict') ?? 'uniquify'
-    setOptions({folder,conflict})
+    const conflict = await storage.getItem<chrome.downloads.FilenameConflictAction>('local:download-conflict')
+    if(!conflict){
+      await storage.setItem('local:download-conflict','uniquify')
+      setOptions({folder,conflict:'uniquify'})
+    }else{
+      setOptions({folder,conflict})
+    }
   }
 
   useEffect(()=>{

@@ -63,14 +63,14 @@ function App() {
     }
     figsData.mainFigs.forEach((figInfo) => {
       if (figInfo.selected) {
-        selectedFiles.push(info2Download(figInfo, figsData.title, "Figure"));
+        selectedFiles.push(info2Download(figInfo, figsData.title, "Figure "+figInfo.id));
       }
     });
     if (figsData.siFigs) {
       figsData.siFigs.forEach((figInfo) => {
         if (figInfo.selected) {
           selectedFiles.push(
-            info2Download(figInfo, figsData.title, figsData.siTitle!)
+            info2Download(figInfo, figsData.title, figsData.siTitle! + " " + figInfo.id)
           );
         }
       });
@@ -78,24 +78,14 @@ function App() {
     filesData.files.forEach((fileInfo) => {
       if (fileInfo.selected) {
         selectedFiles.push(
-          info2Download(fileInfo, figsData.title, filesData.title)
+          info2Download(fileInfo, figsData.title, fileInfo.name)
         );
       }
     });
     if (filesData.article.selected) {
-      //Fix for sciencedirect
-      if (filesData.from === "wiley") {
-        selectedFiles.push(
-          info2Download({
-            ...filesData.article,
-            originUrl:filesData.article.originUrl,
-          }, figsData.title, "Article")
-        );
-      } else {
-        selectedFiles.push(
-          info2Download(filesData.article, figsData.title, "Article")
-        );
-      }
+      selectedFiles.push(
+        info2Download(filesData.article, figsData.title, figsData.title)
+      );
     }
     setDownloads(selectedFiles);
   }, [figsData, filesData]);

@@ -64,7 +64,7 @@ function handleRename(
       if (folder) {
         const ext = downloadItem.filename.split(".").pop()!;
         const file = task.currentFile;
-        let filename = `${file.article}/${file.name} ${file.id}.${ext}`;
+        let filename = `${file.article}/${file.name}.${ext}`;
         console.log(file);
 
         suggest({ filename: filename, conflictAction: conflict });
