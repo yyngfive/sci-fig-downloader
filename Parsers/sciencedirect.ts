@@ -98,6 +98,7 @@ export function getFilesFromScienceDirect(): FilesData {
   return filesData;
 }
 
+//BUG https://www.sciencedirect.com/science/article/pii/S0092867421005031?via%3Dihub 不能区分补充图片
 export function getFiguresFromScienceDirect(): FiguresData {
   let figuresData: FiguresData = {
     title: "请等待页面加载完成后重新加载",

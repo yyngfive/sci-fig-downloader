@@ -42,6 +42,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 
 import type { DownloadItem, downloadStatus, Task } from "@/types/download";
+import { isValidFilename,normalizeFilename } from "@/utils/downloads";
 
 const tasks = new Set<Task>();
 
@@ -63,7 +64,14 @@ function handleRename(
 
       if (folder) {
         const ext = downloadItem.filename.split(".").pop()!;
-        const file = task.currentFile;
+        let file = task.currentFile;
+        console.log('valid name：',isValidFilename(file.name));
+        if (!isValidFilename(file.name)) {
+          file.name = normalizeFilename(file.name);
+          console.log("invalid name, changed to:", file.name);
+          
+        }
+        
         let filename = `${file.article}/${file.name}.${ext}`;
         console.log(file);
 
@@ -102,6 +110,7 @@ function handleDownload(
           tasks.delete(this);
         }
         this.currentFile = this.filesToDownload[this.numberOfProcessedFiles];
+        
       },
     }).then(() => {
       sendResponse(true);
