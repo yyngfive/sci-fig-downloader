@@ -63,14 +63,20 @@ function App() {
     }
     figsData.mainFigs.forEach((figInfo) => {
       if (figInfo.selected) {
-        selectedFiles.push(info2Download(figInfo, figsData.title, "Figure "+figInfo.id));
+        selectedFiles.push(
+          info2Download(figInfo, figsData.title, "Figure " + figInfo.id)
+        );
       }
     });
     if (figsData.siFigs) {
       figsData.siFigs.forEach((figInfo) => {
         if (figInfo.selected) {
           selectedFiles.push(
-            info2Download(figInfo, figsData.title, figsData.siTitle! + " " + figInfo.id)
+            info2Download(
+              figInfo,
+              figsData.title,
+              figsData.siTitle! + " " + figInfo.id
+            )
           );
         }
       });
@@ -170,7 +176,6 @@ function App() {
     console.log("loaded");
     setLoaded(true);
 
-    //BUG:空下载导致动画循环卡死
     //TODO：显示下载进度条
     function handleDownloading(
       request: {
@@ -270,7 +275,9 @@ function App() {
         <button
           className="btn btn-primary btn-sm mx-1"
           onClick={() => {
-            handleDownload();
+            if (downloads.length > 0) {
+              handleDownload();
+            }
           }}
         >
           {downloadStatus.downloaded ? (
