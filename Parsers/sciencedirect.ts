@@ -35,7 +35,6 @@ export function getFilesFromScienceDirect(): FilesData {
       'a[aria-label="View PDF. Opens in a new window."]'
     );
     if (article_link instanceof HTMLAnchorElement) {
-
       const article: FileInfo = {
         name: article_title,
         id: 0,
@@ -44,7 +43,6 @@ export function getFilesFromScienceDirect(): FilesData {
         selected: false,
       };
       filesData.article = article;
-      console.log("article", article);
     }
   }
 
@@ -63,23 +61,22 @@ export function getFilesFromScienceDirect(): FilesData {
   });
 
   const fileLinks = supportedList?.querySelectorAll(".display");
-  
+
   fileLinks?.forEach((si, index) => {
     const id = index + 1;
     let name = si.querySelector(".captions")?.textContent;
-    
+
     if (typeof name !== "string") {
       name = `${filesData.title} ${id}`;
     }
-    
+
     const link = si.querySelector("a.download-link") as HTMLAnchorElement;
-    
+
     let originUrl = link.href;
     const fileType = getFileType(originUrl.split("/").pop() as string);
     if (fileType === "figure") {
       const figList = si.querySelectorAll("li");
-      console.log("figList", figList);
-      
+
       const hasHiRes = figList.length >= 2 ? true : false;
       originUrl = hasHiRes
         ? (figList[0].querySelector("a")?.href as string)
@@ -109,7 +106,7 @@ export function getFiguresFromScienceDirect(): FiguresData {
   };
 
   const title = document.querySelector("h1 .title-text")?.textContent;
-  console.log("title", title);
+  //console.log("title", title);
   if (typeof title !== "string") {
     return figuresData;
   }
@@ -157,9 +154,6 @@ export function getFiguresFromScienceDirect(): FiguresData {
       .replace(/(\s|&nbsp;)+/g, " ")
       .replace(/^(Figure|Fig\.|Scheme)(?:\sS?\d+\.?)?\s*/, "");
 
-    console.log(name);
-    
-
     let { type, id } = extractFigureInfo(caption.replace(/(\s|&nbsp;)+/g, " "));
     const figList = element.querySelectorAll("ol li");
     const hasHiRes = figList.length >= 2 ? true : false;
@@ -177,16 +171,12 @@ export function getFiguresFromScienceDirect(): FiguresData {
       selected: false,
     };
 
-    
-    console.log('figures type',type,caption
-      .replace(/(\s|&nbsp;)+/g, " "));
-    
     if (type === "sch") {
       figuresData.siFigs?.push(figInfo);
-    }else if (type === "sifig") {
+    } else if (type === "sifig") {
       is_sifig = true;
       figuresData.siFigs?.push(figInfo);
-    }else {
+    } else {
       figuresData.mainFigs.push(figInfo);
     }
   });
@@ -201,12 +191,11 @@ export function getFiguresFromScienceDirect(): FiguresData {
 
   if (figuresData.siFigs?.length !== 0) {
     figuresData.hasSi = true;
-    if(is_sifig){
+    if (is_sifig) {
       figuresData.siTitle = "SI Figure";
-    }else{
+    } else {
       figuresData.siTitle = "Scheme";
     }
-    
   }
 
   return figuresData;
@@ -242,17 +231,16 @@ function extractFigureInfo(input: string): {
 } {
   const regex = /^(Figure|Fig\.|Scheme|)\s+(S?\d+)\.\s*(.*)/;
   const match = input.match(regex);
-  //console.log(match);
-  let id
+  let id;
   if (match) {
-    let fig_type
-    if(match[1] === "Scheme"){
+    let fig_type;
+    if (match[1] === "Scheme") {
       fig_type = "sch";
-      id = Number(match[2])
-    }else if(match[2].startsWith("S")){
+      id = Number(match[2]);
+    } else if (match[2].startsWith("S")) {
       fig_type = "sifig";
       id = Number(match[2].substring(1));
-    }else{
+    } else {
       fig_type = "fig";
       id = Number(match[2]);
     }

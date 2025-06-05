@@ -125,7 +125,8 @@ export function getFiguresFromWiley(): FiguresData {
     if (!captionText) {
       return;
     }
-    const name = getTextWithoutRef(captionText as HTMLElement, "bibLink");
+    const name = getTextWithoutRef(captionText as HTMLElement, "bibLink").trim();
+  
     const captionTitle = element.querySelector(".figure__title")
       ?.textContent as string;
     const type = captionTitle.split(" ")[0];
