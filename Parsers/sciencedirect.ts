@@ -98,7 +98,6 @@ export function getFilesFromScienceDirect(): FilesData {
   return filesData;
 }
 
-//BUG https://www.sciencedirect.com/science/article/pii/S0092867421005031?via%3Dihub 不能区分补充图片
 export function getFiguresFromScienceDirect(): FiguresData {
   let figuresData: FiguresData = {
     title: "请等待页面加载完成后重新加载",
@@ -147,6 +146,7 @@ export function getFiguresFromScienceDirect(): FiguresData {
   }
 
   const figures = figureList.querySelectorAll("figure.figure");
+  let is_sifig = false;
   figures.forEach((element) => {
     let caption = element.querySelector(".captions")?.textContent;
     if (!caption) {
@@ -155,9 +155,12 @@ export function getFiguresFromScienceDirect(): FiguresData {
 
     const name = caption
       .replace(/(\s|&nbsp;)+/g, " ")
-      .replace(/^(Figure|Fig\.|Scheme)(?:\s\d+\.?)?\s*/, "");
+      .replace(/^(Figure|Fig\.|Scheme)(?:\sS?\d+\.?)?\s*/, "");
 
-    let { type, id } = extractFigureInfo(caption);
+    console.log(name);
+    
+
+    let { type, id } = extractFigureInfo(caption.replace(/(\s|&nbsp;)+/g, " "));
     const figList = element.querySelectorAll("ol li");
     const hasHiRes = figList.length >= 2 ? true : false;
     const htmlUrl = hasHiRes
@@ -174,9 +177,16 @@ export function getFiguresFromScienceDirect(): FiguresData {
       selected: false,
     };
 
+    
+    console.log('figures type',type,caption
+      .replace(/(\s|&nbsp;)+/g, " "));
+    
     if (type === "sch") {
       figuresData.siFigs?.push(figInfo);
-    } else {
+    }else if (type === "sifig") {
+      is_sifig = true;
+      figuresData.siFigs?.push(figInfo);
+    }else {
       figuresData.mainFigs.push(figInfo);
     }
   });
@@ -191,7 +201,12 @@ export function getFiguresFromScienceDirect(): FiguresData {
 
   if (figuresData.siFigs?.length !== 0) {
     figuresData.hasSi = true;
-    figuresData.siTitle = "Scheme";
+    if(is_sifig){
+      figuresData.siTitle = "SI Figure";
+    }else{
+      figuresData.siTitle = "Scheme";
+    }
+    
   }
 
   return figuresData;
@@ -225,15 +240,25 @@ function extractFigureInfo(input: string): {
   id: number;
   name: string;
 } {
-  const regex = /^(Figure|Fig\.|Scheme)\s+(\d+)\.\s*(.*)/;
+  const regex = /^(Figure|Fig\.|Scheme|)\s+(S?\d+)\.\s*(.*)/;
   const match = input.match(regex);
   //console.log(match);
-
+  let id
   if (match) {
-    const fig_type = match[1] === "Scheme" ? "sch" : "fig";
+    let fig_type
+    if(match[1] === "Scheme"){
+      fig_type = "sch";
+      id = Number(match[2])
+    }else if(match[2].startsWith("S")){
+      fig_type = "sifig";
+      id = Number(match[2].substring(1));
+    }else{
+      fig_type = "fig";
+      id = Number(match[2]);
+    }
     return {
       type: fig_type,
-      id: Number(match[2]),
+      id: id,
       name: match[3],
     };
   }
