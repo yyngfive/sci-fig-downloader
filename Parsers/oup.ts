@@ -66,7 +66,7 @@ export function getFilesFromOUP(): FilesData {
 
   return filesData;
 }
-
+// BUG https://academic.oup.com/peds/article/29/12/617/2607334  图片读取错误
 export async function getFiguresFromOUP(): Promise<FiguresData> {
   let figuresData: FiguresData = {
     title: "",

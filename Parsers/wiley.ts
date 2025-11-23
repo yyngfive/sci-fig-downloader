@@ -75,6 +75,10 @@ export function getFilesFromWiley(): FilesData {
   return filesData;
 }
 
+//BUG:https://onlinelibrary.wiley.com/doi/10.1002/anie.202107327 无法识别图片标号
+//BUG https://onlinelibrary.wiley.com/doi/full/10.1002/agt2.350 图片标号识别重复
+//BUG https://onlinelibrary.wiley.com/doi/10.1002/anie.201711651 补充材料描述无区分度，直接显示文件名
+
 export function getFiguresFromWiley(): FiguresData {
   let figuresData: FiguresData = {
     title: "请等待页面加载完成后重新加载",

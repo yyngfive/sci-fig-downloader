@@ -18,6 +18,7 @@
 import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
 import { getFileType ,default_file} from "@/utils/fileType";
 
+
 export function getFilesFromACS(): FilesData {
   let filesData: FilesData = {
     from: "acs",
@@ -28,17 +29,17 @@ export function getFilesFromACS(): FilesData {
   };
 
   const title = document.querySelector(".hlFld-Title")?.textContent;
-  console.log("title", title);
+  console.log("title", title, typeof title);
   if (typeof title === "string") {
     const article_title = title
-    const article_link = document.querySelector('a.article__btn__secondary')
+    const article_link = document.querySelector('a.article__btn__secondary--pdf')
     console.log("article_link", article_link);
     
     if(article_link instanceof HTMLAnchorElement) {
       const article:FileInfo = {
         name: article_title,
         id: 0,
-        originUrl: article_link.href.split('?')[0].replace('epdf','pdf'),
+        originUrl: article_link.href,
         fileType: "pdf",
         selected: false,
       }

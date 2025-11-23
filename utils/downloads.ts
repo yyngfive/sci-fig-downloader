@@ -18,6 +18,7 @@
 import type { DownloadItem } from "@/types/download";
 import type { FigInfo, FileInfo } from "@/types/parser";
 
+
 function info2Download(
   item: FigInfo | FileInfo,
   article: string,

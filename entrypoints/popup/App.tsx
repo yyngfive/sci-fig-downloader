@@ -31,8 +31,11 @@ import { DownloadOptionCard } from "@/components/OptionCard";
 import { info2Download } from "@/utils/downloads";
 
 function App() {
+
+  const title_default = "正在加载中……";
+
   const [figsData, setFigsData] = useImmer<FiguresData>({
-    title: "",
+    title: title_default,
     hasSi: false,
     hasToc: false,
     mainFigs: [],
@@ -134,7 +137,7 @@ function App() {
         active: true,
         lastFocusedWindow: true,
       });
-      if (tab.id && figsData.title === "") {
+      if (tab.id && figsData.title === title_default) {
         const currentUrl = tab.url as string;
         if (findJournalForUrl(currentUrl)) {
           requestFiguresData(tab.id, findJournalForUrl(currentUrl)!).then(
