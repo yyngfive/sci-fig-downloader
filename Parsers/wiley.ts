@@ -79,9 +79,6 @@ export function getFilesFromWiley(): FilesData {
   return filesData;
 }
 
-//BUG:https://onlinelibrary.wiley.com/doi/10.1002/anie.202107327 无法识别图片标号
-//BUG https://onlinelibrary.wiley.com/doi/full/10.1002/agt2.350 图片标号识别重复
-//BUG https://onlinelibrary.wiley.com/doi/10.1002/anie.201711651 补充材料描述无区分度，直接显示文件名
 
 export function getFiguresFromWiley(): FiguresData {
   let figuresData: FiguresData = {
@@ -157,7 +154,13 @@ export function getFiguresFromWiley(): FiguresData {
       selected: false,
     };
 
-    if (type.startsWith("Scheme")) {
+    //针对Aggregate期刊中类似文章的特殊处理https://onlinelibrary.wiley.com/doi/full/10.1002/agt2.350
+    if(type.startsWith("CHART")){
+      figuresData.tocFig = figInfo;
+      figuresData.hasToc = true;
+    }
+
+    if (type.startsWith("Scheme") || type.startsWith("Sch") || type.startsWith("SCHEME")) {
       figuresData.siFigs?.push(figInfo);
     } else {
       figuresData.mainFigs.push(figInfo);
