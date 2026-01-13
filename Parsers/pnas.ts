@@ -33,15 +33,14 @@ export function getFilesFromPNAS(): FilesData {
     return filesData;
   }
   const article_title = title;
-  const article_url = document.querySelector(
-    'a[aria-label="Open full-text in eReader"]'
-  );
-  if (article_url instanceof HTMLAnchorElement) {
+  const currentUrl = window.location.href;
+  const article_url = currentUrl.replace("/doi/", "/doi/pdf/").split("?")[0];
+  if (article_url) {
     const article: FileInfo = {
       id: 0,
       name: article_title,
       fileType: "pdf",
-      originUrl: article_url.href.replace("reader", "pdf"),
+      originUrl: article_url,
       selected: false,
     };
     filesData.article = article;

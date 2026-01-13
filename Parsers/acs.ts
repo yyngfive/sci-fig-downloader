@@ -125,7 +125,6 @@ export function getFiguresFromACS(): FiguresData {
   if (!figureList) {
     return figuresData;
   }
-  //TODO:https://pubs.acs.org/doi/10.1021/cr400354z 无法获取abstract figure
   const figures = figureList.querySelectorAll("figure");
   console.log(figures.length);
   
