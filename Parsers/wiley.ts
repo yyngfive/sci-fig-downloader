@@ -18,6 +18,7 @@
 import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
 import { getFileType, default_file } from "@/utils/fileType";
 import { parseQueryParameters } from "@/utils/parseUrl";
+
 export function getFilesFromWiley(): FilesData {
   let filesData: FilesData = {
     from: "wiley",
@@ -57,10 +58,13 @@ export function getFilesFromWiley(): FilesData {
     }
     const id = index;
     const cells = si.querySelectorAll("td");
-    const name = cells[1].textContent as string;
     const originUrl = cells[0].querySelector("a")?.href as string;
 
-    const fileName = parseQueryParameters(originUrl);
+    const fileName  = (cells[0].textContent as string).split('.')[0];
+    
+    const cleanedFileName = fileName.replace(/^.*-sup-\d+-/, "");
+    const name = (cells[1].textContent as string) + ` (${cleanedFileName})`;
+
     const fileType = getFileType(originUrl.split("/").pop() as string);
     const fileInfo: FileInfo = {
       id,
