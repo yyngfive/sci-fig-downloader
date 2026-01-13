@@ -66,7 +66,7 @@ export function getFilesFromOUP(): FilesData {
 
   return filesData;
 }
-// BUG https://academic.oup.com/peds/article/29/12/617/2607334  图片读取错误
+
 export async function getFiguresFromOUP(): Promise<FiguresData> {
   let figuresData: FiguresData = {
     title: "",
@@ -84,11 +84,19 @@ export async function getFiguresFromOUP(): Promise<FiguresData> {
   }
   figuresData.title = title.trim();
 
-  const toc = document.querySelector('div[class="fig fig-section"]');
+  var toc = document.querySelector('div[class="fig fig-section"]');
 
-  const figureList = document.querySelectorAll(
+  var figureList = document.querySelectorAll(
     'div[class="fig fig-section js-fig-section"]'
   );
+
+  if(figureList.length===0){
+    figureList = document.querySelectorAll(
+      'div[class="fig fig-section"]'
+    );
+    toc = null;
+  }
+
   const results = await Promise.allSettled(
     Array.from(figureList).map(async (e) => {
       const img = e.querySelector("img")!;
