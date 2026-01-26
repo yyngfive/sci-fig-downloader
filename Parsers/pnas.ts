@@ -18,7 +18,7 @@
 import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
 import { getFileType, default_file } from "@/utils/fileType";
 
-//BUG https://www.pnas.org/doi/10.1073/pnas.2422085122 无法获取正文 下载图片缓慢
+//BUG https://www.pnas.org/doi/full/10.1073/pnas.1309843110 正文获取可能会被full影响导致404
 export function getFilesFromPNAS(): FilesData {
   let filesData: FilesData = {
     from: "pnas",
