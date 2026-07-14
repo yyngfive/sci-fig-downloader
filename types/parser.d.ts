@@ -38,19 +38,23 @@ interface FileInfo extends Info {
     | "other";
 }
 
+type Publisher =
+  | "nature"
+  | "acs"
+  | "wiley"
+  | "science"
+  | "sciencedirect"
+  | "oup"
+  | "rsc"
+  | "pnas"
+  // publisher-generator:publisher
+;
+
 interface FiguresData {
   title: string; //文章标题
   hasToc: boolean; //是否有图片摘要
   hasSi: boolean; //是否提供可直接下载的补充材料图片或者反应体系图（有机反应文章常见）
-  from:
-    | "nature"
-    | "acs"
-    | "wiley"
-    | "science"
-    | "sciencedirect"
-    | "oup"
-    | "rsc"
-    | "pnas"; //支持的杂志网站
+  from: Publisher; //支持的杂志网站
   siTitle?: "Scheme" | "Extended Data Figure" | "SI Figure"; //补充图片的类别
   tocFig?: FigInfo; //图片摘要
   mainFigs: FigInfo[]; //正文图片
@@ -59,19 +63,11 @@ interface FiguresData {
 
 interface FilesData {
   title: string;
-  from:
-    | "acs"
-    | "nature"
-    | "science"
-    | "wiley"
-    | "sciencedirect"
-    | "oup"
-    | "rsc"
-    | "pnas";
+  from: Publisher;
   hasSrc: boolean;
   srcFiles?: FileInfo[];
   files: FileInfo[];
   article: FileInfo;
 }
 
-export { FiguresData, FigInfo, FileInfo, FilesData };
+export { Publisher, FiguresData, FigInfo, FileInfo, FilesData };

@@ -37,6 +37,7 @@ export default defineContentScript({
     "https://pubs.rsc.org/*",
     "https://pnas.org/*",
     "https://www.pnas.org/*",
+    // publisher-generator:matches
   ],
   main() {
     function isPromise<T>(value: any): value is Promise<T> {

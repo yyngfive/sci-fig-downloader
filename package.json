@@ -11,6 +11,8 @@
     "build:firefox": "wxt build -b firefox",
     "zip": "wxt zip -b edge && wxt zip -b chrome",
     "zip:firefox": "wxt zip -b firefox",
+    "add:publisher": "node scripts/add-publisher.mjs",
+    "test:add-publisher": "node --test scripts/add-publisher.test.mjs",
     "compile": "tsc --noEmit",
     "postinstall": "wxt prepare"
   },

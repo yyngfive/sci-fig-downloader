@@ -16,7 +16,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import type { FiguresData, FigInfo, FileInfo, FilesData } from "@/types/parser";
-
+//BUG https://academic.oup.com/nar/article/48/14/e82/5855635?login=false
 import { getFileType, default_file } from "@/utils/fileType";
 export function getFilesFromOUP(): FilesData {
   let filesData: FilesData = {

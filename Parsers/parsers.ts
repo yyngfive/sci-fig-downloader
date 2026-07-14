@@ -1,4 +1,4 @@
-// Copyright (C) 2024  yyngfive 
+// Copyright (C) 2024  yyngfive
 
 // Email: chenhye5@outlook.com
 
@@ -19,56 +19,78 @@ import { getFiguresFromNature, getFilesFromNature } from "@/Parsers/nature";
 import { getFiguresFromACS, getFilesFromACS } from "@/Parsers/acs";
 import { getFiguresFromWiley, getFilesFromWiley } from "@/Parsers/wiley";
 import { getFiguresFromScience, getFilesFromScience } from "./science";
-import { getFiguresFromScienceDirect,getFilesFromScienceDirect } from "./sciencedirect";
-import { getFiguresFromOUP,getFilesFromOUP } from "./oup";
-import { getFiguresFromRSC,getFilesFromRSC } from "./rsc";
-import { getFiguresFromPNAS,getFilesFromPNAS } from "./pnas";
-import { FiguresData, FilesData } from "@/types/parser";
+import {
+  getFiguresFromScienceDirect,
+  getFilesFromScienceDirect,
+} from "./sciencedirect";
+import { getFiguresFromOUP, getFilesFromOUP } from "./oup";
+import { getFiguresFromRSC, getFilesFromRSC } from "./rsc";
+import { getFiguresFromPNAS, getFilesFromPNAS } from "./pnas";
+// publisher-generator:imports
+import type { FiguresData, FilesData, Publisher } from "@/types/parser";
 
-export function findJournalForUrl(url: string): string | null {
-  const supportWebsites = ["nature", "acs", "wiley", "science","sciencedirect","oup","rsc","pnas"];
-  console.log(url);
-  if (!url.startsWith("http")) {
+export const publisherHosts: Record<Publisher, string[]> = {
+  nature: ["nature.com"],
+  acs: ["pubs.acs.org"],
+  wiley: ["onlinelibrary.wiley.com"],
+  science: ["science.org"],
+  sciencedirect: ["sciencedirect.com", "sciencedirectassets.com"],
+  oup: ["academic.oup.com"],
+  rsc: ["pubs.rsc.org"],
+  pnas: ["pnas.org"],
+  // publisher-generator:hosts
+};
+
+export function findJournalForUrl(url: string): Publisher | null {
+  let hostname: string;
+  try {
+    hostname = new URL(url).hostname.toLowerCase();
+  } catch {
     return null;
   }
-  const domain = url.split("/")[2].split(".");
-  if (domain.length >= 2) {
-    const top = domain[domain.length - 2];
-    console.log(top, "top");
 
-    if (supportWebsites.includes(top)) {
-      return top;
+  for (const [publisher, hosts] of Object.entries(publisherHosts) as [
+    Publisher,
+    string[],
+  ][]) {
+    if (hosts.some((host) => hostname === host || hostname.endsWith(`.${host}`))) {
+      return publisher;
     }
   }
   return null;
 }
 
-export const figParsers: Record<FiguresData["from"], () => FiguresData | Promise<FiguresData>> = {
+export const figParsers: Record<
+  Publisher,
+  () => FiguresData | Promise<FiguresData>
+> = {
   nature: getFiguresFromNature,
   acs: getFiguresFromACS,
   wiley: getFiguresFromWiley,
   science: getFiguresFromScience,
-  sciencedirect:getFiguresFromScienceDirect,
-  oup:getFiguresFromOUP,
-  rsc:getFiguresFromRSC,
-  pnas:getFiguresFromPNAS,
+  sciencedirect: getFiguresFromScienceDirect,
+  oup: getFiguresFromOUP,
+  rsc: getFiguresFromRSC,
+  pnas: getFiguresFromPNAS,
+  // publisher-generator:figure-parsers
 };
 
-export const fileParsers: Record<FilesData["from"], () => FilesData> = {
+export const fileParsers: Record<Publisher, () => FilesData> = {
   acs: getFilesFromACS,
   nature: getFilesFromNature,
   science: getFilesFromScience,
   wiley: getFilesFromWiley,
-  sciencedirect:getFilesFromScienceDirect,
-  oup:getFilesFromOUP,
-  rsc:getFilesFromRSC,
-  pnas:getFilesFromPNAS,
+  sciencedirect: getFilesFromScienceDirect,
+  oup: getFilesFromOUP,
+  rsc: getFilesFromRSC,
+  pnas: getFilesFromPNAS,
+  // publisher-generator:file-parsers
 };
 
-export function getFiguresFrom(Journal: FiguresData["from"]) {
-  return figParsers[Journal]();
+export function getFiguresFrom(publisher: Publisher) {
+  return figParsers[publisher]();
 }
 
-export function getFilesFrom(Journal: FilesData["from"]) {
-  return fileParsers[Journal]();
+export function getFilesFrom(publisher: Publisher) {
+  return fileParsers[publisher]();
 }
