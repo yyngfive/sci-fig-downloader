@@ -1,4 +1,6 @@
 # Sci Fig Downloader (SFD)
+[![Chrome Users](https://img.shields.io/chrome-web-store/users/dooahdhpalnmkjkmdnhchoihgfmhfjkj?logo=googlechrome&label=Users)](https://chromewebstore.google.com/detail/sci-fig-downloader/dooahdhpalnmkjkmdnhchoihgfmhfjkj)
+[![Edge Users](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Feakkjiohlkpoimlgnljjceajjpgfjdop&query=%24.activeInstallCount&label=Edge%20Users&color=0078D7&style=flat-square)](https://microsoftedge.microsoft.com/addons/detail/sci-fig-downloader/eakkjiohlkpoimlgnljjceajjpgfjdop)
 
 Chrome/Edge 拓展，用于从期刊网站上下载文章附图的原始版本以及文章的补充材料
 
